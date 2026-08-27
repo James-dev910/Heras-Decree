@@ -33,6 +33,19 @@ function loadSchedules() {
   return {};
 }
 
+// Get schedules for a specific guild
+function getGuildSchedules(guildId) {
+  const allSchedules = loadSchedules();
+  return allSchedules[guildId] || {};
+}
+
+// Save schedules for a specific guild
+function saveGuildSchedules(guildId, guildSchedules) {
+  const allSchedules = loadSchedules();
+  allSchedules[guildId] = guildSchedules;
+  saveSchedules(allSchedules);
+}
+
 // Save scheduled events to file
 function saveSchedules(schedules) {
   try {
@@ -43,7 +56,7 @@ function saveSchedules(schedules) {
 }
 
 // Schedule an event
-function scheduleEvent(eventName, timeString, channelId) {
+function scheduleEvent(eventName, timeString, channelId, guildId) {
   if (!EVENT_NAMES.includes(eventName)) {
     return { success: false, message: '❌ Invalid event name!' };
   }
@@ -62,17 +75,17 @@ function scheduleEvent(eventName, timeString, channelId) {
     return { success: false, message: '❌ Cannot schedule events in the past!' };
   }
 
-  const schedules = loadSchedules();
+  const guildSchedules = getGuildSchedules(guildId);
   const isBearEvent = BEAR_EVENTS.includes(eventName);
 
-  schedules[eventName] = {
+  guildSchedules[eventName] = {
     time: eventTime.toISOString(),
     channelId: channelId,
     type: isBearEvent ? 'recurring' : 'single',
     lastNotified: null
   };
 
-  saveSchedules(schedules);
+  saveGuildSchedules(guildId, guildSchedules);
 
   const eventType = isBearEvent ? '(循環，每 48 小時)' : '(單次)';
   return {
@@ -82,9 +95,9 @@ function scheduleEvent(eventName, timeString, channelId) {
 }
 
 // List all scheduled events
-function listScheduledEvents() {
-  const schedules = loadSchedules();
-  const events = Object.entries(schedules);
+function listScheduledEvents(guildId) {
+  const guildSchedules = getGuildSchedules(guildId);
+  const events = Object.entries(guildSchedules);
 
   if (events.length === 0) {
     return '📋 目前沒有任何排程的活動';
@@ -117,74 +130,77 @@ function listScheduledEvents() {
 }
 
 // Stop an event or all events
-function stopEvent(eventName) {
-  const schedules = loadSchedules();
+function stopEvent(eventName, guildId) {
+  const guildSchedules = getGuildSchedules(guildId);
 
   if (eventName === 'All') {
-    const count = Object.keys(schedules).length;
-    saveSchedules({});
+    const count = Object.keys(guildSchedules).length;
+    saveGuildSchedules(guildId, {});
     return { success: true, message: `✅ 已清除所有排程 (共 ${count} 個活動)` };
   }
 
-  if (!schedules[eventName]) {
+  if (!guildSchedules[eventName]) {
     return { success: false, message: `❌ **${eventName}** 目前沒有排程` };
   }
 
-  delete schedules[eventName];
-  saveSchedules(schedules);
+  delete guildSchedules[eventName];
+  saveGuildSchedules(guildId, guildSchedules);
   return { success: true, message: `✅ 已停止 **${eventName}** 的排程` };
 }
 
 // Check and send notifications
 async function checkAndSendNotifications(client) {
-  const schedules = loadSchedules();
+  const allSchedules = loadSchedules();
   const now = new Date();
   let updated = false;
 
-  for (const [eventName, data] of Object.entries(schedules)) {
-    const eventTime = new Date(data.time);
-    const notificationTime = new Date(eventTime.getTime() - 5 * 60 * 1000); // 5 minutes before
-    const notificationEndTime = new Date(notificationTime.getTime() + 60 * 1000); // 1-minute window
+  // Iterate through all guilds
+  for (const [guildId, guildSchedules] of Object.entries(allSchedules)) {
+    for (const [eventName, data] of Object.entries(guildSchedules)) {
+      const eventTime = new Date(data.time);
+      const notificationTime = new Date(eventTime.getTime() - 5 * 60 * 1000); // 5 minutes before
+      const notificationEndTime = new Date(notificationTime.getTime() + 60 * 1000); // 1-minute window
 
-    // Check if it's time to send notification (within 1-minute window)
-    if (now >= notificationTime && now < notificationEndTime) {
-      // Check if we already sent notification for this time
-      if (data.lastNotified === data.time) {
-        continue; // Already sent
-      }
-
-      try {
-        const channel = await client.channels.fetch(data.channelId);
-        if (channel) {
-          const message = `🚨 @everyone ⚔️ **${eventName}** starts in **5 minutes**! Get ready for the battle! 🛡️`;
-          await channel.send(message);
-          console.log(`✅ Sent notification for ${eventName}`);
-
-          // Update lastNotified
-          schedules[eventName].lastNotified = data.time;
-
-          // If it's a Bear event, schedule next occurrence (48 hours later)
-          if (BEAR_EVENTS.includes(eventName)) {
-            const nextEventTime = new Date(eventTime.getTime() + 48 * 60 * 60 * 1000);
-            schedules[eventName].time = nextEventTime.toISOString();
-            schedules[eventName].lastNotified = null; // Reset for next cycle
-            console.log(`🔄 ${eventName} rescheduled to ${nextEventTime.toISOString()}`);
-          } else {
-            // For single events, remove after notification
-            delete schedules[eventName];
-            console.log(`🗑️ ${eventName} removed (single event completed)`);
-          }
-
-          updated = true;
+      // Check if it's time to send notification (within 1-minute window)
+      if (now >= notificationTime && now < notificationEndTime) {
+        // Check if we already sent notification for this time
+        if (data.lastNotified === data.time) {
+          continue; // Already sent
         }
-      } catch (error) {
-        console.error(`❌ Error sending notification for ${eventName}:`, error);
+
+        try {
+          const channel = await client.channels.fetch(data.channelId);
+          if (channel) {
+            const message = `🚨 @everyone ⚔️ **${eventName}** starts in **5 minutes**! Get ready for the battle! 🛡️`;
+            await channel.send(message);
+            console.log(`✅ Sent notification for ${eventName} in guild ${guildId}`);
+
+            // Update lastNotified
+            guildSchedules[eventName].lastNotified = data.time;
+
+            // If it's a Bear event, schedule next occurrence (48 hours later)
+            if (BEAR_EVENTS.includes(eventName)) {
+              const nextEventTime = new Date(eventTime.getTime() + 48 * 60 * 60 * 1000);
+              guildSchedules[eventName].time = nextEventTime.toISOString();
+              guildSchedules[eventName].lastNotified = null; // Reset for next cycle
+              console.log(`🔄 ${eventName} rescheduled to ${nextEventTime.toISOString()} for guild ${guildId}`);
+            } else {
+              // For single events, remove after notification
+              delete guildSchedules[eventName];
+              console.log(`🗑️ ${eventName} removed (single event completed) from guild ${guildId}`);
+            }
+
+            updated = true;
+          }
+        } catch (error) {
+          console.error(`❌ Error sending notification for ${eventName} in guild ${guildId}:`, error);
+        }
       }
     }
   }
 
   if (updated) {
-    saveSchedules(schedules);
+    saveSchedules(allSchedules);
   }
 }
 

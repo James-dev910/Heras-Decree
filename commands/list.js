@@ -7,7 +7,8 @@ module.exports = {
     .setDescription('查看所有已排程的活動'),
 
   async handleList(interaction) {
-    const message = listScheduledEvents();
+    const guildId = interaction.guildId;
+    const message = listScheduledEvents(guildId);
     await interaction.reply({ content: message, ephemeral: true });
   }
 };

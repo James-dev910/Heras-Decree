@@ -5,6 +5,7 @@
 ## 功能特色
 
 - **Slash Commands 介面**：使用 Discord 原生選單介面，操作直覺簡便
+- **多伺服器獨立運作**：每個 Discord 伺服器的活動資料完全獨立，互不影響
 - **智慧排程系統**：
   - Bear 系列活動：每 48 小時自動循環
   - 其他活動：單次通知
@@ -128,11 +129,17 @@ git push -u origin main
 |---------|------|------|
 | `DISCORD_TOKEN` | Discord Bot Token | `MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GhIjKl.MnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrSt` |
 | `CLIENT_ID` | Discord Application ID | `1234567890123456789` |
-| `GUILD_ID` | Discord Server ID（選填，填寫後指令更新更快） | `9876543210987654321` |
+| `GUILD_ID` | Discord Server ID（選填） | `9876543210987654321` |
 
 > **GUILD_ID 說明**：
-> - **填寫**：指令僅註冊到該伺服器，更新立即生效（推薦）
-> - **不填**：指令全域註冊，需要最多 1 小時生效
+> - **填寫單一伺服器 ID**：指令在該伺服器立即生效（推薦用於主要伺服器）
+> - **不填**：指令全域註冊到所有伺服器，需要最多 1 小時生效
+>
+> **多伺服器支援**：
+> - Bot 可以同時在多個 Discord 伺服器運作
+> - 每個伺服器的活動資料**完全獨立**儲存，互不影響
+> - Server A 設定的活動不會出現在 Server B 的 `/list` 中
+> - 如果有多個伺服器，建議不填 `GUILD_ID`，讓指令全域註冊
 
 #### 4. 部署
 
@@ -196,17 +203,29 @@ Heras_decree/
 
 ### 資料儲存
 - 排程資料儲存於 `scheduler-data.json`
+- **多伺服器架構**：使用 Guild ID 作為第一層 key，確保每個伺服器資料獨立
 - 格式：
   ```json
   {
-    "Bear Trap 1": {
-      "time": "2026-08-30T14:00:00.000Z",
-      "channelId": "1234567890123456789",
-      "type": "recurring",
-      "lastNotified": null
+    "1234567890123456789": {
+      "Bear Trap 1": {
+        "time": "2026-08-30T14:00:00.000Z",
+        "channelId": "9876543210987654321",
+        "type": "recurring",
+        "lastNotified": null
+      }
+    },
+    "9999999999999999999": {
+      "Viking": {
+        "time": "2026-09-01T10:00:00.000Z",
+        "channelId": "8888888888888888888",
+        "type": "single",
+        "lastNotified": null
+      }
     }
   }
   ```
+  > 以上範例顯示兩個不同伺服器（Guild ID: `1234567890123456789` 和 `9999999999999999999`）各自獨立的排程資料
 
 ---
 

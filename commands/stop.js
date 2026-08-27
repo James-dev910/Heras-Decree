@@ -23,7 +23,8 @@ module.exports = {
 
   async handleStop(interaction) {
     const eventName = interaction.options.getString('event');
-    const result = stopEvent(eventName);
+    const guildId = interaction.guildId;
+    const result = stopEvent(eventName, guildId);
 
     await interaction.reply({
       content: result.message,
