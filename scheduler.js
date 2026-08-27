@@ -2,16 +2,17 @@ const fs = require('fs');
 const path = require('path');
 
 const SCHEDULER_FILE = path.join(__dirname, 'scheduler-data.json');
+const CUSTOM_EVENTS_FILE = path.join(__dirname, 'custom-events.json');
 
-// Event categories
-const BEAR_EVENTS = [
+// Default event categories
+const DEFAULT_BEAR_EVENTS = [
   'Bear Trap 1',
   'Bear Trap 2',
   'Academy Bear Trap 1',
   'Academy Bear Trap 2'
 ];
 
-const EVENT_NAMES = [
+const DEFAULT_EVENT_NAMES = [
   'Bear Trap 1',
   'Bear Trap 2',
   'Academy Bear Trap 1',
@@ -19,6 +20,62 @@ const EVENT_NAMES = [
   'Caesar Boss',
   'Viking'
 ];
+
+// Load custom events from file
+function loadCustomEvents() {
+  try {
+    if (fs.existsSync(CUSTOM_EVENTS_FILE)) {
+      const data = fs.readFileSync(CUSTOM_EVENTS_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.error('Error loading custom events:', error);
+  }
+  return {};
+}
+
+// Save custom events to file
+function saveCustomEvents(customEvents) {
+  try {
+    fs.writeFileSync(CUSTOM_EVENTS_FILE, JSON.stringify(customEvents, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error saving custom events:', error);
+  }
+}
+
+// Get custom events for a specific guild
+function getGuildCustomEvents(guildId) {
+  const allCustomEvents = loadCustomEvents();
+  return allCustomEvents[guildId] || {};
+}
+
+// Get all event names for a guild (default + custom)
+function getAllEventNames(guildId) {
+  const customEvents = getGuildCustomEvents(guildId);
+  const customEventNames = Object.keys(customEvents);
+  return [...DEFAULT_EVENT_NAMES, ...customEventNames];
+}
+
+// Get all Bear events for a guild (default + custom Bear events)
+function getAllBearEvents(guildId) {
+  const customEvents = getGuildCustomEvents(guildId);
+  const customBearEvents = Object.keys(customEvents).filter(name => customEvents[name].type === 'recurring');
+  return [...DEFAULT_BEAR_EVENTS, ...customBearEvents];
+}
+
+// Check if event is a Bear event
+function isBearEvent(eventName, guildId) {
+  return getAllBearEvents(guildId).includes(eventName);
+}
+
+// Get event emoji
+function getEventEmoji(eventName, guildId) {
+  const customEvents = getGuildCustomEvents(guildId);
+  if (customEvents[eventName]) {
+    return customEvents[eventName].emoji || '⚔️';
+  }
+  return '⚔️'; // Default emoji for built-in events
+}
 
 // Load scheduled events from file
 function loadSchedules() {
@@ -55,9 +112,69 @@ function saveSchedules(schedules) {
   }
 }
 
+// Add custom event
+function addCustomEvent(eventName, emoji, type, guildId) {
+  // Validate event name doesn't already exist
+  const allEvents = getAllEventNames(guildId);
+  if (allEvents.includes(eventName)) {
+    return { success: false, message: `❌ Event **${eventName}** already exists!` };
+  }
+
+  // Validate type
+  if (type !== 'recurring' && type !== 'single') {
+    return { success: false, message: '❌ Invalid event type! Must be "recurring" or "single"' };
+  }
+
+  const allCustomEvents = loadCustomEvents();
+  if (!allCustomEvents[guildId]) {
+    allCustomEvents[guildId] = {};
+  }
+
+  allCustomEvents[guildId][eventName] = {
+    emoji: emoji,
+    type: type
+  };
+
+  saveCustomEvents(allCustomEvents);
+
+  const typeText = type === 'recurring' ? 'Recurring (every 48 hours)' : 'One-time';
+  return {
+    success: true,
+    message: `✅ Custom event **${eventName}** ${emoji} added successfully!\nType: ${typeText}`
+  };
+}
+
+// Remove custom event
+function removeCustomEvent(eventName, guildId) {
+  const customEvents = getGuildCustomEvents(guildId);
+
+  if (!customEvents[eventName]) {
+    return { success: false, message: `❌ Custom event **${eventName}** not found!` };
+  }
+
+  // Check if event has active schedule
+  const guildSchedules = getGuildSchedules(guildId);
+  if (guildSchedules[eventName]) {
+    return {
+      success: false,
+      message: `❌ Cannot remove **${eventName}** - it has an active schedule!\nPlease stop the schedule first using /stop`
+    };
+  }
+
+  const allCustomEvents = loadCustomEvents();
+  delete allCustomEvents[guildId][eventName];
+  saveCustomEvents(allCustomEvents);
+
+  return {
+    success: true,
+    message: `✅ Custom event **${eventName}** removed successfully!`
+  };
+}
+
 // Schedule an event
 function scheduleEvent(eventName, timeString, channelId, guildId) {
-  if (!EVENT_NAMES.includes(eventName)) {
+  const allEventNames = getAllEventNames(guildId);
+  if (!allEventNames.includes(eventName)) {
     return { success: false, message: '❌ Invalid event name!' };
   }
 
@@ -76,18 +193,18 @@ function scheduleEvent(eventName, timeString, channelId, guildId) {
   }
 
   const guildSchedules = getGuildSchedules(guildId);
-  const isBearEvent = BEAR_EVENTS.includes(eventName);
+  const isRecurring = isBearEvent(eventName, guildId);
 
   guildSchedules[eventName] = {
     time: eventTime.toISOString(),
     channelId: channelId,
-    type: isBearEvent ? 'recurring' : 'single',
+    type: isRecurring ? 'recurring' : 'single',
     lastNotified: null
   };
 
   saveGuildSchedules(guildId, guildSchedules);
 
-  const eventType = isBearEvent ? '(Recurring, every 48 hours)' : '(One-time)';
+  const eventType = isRecurring ? '(Recurring, every 48 hours)' : '(One-time)';
   return {
     success: true,
     message: `✅ **${eventName}** ${eventType} scheduled at **${timeString} UTC**\n⏰ Notification will be sent 5 minutes before the event starts`
@@ -171,15 +288,16 @@ async function checkAndSendNotifications(client) {
         try {
           const channel = await client.channels.fetch(data.channelId);
           if (channel) {
-            const message = `🚨 @everyone ⚔️ **${eventName}** starts in **5 minutes**! Get ready for the battle! 🛡️`;
+            const emoji = getEventEmoji(eventName, guildId);
+            const message = `🚨 @everyone ${emoji} **${eventName}** starts in **5 minutes**! Get ready for the battle! 🛡️`;
             await channel.send(message);
             console.log(`✅ Sent notification for ${eventName} in guild ${guildId}`);
 
             // Update lastNotified
             guildSchedules[eventName].lastNotified = data.time;
 
-            // If it's a Bear event, schedule next occurrence (48 hours later)
-            if (BEAR_EVENTS.includes(eventName)) {
+            // If it's a recurring event, schedule next occurrence (48 hours later)
+            if (isBearEvent(eventName, guildId)) {
               const nextEventTime = new Date(eventTime.getTime() + 48 * 60 * 60 * 1000);
               guildSchedules[eventName].time = nextEventTime.toISOString();
               guildSchedules[eventName].lastNotified = null; // Reset for next cycle
@@ -209,6 +327,8 @@ module.exports = {
   listScheduledEvents,
   stopEvent,
   checkAndSendNotifications,
-  EVENT_NAMES,
-  BEAR_EVENTS
+  addCustomEvent,
+  removeCustomEvent,
+  getAllEventNames,
+  getGuildCustomEvents
 };

@@ -1,22 +1,23 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { stopEvent, getAllEventNames } = require('../scheduler');
+const { removeCustomEvent, getGuildCustomEvents } = require('../scheduler');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('stop')
-    .setDescription('Stop event schedule')
+    .setName('remove_event')
+    .setDescription('Remove a custom event')
     .addStringOption(option =>
       option
-        .setName('event')
-        .setDescription('Select event to stop')
+        .setName('name')
+        .setDescription('Custom event name to remove')
         .setRequired(true)
         .setAutocomplete(true)
     ),
 
-  async handleStop(interaction) {
-    const eventName = interaction.options.getString('event');
+  async handleRemoveEvent(interaction) {
+    const eventName = interaction.options.getString('name');
     const guildId = interaction.guildId;
-    const result = stopEvent(eventName, guildId);
+
+    const result = removeCustomEvent(eventName, guildId);
 
     await interaction.reply({
       content: result.message,
@@ -26,18 +27,13 @@ module.exports = {
 
   async handleAutocomplete(interaction) {
     const guildId = interaction.guildId;
-    const allEvents = getAllEventNames(guildId);
+    const customEvents = getGuildCustomEvents(guildId);
     const focusedValue = interaction.options.getFocused();
 
-    // Add "All" option
-    const allOption = [{ name: '🗑️ All (Clear all schedules)', value: 'All' }];
-
-    const eventChoices = allEvents
+    const choices = Object.keys(customEvents)
       .filter(name => name.toLowerCase().includes(focusedValue.toLowerCase()))
-      .slice(0, 24)
+      .slice(0, 25)
       .map(name => ({ name: name, value: name }));
-
-    const choices = [...allOption, ...eventChoices];
 
     await interaction.respond(choices);
   }

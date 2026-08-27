@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { scheduleEvent, EVENT_NAMES } = require('../scheduler');
+const { scheduleEvent, getAllEventNames } = require('../scheduler');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,14 +10,7 @@ module.exports = {
         .setName('event')
         .setDescription('Select event')
         .setRequired(true)
-        .addChoices(
-          { name: '🐻 Bear Trap 1', value: 'Bear Trap 1' },
-          { name: '🐻 Bear Trap 2', value: 'Bear Trap 2' },
-          { name: '🎓 Academy Bear Trap 1', value: 'Academy Bear Trap 1' },
-          { name: '🎓 Academy Bear Trap 2', value: 'Academy Bear Trap 2' },
-          { name: '👑 Caesar Boss', value: 'Caesar Boss' },
-          { name: '⚔️ Viking', value: 'Viking' }
-        )
+        .setAutocomplete(true)
     )
     .addStringOption(option =>
       option
@@ -38,5 +31,18 @@ module.exports = {
       content: result.message,
       ephemeral: !result.success
     });
+  },
+
+  async handleAutocomplete(interaction) {
+    const guildId = interaction.guildId;
+    const allEvents = getAllEventNames(guildId);
+    const focusedValue = interaction.options.getFocused();
+
+    const choices = allEvents
+      .filter(name => name.toLowerCase().includes(focusedValue.toLowerCase()))
+      .slice(0, 25)
+      .map(name => ({ name: name, value: name }));
+
+    await interaction.respond(choices);
   }
 };

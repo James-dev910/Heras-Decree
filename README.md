@@ -4,43 +4,66 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 
 ## Features
 
-- **Slash Commands Interface**: Intuitive operation using Discord's native dropdown menus
+- **Slash Commands Interface**: Intuitive operation using Discord's native autocomplete search
+- **Custom Events**: Add your own events with custom emojis and scheduling types
 - **Multi-Server Independent Operation**: Each Discord server's event data is completely independent
 - **Smart Scheduling System**:
   - Bear Series Events: Auto-repeat every 48 hours
   - Other Events: One-time notifications
+  - Custom Events: Choose recurring or single type
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
 ## Supported Event Types
 
-### 🐻 Bear Series (Recurring, every 48 hours)
+### 🐻 Default Bear Series (Recurring, every 48 hours)
 - Bear Trap 1
 - Bear Trap 2
 - Academy Bear Trap 1
 - Academy Bear Trap 2
 
-### ⚔️ Other Events (One-time)
+### ⚔️ Default Other Events (One-time)
 - Caesar Boss
 - Viking
+
+### ✨ Custom Events
+Create your own events with:
+- Custom names
+- Custom emojis
+- Choice of recurring (48h) or single (one-time) type
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
 | `/help` | Display all features and command instructions |
-| `/setup_time` | Schedule event notification time (use dropdown to select event and input UTC time) |
+| `/setup_time` | Schedule event notification time (autocomplete search for event, input UTC time) |
 | `/list` | View all scheduled events |
-| `/stop` | Stop specific event or clear all schedules (select "All") |
+| `/stop` | Stop specific event or clear all schedules (autocomplete search, select "All" to clear all) |
+| `/add_event` | Add a custom event with name, emoji, and type |
+| `/remove_event` | Remove a custom event (autocomplete search) |
 
-### Usage Example
+### Usage Examples
 
+#### Schedule Default Event
 ```
 /setup_time event:Bear Trap 1 time:2026-08-30 14:00
 ```
 - Event time: 2026-08-30 14:00 UTC
 - Notification time: 2026-08-30 13:55 UTC (5 minutes early)
 - Next cycle: 2026-09-01 13:55 UTC (48 hours later)
+
+#### Add Custom Event
+```
+/add_event name:testevent emoji:😂 type:Single
+```
+- Creates a new one-time event named "testevent" with emoji 😂
+
+#### Schedule Custom Event
+```
+/setup_time event:testevent time:2026-08-30 14:00
+```
+- Notification: "🚨 @everyone 😂 **testevent** starts in **5 minutes**! Get ready for the battle! 🛡️"
 
 ### 📍 Important: Notification Channel Location
 

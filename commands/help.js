@@ -14,27 +14,34 @@ module.exports = {
 
 🔹 **/setup_time**
    Schedule event notification time
-   • **event**: Select event type (use dropdown menu)
+   • **event**: Select event type (autocomplete search)
    • **time**: Set UTC time (format: YYYY-MM-DD HH:MM)
 
-   **Event Types:**
+   **Default Event Types:**
    🐻 **Bear Series** (Recurring, auto-repeats every 48 hours)
-   • Bear Trap 1
-   • Bear Trap 2
-   • Academy Bear Trap 1
-   • Academy Bear Trap 2
+   • Bear Trap 1, Bear Trap 2, Academy Bear Trap 1, Academy Bear Trap 2
 
    ⚔️ **Other Events** (One-time notification)
-   • Caesar Boss
-   • Viking
+   • Caesar Boss, Viking
 
 🔹 **/list**
    View all scheduled events and their next trigger times
 
 🔹 **/stop**
    Stop event schedule
-   • **event**: Select event to stop (use dropdown menu)
+   • **event**: Select event to stop (autocomplete search)
    • Select "All" to clear all schedules
+
+🔹 **/add_event** ✨
+   Add a custom event
+   • **name**: Event name (e.g., "testevent")
+   • **emoji**: Emoji for the event (e.g., 😂 or :joy:)
+   • **type**: Select "Recurring" (48h) or "Single" (one-time)
+
+🔹 **/remove_event** 🗑️
+   Remove a custom event
+   • **name**: Custom event name to remove (autocomplete search)
+   • Note: Cannot remove events with active schedules (stop them first)
 
 ⏰ **Notification System:**
 All events will send notifications **5 minutes** before the start time!
@@ -45,10 +52,10 @@ Notifications will be sent to **the channel where you execute the /setup_time co
 • Set in Channel B → Notification sent to Channel B
 • Re-setting an event in a different channel will change the notification location
 
-📝 **Example:**
-\`/setup_time event:Bear Trap 1 time:2026-08-30 14:00\`
-→ Notification at 2026-08-30 13:55 UTC
-→ Next notification at 2026-09-01 13:55 UTC (48 hours later)
+📝 **Examples:**
+\`/add_event name:testevent emoji:😂 type:Single\`
+\`/setup_time event:testevent time:2026-08-30 14:00\`
+→ Notification: "🚨 @everyone 😂 **testevent** starts in **5 minutes**! Get ready for the battle! 🛡️"
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

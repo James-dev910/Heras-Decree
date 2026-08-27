@@ -58,8 +58,28 @@ client.once('ready', async () => {
   console.log('⏰ Scheduler initialized - checking for events every minute');
 });
 
-// Handle command interactions
+// Handle autocomplete interactions
 client.on('interactionCreate', async interaction => {
+  if (interaction.isAutocomplete()) {
+    const { commandName } = interaction;
+
+    try {
+      if (commandName === 'setup_time') {
+        const { handleAutocomplete } = require('./commands/setup_time');
+        await handleAutocomplete(interaction);
+      } else if (commandName === 'stop') {
+        const { handleAutocomplete } = require('./commands/stop');
+        await handleAutocomplete(interaction);
+      } else if (commandName === 'remove_event') {
+        const { handleAutocomplete } = require('./commands/remove_event');
+        await handleAutocomplete(interaction);
+      }
+    } catch (error) {
+      console.error(`Error in autocomplete for ${commandName}:`, error);
+    }
+    return;
+  }
+
   if (!interaction.isChatInputCommand()) return;
 
   const { commandName } = interaction;
@@ -77,6 +97,12 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'stop') {
       const { handleStop } = require('./commands/stop');
       await handleStop(interaction);
+    } else if (commandName === 'add_event') {
+      const { handleAddEvent } = require('./commands/add_event');
+      await handleAddEvent(interaction);
+    } else if (commandName === 'remove_event') {
+      const { handleRemoveEvent } = require('./commands/remove_event');
+      await handleRemoveEvent(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);
