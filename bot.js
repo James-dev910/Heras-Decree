@@ -1,0 +1,103 @@
+require('dotenv').config();
+const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
+const fs = require('fs');
+const path = require('path');
+const { scheduleEvent, listScheduledEvents, stopEvent, checkAndSendNotifications } = require('./scheduler');
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+  ],
+});
+
+const commands = [];
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+// Load commands
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+  commands.push(command.data.toJSON());
+}
+
+// Register commands when bot is ready
+client.once('ready', async () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
+
+  const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+
+  try {
+    console.log('🔄 Started refreshing application (/) commands.');
+
+    if (process.env.GUILD_ID) {
+      // Register commands to specific guild (faster for testing)
+      await rest.put(
+        Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+        { body: commands },
+      );
+      console.log(`✅ Successfully registered commands to guild ${process.env.GUILD_ID}`);
+    } else {
+      // Register commands globally
+      await rest.put(
+        Routes.applicationCommands(process.env.CLIENT_ID),
+        { body: commands },
+      );
+      console.log('✅ Successfully registered global commands');
+    }
+  } catch (error) {
+    console.error('❌ Error registering commands:', error);
+  }
+
+  // Start checking for scheduled notifications every minute
+  setInterval(() => {
+    checkAndSendNotifications(client);
+  }, 60000); // Check every 60 seconds
+
+  console.log('⏰ Scheduler initialized - checking for events every minute');
+});
+
+// Handle command interactions
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isChatInputCommand()) return;
+
+  const { commandName } = interaction;
+
+  try {
+    if (commandName === 'help') {
+      const { handleHelp } = require('./commands/help');
+      await handleHelp(interaction);
+    } else if (commandName === 'setup_time') {
+      const { handleSetupTime } = require('./commands/setup_time');
+      await handleSetupTime(interaction);
+    } else if (commandName === 'list') {
+      const { handleList } = require('./commands/list');
+      await handleList(interaction);
+    } else if (commandName === 'stop') {
+      const { handleStop } = require('./commands/stop');
+      await handleStop(interaction);
+    }
+  } catch (error) {
+    console.error(`Error executing ${commandName}:`, error);
+    const errorMessage = '❌ There was an error executing this command!';
+
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({ content: errorMessage, ephemeral: true });
+    } else {
+      await interaction.reply({ content: errorMessage, ephemeral: true });
+    }
+  }
+});
+
+// Error handling
+client.on('error', error => {
+  console.error('❌ Discord client error:', error);
+});
+
+process.on('unhandledRejection', error => {
+  console.error('❌ Unhandled promise rejection:', error);
+});
+
+// Login to Discord
+client.login(process.env.DISCORD_TOKEN);
