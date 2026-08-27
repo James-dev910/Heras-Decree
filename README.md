@@ -34,14 +34,21 @@ Create your own events with:
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/help` | Display all features and command instructions |
-| `/setup_time` | Schedule event notification time (autocomplete search for event, input UTC time) |
-| `/list` | View all scheduled events |
-| `/stop` | Stop specific event or clear all schedules (autocomplete search, select "All" to clear all) |
-| `/add_event` | Add a custom event with name, emoji, and type |
-| `/remove_event` | Remove a custom event (autocomplete search) |
+| Command | Description | Permission Required |
+|---------|-------------|---------------------|
+| `/help` | Display all features and command instructions | Everyone |
+| `/setup_time` | Schedule event notification time (autocomplete search for event, input UTC time) | Everyone |
+| `/list` | View all scheduled events | Everyone |
+| `/stop` | Stop specific event or clear all schedules (autocomplete search, select "All" to clear all) | Everyone |
+| `/add_event` | Add a custom event with name, emoji, and type | **Manage Server** |
+| `/remove_event` | Remove a custom event (autocomplete search) | **Manage Server** |
+
+### 🔒 Permission Requirements
+
+- **Everyone**: All users can schedule events, view schedules, and stop events
+- **Manage Server**: Only users with "Manage Server" permission can create or remove custom events
+  - This includes server owners and users with the "Manage Server" role permission
+  - This prevents unauthorized users from modifying the event list
 
 ### Usage Examples
 

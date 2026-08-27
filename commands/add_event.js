@@ -1,10 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { addCustomEvent } = require('../scheduler');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('add_event')
-    .setDescription('Add a custom event')
+    .setDescription('Add a custom event (requires Manage Server permission)')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addStringOption(option =>
       option
         .setName('name')

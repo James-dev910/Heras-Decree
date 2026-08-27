@@ -32,16 +32,20 @@ module.exports = {
    • **event**: Select event to stop (autocomplete search)
    • Select "All" to clear all schedules
 
-🔹 **/add_event** ✨
-   Add a custom event
+🔹 **/add_event** ✨ 🔒
+   Add a custom event (requires Manage Server permission)
    • **name**: Event name (e.g., "testevent")
    • **emoji**: Emoji for the event (e.g., 😂 or :joy:)
    • **type**: Select "Recurring" (48h) or "Single" (one-time)
 
-🔹 **/remove_event** 🗑️
-   Remove a custom event
+🔹 **/remove_event** 🗑️ 🔒
+   Remove a custom event (requires Manage Server permission)
    • **name**: Custom event name to remove (autocomplete search)
    • Note: Cannot remove events with active schedules (stop them first)
+
+🔒 **Permission Requirements:**
+• /add_event and /remove_event require "Manage Server" permission
+• All other commands are available to everyone
 
 ⏰ **Notification System:**
 All events will send notifications **5 minutes** before the start time!
