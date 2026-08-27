@@ -4,11 +4,11 @@ const { stopEvent, EVENT_NAMES } = require('../scheduler');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('停止活動排程')
+    .setDescription('Stop event schedule')
     .addStringOption(option =>
       option
         .setName('event')
-        .setDescription('選擇要停止的活動')
+        .setDescription('Select event to stop')
         .setRequired(true)
         .addChoices(
           { name: '🐻 Bear Trap 1', value: 'Bear Trap 1' },
@@ -17,7 +17,7 @@ module.exports = {
           { name: '🎓 Academy Bear Trap 2', value: 'Academy Bear Trap 2' },
           { name: '👑 Caesar Boss', value: 'Caesar Boss' },
           { name: '⚔️ Viking', value: 'Viking' },
-          { name: '🗑️ All（清除所有排程）', value: 'All' }
+          { name: '🗑️ All (Clear all schedules)', value: 'All' }
         )
     ),
 

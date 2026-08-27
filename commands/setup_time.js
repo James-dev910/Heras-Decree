@@ -4,11 +4,11 @@ const { scheduleEvent, EVENT_NAMES } = require('../scheduler');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('setup_time')
-    .setDescription('設定活動通知時間')
+    .setDescription('Schedule event notification time')
     .addStringOption(option =>
       option
         .setName('event')
-        .setDescription('選擇活動')
+        .setDescription('Select event')
         .setRequired(true)
         .addChoices(
           { name: '🐻 Bear Trap 1', value: 'Bear Trap 1' },
@@ -22,7 +22,7 @@ module.exports = {
     .addStringOption(option =>
       option
         .setName('time')
-        .setDescription('設定 UTC 時間（格式：YYYY-MM-DD HH:MM，例如：2026-08-30 14:00）')
+        .setDescription('Set UTC time (format: YYYY-MM-DD HH:MM, e.g., 2026-08-30 14:00)')
         .setRequired(true)
     ),
 

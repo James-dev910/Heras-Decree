@@ -3,46 +3,52 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
-    .setDescription('顯示所有指令與功能說明'),
+    .setDescription('Show all commands and features'),
 
   async handleHelp(interaction) {
     const helpMessage = `
-📖 **Hera's Decree Bot - 指令說明**
+📖 **Hera's Decree Bot - Commands Guide**
 
 🔹 **/help**
-   顯示此說明訊息
+   Display this help message
 
 🔹 **/setup_time**
-   設定活動通知時間
-   • **event**: 選擇活動類型（使用選單選擇）
-   • **time**: 設定 UTC 時間（格式：YYYY-MM-DD HH:MM）
+   Schedule event notification time
+   • **event**: Select event type (use dropdown menu)
+   • **time**: Set UTC time (format: YYYY-MM-DD HH:MM)
 
-   **活動類型：**
-   🐻 **Bear 系列**（循環，每 48 小時自動重複）
+   **Event Types:**
+   🐻 **Bear Series** (Recurring, auto-repeats every 48 hours)
    • Bear Trap 1
    • Bear Trap 2
    • Academy Bear Trap 1
    • Academy Bear Trap 2
 
-   ⚔️ **其他活動**（單次通知）
+   ⚔️ **Other Events** (One-time notification)
    • Caesar Boss
    • Viking
 
 🔹 **/list**
-   查看所有已排程的活動與下次觸發時間
+   View all scheduled events and their next trigger times
 
 🔹 **/stop**
-   停止指定活動的排程
-   • **event**: 選擇要停止的活動（使用選單選擇）
-   • 選擇 "All" 可清除所有排程
+   Stop event schedule
+   • **event**: Select event to stop (use dropdown menu)
+   • Select "All" to clear all schedules
 
-⏰ **通知機制：**
-所有活動都會在開始前 **5 分鐘** 自動發送通知！
+⏰ **Notification System:**
+All events will send notifications **5 minutes** before the start time!
 
-📝 **範例：**
+📍 **Notification Channel:**
+Notifications will be sent to **the channel where you execute the /setup_time command**.
+• Set in Channel A → Notification sent to Channel A
+• Set in Channel B → Notification sent to Channel B
+• Re-setting an event in a different channel will change the notification location
+
+📝 **Example:**
 \`/setup_time event:Bear Trap 1 time:2026-08-30 14:00\`
-設定後會在 2026-08-30 13:55 UTC 發送通知
-下次通知會自動排在 2026-09-01 13:55 UTC（48小時後）
+→ Notification at 2026-08-30 13:55 UTC
+→ Next notification at 2026-09-01 13:55 UTC (48 hours later)
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

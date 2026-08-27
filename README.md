@@ -1,107 +1,124 @@
 # Hera's Decree - Discord Event Notification Bot
 
-一個專為群組活動通知設計的 Discord Bot，支援自動排程與循環提醒功能。
+A Discord Bot designed for group event notifications with automatic scheduling and recurring reminder features.
 
-## 功能特色
+## Features
 
-- **Slash Commands 介面**：使用 Discord 原生選單介面，操作直覺簡便
-- **多伺服器獨立運作**：每個 Discord 伺服器的活動資料完全獨立，互不影響
-- **智慧排程系統**：
-  - Bear 系列活動：每 48 小時自動循環
-  - 其他活動：單次通知
-- **精準提醒**：活動開始前 5 分鐘自動發送通知
-- **雲端部署優化**：啟動時自動註冊指令，無需手動配置
+- **Slash Commands Interface**: Intuitive operation using Discord's native dropdown menus
+- **Multi-Server Independent Operation**: Each Discord server's event data is completely independent
+- **Smart Scheduling System**:
+  - Bear Series Events: Auto-repeat every 48 hours
+  - Other Events: One-time notifications
+- **Precise Reminders**: Automatic notifications sent 5 minutes before event start
+- **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
-## 支援的活動類型
+## Supported Event Types
 
-### 🐻 Bear 系列（循環，每 48 小時）
+### 🐻 Bear Series (Recurring, every 48 hours)
 - Bear Trap 1
 - Bear Trap 2
 - Academy Bear Trap 1
 - Academy Bear Trap 2
 
-### ⚔️ 其他活動（單次）
+### ⚔️ Other Events (One-time)
 - Caesar Boss
 - Viking
 
-## 指令說明
+## Commands
 
-| 指令 | 說明 |
-|------|------|
-| `/help` | 顯示所有功能與指令說明 |
-| `/setup_time` | 設定活動通知時間（使用選單選擇活動與輸入 UTC 時間） |
-| `/list` | 查看所有已排程的活動 |
-| `/stop` | 停止指定活動或清除所有排程（選擇 "All"） |
+| Command | Description |
+|---------|-------------|
+| `/help` | Display all features and command instructions |
+| `/setup_time` | Schedule event notification time (use dropdown to select event and input UTC time) |
+| `/list` | View all scheduled events |
+| `/stop` | Stop specific event or clear all schedules (select "All") |
 
-### 使用範例
+### Usage Example
 
 ```
 /setup_time event:Bear Trap 1 time:2026-08-30 14:00
 ```
-- 活動時間：2026-08-30 14:00 UTC
-- 通知時間：2026-08-30 13:55 UTC（提前 5 分鐘）
-- 下次循環：2026-09-01 13:55 UTC（48 小時後）
+- Event time: 2026-08-30 14:00 UTC
+- Notification time: 2026-08-30 13:55 UTC (5 minutes early)
+- Next cycle: 2026-09-01 13:55 UTC (48 hours later)
+
+### 📍 Important: Notification Channel Location
+
+**Notifications are sent to the channel where you execute the `/setup_time` command.**
+
+- Set in **Channel A** → Notification sent to **Channel A**
+- Set in **Channel B** → Notification sent to **Channel B**
+- Re-setting an event in a different channel will change the notification location
+
+**Example Scenario:**
+```
+1. Execute in #general: /setup_time event:Bear Trap 1 time:2026-08-30 14:00
+   → Notification sent to #general
+
+2. Execute in #events: /setup_time event:Viking time:2026-09-01 10:00
+   → Notification sent to #events
+```
 
 ---
 
-## 部署指南
+## Deployment Guide
 
-### 第一步：Discord Bot 設定
+### Step 1: Discord Bot Setup
 
-#### 1. 建立 Discord Application
+#### 1. Create Discord Application
 
-1. 前往 [Discord Developer Portal](https://discord.com/developers/applications)
-2. 點擊 **"New Application"**
-3. 輸入名稱（例如：Hera's Decree）並建立
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click **"New Application"**
+3. Enter name (e.g., Hera's Decree) and create
 
-#### 2. 建立 Bot 並取得 Token
+#### 2. Create Bot and Get Token
 
-1. 在左側選單點擊 **"Bot"**
-2. 點擊 **"Add Bot"** 確認建立
-3. 在 Bot 頁面找到 **"TOKEN"** 區塊
-4. 點擊 **"Reset Token"** 並複製（⚠️ 只會顯示一次，請妥善保存）
+1. Click **"Bot"** in the left sidebar
+2. Click **"Add Bot"** and confirm
+3. Find the **"TOKEN"** section on Bot page
+4. Click **"Reset Token"** and copy (⚠️ Only shown once, save it securely)
 
-#### 3. 設定 Privileged Gateway Intents
+#### 3. Configure Privileged Gateway Intents
 
-在 Bot 設定頁面下方，啟用以下權限：
+Enable the following permissions at the bottom of the Bot settings page:
 
-- ✅ **SERVER MEMBERS INTENT**（如需讀取成員資訊）
-- ✅ **MESSAGE CONTENT INTENT**（如需讀取訊息內容）
+- ✅ **SERVER MEMBERS INTENT** (if reading member info is needed)
+- ✅ **MESSAGE CONTENT INTENT** (if reading message content is needed)
 
-> **注意**：本 Bot 主要使用 `Guilds` 和 `GuildMessages` intents，已在程式碼中配置。
+> **Note**: This bot primarily uses `Guilds` and `GuildMessages` intents, already configured in code.
 
-#### 4. 取得 Client ID
+#### 4. Get Client ID
 
-1. 在左側選單點擊 **"General Information"**
-2. 複製 **"APPLICATION ID"**（這就是 `CLIENT_ID`）
+1. Click **"General Information"** in the left sidebar
+2. Copy **"APPLICATION ID"** (this is your `CLIENT_ID`)
 
-#### 5. 取得 Guild ID（伺服器 ID）
+#### 5. Get Guild ID (Server ID)
 
-1. 在 Discord 中開啟 **使用者設定 → 進階**
-2. 啟用 **"開發者模式"**
-3. 右鍵點擊你的伺服器圖示 → **"複製伺服器 ID"**
+1. In Discord, open **User Settings → Advanced**
+2. Enable **"Developer Mode"**
+3. Right-click your server icon → **"Copy Server ID"**
 
-#### 6. 生成 Bot 邀請連結
+#### 6. Generate Bot Invite Link
 
-1. 在左側選單點擊 **"OAuth2" → "URL Generator"**
-2. 在 **SCOPES** 勾選：
+1. Click **"OAuth2" → "URL Generator"** in the left sidebar
+2. Under **SCOPES**, select:
    - ✅ `bot`
    - ✅ `applications.commands`
-3. 在 **BOT PERMISSIONS** 勾選：
-   - ✅ `Send Messages`（發送訊息）
-   - ✅ `Mention Everyone`（提及 @everyone）
-   - ✅ `Use Slash Commands`（使用斜線指令）
-   - ✅ `Read Messages/View Channels`（讀取訊息/查看頻道）
-4. 複製底部生成的 URL 並在瀏覽器開啟
-5. 選擇你的伺服器並授權
+3. Under **BOT PERMISSIONS**, select:
+   - ✅ `Send Messages`
+   - ✅ `Mention Everyone`
+   - ✅ `Use Slash Commands`
+   - ✅ `Read Messages/View Channels`
+4. Copy the generated URL at the bottom and open in browser
+5. Select your server and authorize
 
 ---
 
-### 第二步：Zeabur 部署
+### Step 2: Zeabur Deployment
 
-#### 1. 準備 GitHub Repository
+#### 1. Prepare GitHub Repository
 
-將專案推送到 GitHub：
+Push the project to GitHub:
 
 ```bash
 cd /path/to/Heras_decree
@@ -109,45 +126,45 @@ git init
 git add .
 git commit -m "Initial commit: Hera's Decree Bot"
 git branch -M main
-git remote add origin https://github.com/你的使用者名稱/Heras_decree.git
+git remote add origin https://github.com/your-username/Heras_decree.git
 git push -u origin main
 ```
 
-#### 2. 在 Zeabur 建立專案
+#### 2. Create Project on Zeabur
 
-1. 前往 [Zeabur](https://zeabur.com/)
-2. 登入並點擊 **"Create Project"**
-3. 選擇 **"Deploy from GitHub"**
-4. 授權 Zeabur 存取你的 GitHub
-5. 選擇 `Heras_decree` repository
+1. Go to [Zeabur](https://zeabur.com/)
+2. Login and click **"Create Project"**
+3. Select **"Deploy from GitHub"**
+4. Authorize Zeabur to access your GitHub
+5. Select `Heras_decree` repository
 
-#### 3. 設定環境變數
+#### 3. Configure Environment Variables
 
-在 Zeabur 專案設定中，新增以下環境變數：
+Add the following environment variables in Zeabur project settings:
 
-| 變數名稱 | 說明 | 範例 |
-|---------|------|------|
+| Variable Name | Description | Example |
+|--------------|-------------|---------|
 | `DISCORD_TOKEN` | Discord Bot Token | `MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GhIjKl.MnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrSt` |
 | `CLIENT_ID` | Discord Application ID | `1234567890123456789` |
-| `GUILD_ID` | Discord Server ID（選填） | `9876543210987654321` |
+| `GUILD_ID` | Discord Server ID (Optional) | `9876543210987654321` |
 
-> **GUILD_ID 說明**：
-> - **填寫單一伺服器 ID**：指令在該伺服器立即生效（推薦用於主要伺服器）
-> - **不填**：指令全域註冊到所有伺服器，需要最多 1 小時生效
+> **GUILD_ID Explanation**:
+> - **Fill single server ID**: Commands take effect immediately on that server (recommended for main server)
+> - **Leave empty**: Commands register globally to all servers, takes up to 1 hour to take effect
 >
-> **多伺服器支援**：
-> - Bot 可以同時在多個 Discord 伺服器運作
-> - 每個伺服器的活動資料**完全獨立**儲存，互不影響
-> - Server A 設定的活動不會出現在 Server B 的 `/list` 中
-> - 如果有多個伺服器，建議不填 `GUILD_ID`，讓指令全域註冊
+> **Multi-Server Support**:
+> - Bot can operate on multiple Discord servers simultaneously
+> - Each server's event data is **completely independent**
+> - Events set in Server A won't appear in Server B's `/list`
+> - If you have multiple servers, recommend leaving `GUILD_ID` empty for global registration
 
-#### 4. 部署
+#### 4. Deploy
 
-1. 點擊 **"Deploy"**
-2. Zeabur 會自動：
-   - 執行 `npm install`
-   - 執行 `npm start`（啟動 `bot.js`）
-3. 查看 Logs 確認部署成功：
+1. Click **"Deploy"**
+2. Zeabur will automatically:
+   - Run `npm install`
+   - Run `npm start` (starts `bot.js`)
+3. Check Logs to confirm successful deployment:
    ```
    ✅ Logged in as Hera's Decree#1234
    🔄 Started refreshing application (/) commands.
@@ -157,54 +174,54 @@ git push -u origin main
 
 ---
 
-### 第三步：測試 Bot
+### Step 3: Test Bot
 
-1. 在 Discord 伺服器中輸入 `/help` 確認指令已註冊
-2. 測試排程：
+1. In Discord server, type `/help` to confirm commands are registered
+2. Test scheduling:
    ```
    /setup_time event:Caesar Boss time:2026-08-27 15:00
    ```
-3. 使用 `/list` 查看排程
-4. 使用 `/stop` 取消排程
+3. Use `/list` to view schedules
+4. Use `/stop` to cancel schedules
 
 ---
 
-## 專案結構
+## Project Structure
 
 ```
 Heras_decree/
-├── bot.js                  # 主程式（自動註冊指令、處理事件）
-├── scheduler.js            # 排程管理系統
-├── commands/               # Slash Commands 定義
+├── bot.js                  # Main program (auto-register commands, handle events)
+├── scheduler.js            # Scheduling management system
+├── commands/               # Slash Commands definitions
 │   ├── help.js
 │   ├── setup_time.js
 │   ├── list.js
 │   └── stop.js
-├── package.json            # 專案依賴
-├── .env.example            # 環境變數範例
-├── .gitignore              # Git 忽略清單
-├── Procfile                # Zeabur 啟動設定
-└── README.md               # 本文件
+├── package.json            # Project dependencies
+├── .env.example            # Environment variables template
+├── .gitignore              # Git ignore list
+├── Procfile                # Zeabur startup config
+└── README.md               # This document
 ```
 
 ---
 
-## 技術細節
+## Technical Details
 
-### 時間格式
-- **輸入格式**：`YYYY-MM-DD HH:MM`（UTC 時區）
-- **範例**：`2026-08-30 14:00` 代表 2026 年 8 月 30 日下午 2 點 UTC
+### Time Format
+- **Input format**: `YYYY-MM-DD HH:MM` (UTC timezone)
+- **Example**: `2026-08-30 14:00` represents August 30, 2026, 2:00 PM UTC
 
-### 排程邏輯
-- **檢查頻率**：每 60 秒檢查一次
-- **通知視窗**：活動時間前 5-6 分鐘內（1 分鐘容錯視窗）
-- **Bear 事件循環**：發送通知後自動加 48 小時
-- **單次事件**：發送通知後自動移除
+### Scheduling Logic
+- **Check frequency**: Every 60 seconds
+- **Notification window**: 5-6 minutes before event time (1-minute tolerance window)
+- **Bear event cycling**: Automatically adds 48 hours after sending notification
+- **Single events**: Automatically removed after sending notification
 
-### 資料儲存
-- 排程資料儲存於 `scheduler-data.json`
-- **多伺服器架構**：使用 Guild ID 作為第一層 key，確保每個伺服器資料獨立
-- 格式：
+### Data Storage
+- Schedule data stored in `scheduler-data.json`
+- **Multi-server architecture**: Uses Guild ID as first-level key to ensure independent server data
+- Format:
   ```json
   {
     "1234567890123456789": {
@@ -225,41 +242,41 @@ Heras_decree/
     }
   }
   ```
-  > 以上範例顯示兩個不同伺服器（Guild ID: `1234567890123456789` 和 `9999999999999999999`）各自獨立的排程資料
+  > The above example shows two different servers (Guild ID: `1234567890123456789` and `9999999999999999999`) with their independent schedule data
 
 ---
 
-## 疑難排解
+## Troubleshooting
 
-### 指令沒有出現？
-1. 確認環境變數 `CLIENT_ID` 和 `GUILD_ID` 正確
-2. 查看 Zeabur Logs 是否有錯誤訊息
-3. 全域指令需要最多 1 小時生效（建議使用 `GUILD_ID`）
+### Commands not appearing?
+1. Verify environment variables `CLIENT_ID` and `GUILD_ID` are correct
+2. Check Zeabur Logs for error messages
+3. Global commands need up to 1 hour to take effect (recommend using `GUILD_ID`)
 
-### 通知沒有發送？
-1. 確認 Bot 有 `Send Messages` 和 `Mention Everyone` 權限
-2. 檢查時間格式是否正確（UTC 時區）
-3. 確認時間設定在未來（不能是過去時間）
+### Notifications not sent?
+1. Verify Bot has `Send Messages` and `Mention Everyone` permissions
+2. Check time format is correct (UTC timezone)
+3. Verify time is set in the future (can't be past time)
 
-### Bot 離線？
-1. 檢查 Zeabur 服務狀態
-2. 確認 `DISCORD_TOKEN` 正確且未過期
-3. 查看 Logs 尋找錯誤訊息
+### Bot offline?
+1. Check Zeabur service status
+2. Verify `DISCORD_TOKEN` is correct and not expired
+3. Check Logs for error messages
 
 ---
 
-## 授權
+## License
 
 MIT License
 
 ---
 
-## 開發者
+## Developer
 
-如需修改或擴充功能，請參考：
-- [discord.js 官方文件](https://discord.js.org/)
+For modifications or feature extensions, refer to:
+- [discord.js Official Documentation](https://discord.js.org/)
 - [Discord Developer Portal](https://discord.com/developers/docs/)
 
 ---
 
-**祝你使用愉快！⚔️**
+**Enjoy! ⚔️**

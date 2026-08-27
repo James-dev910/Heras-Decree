@@ -87,10 +87,10 @@ function scheduleEvent(eventName, timeString, channelId, guildId) {
 
   saveGuildSchedules(guildId, guildSchedules);
 
-  const eventType = isBearEvent ? '(循環，每 48 小時)' : '(單次)';
+  const eventType = isBearEvent ? '(Recurring, every 48 hours)' : '(One-time)';
   return {
     success: true,
-    message: `✅ **${eventName}** ${eventType} 已排程於 **${timeString} UTC**\n⏰ 將在活動開始前 5 分鐘發送通知`
+    message: `✅ **${eventName}** ${eventType} scheduled at **${timeString} UTC**\n⏰ Notification will be sent 5 minutes before the event starts`
   };
 }
 
@@ -100,10 +100,10 @@ function listScheduledEvents(guildId) {
   const events = Object.entries(guildSchedules);
 
   if (events.length === 0) {
-    return '📋 目前沒有任何排程的活動';
+    return '📋 No scheduled events';
   }
 
-  let message = '📋 **目前排程的活動：**\n\n';
+  let message = '📋 **Scheduled Events:**\n\n';
 
   events.forEach(([eventName, data]) => {
     const eventTime = new Date(data.time);
@@ -118,12 +118,12 @@ function listScheduledEvents(guildId) {
     const timeString = `${year}-${month}-${day} ${hours}:${minutes}`;
 
     const typeIcon = data.type === 'recurring' ? '🔄' : '📅';
-    const status = now >= notificationTime ? '⏳ 即將發送' : '⏰ 已排程';
+    const status = now >= notificationTime ? '⏳ Sending soon' : '⏰ Scheduled';
 
     message += `${typeIcon} **${eventName}**\n`;
-    message += `   └ 活動時間: ${timeString} UTC\n`;
-    message += `   └ 通知時間: 前 5 分鐘\n`;
-    message += `   └ 狀態: ${status}\n\n`;
+    message += `   └ Event time: ${timeString} UTC\n`;
+    message += `   └ Notification: 5 minutes before\n`;
+    message += `   └ Status: ${status}\n\n`;
   });
 
   return message.trim();
@@ -136,16 +136,16 @@ function stopEvent(eventName, guildId) {
   if (eventName === 'All') {
     const count = Object.keys(guildSchedules).length;
     saveGuildSchedules(guildId, {});
-    return { success: true, message: `✅ 已清除所有排程 (共 ${count} 個活動)` };
+    return { success: true, message: `✅ Cleared all schedules (${count} events removed)` };
   }
 
   if (!guildSchedules[eventName]) {
-    return { success: false, message: `❌ **${eventName}** 目前沒有排程` };
+    return { success: false, message: `❌ **${eventName}** is not currently scheduled` };
   }
 
   delete guildSchedules[eventName];
   saveGuildSchedules(guildId, guildSchedules);
-  return { success: true, message: `✅ 已停止 **${eventName}** 的排程` };
+  return { success: true, message: `✅ Stopped schedule for **${eventName}**` };
 }
 
 // Check and send notifications

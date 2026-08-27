@@ -4,7 +4,7 @@ const { listScheduledEvents } = require('../scheduler');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('list')
-    .setDescription('查看所有已排程的活動'),
+    .setDescription('View all scheduled events'),
 
   async handleList(interaction) {
     const guildId = interaction.guildId;
