@@ -227,17 +227,18 @@ function listScheduledEvents(guildId) {
     const now = new Date();
     const notificationTime = new Date(eventTime.getTime() - 5 * 60 * 1000);
 
-    const { utcTime, localTime, timezoneString } = formatTimeWithTimezone(eventTime);
-    const { utcTime: notifUtcTime, localTime: notifLocalTime } = formatTimeWithTimezone(notificationTime);
+    const utcTime = formatUTCTime(eventTime);
+    const discordTimestamp = toDiscordTimestamp(eventTime, 'F');
+    const notifDiscordTimestamp = toDiscordTimestamp(notificationTime, 't');
 
     const emoji = getEventEmoji(eventName, guildId);
     const typeIcon = data.type === 'recurring' ? '🔄' : '📅';
     const status = now >= notificationTime ? '⏳ Sending soon' : '⏰ Scheduled';
 
     message += `${emoji} **${eventName}** ${typeIcon}\n`;
-    message += `   • UTC Time: ${utcTime}\n`;
-    message += `   • Your Time (${timezoneString}): ${localTime}\n`;
-    message += `   • Notification: 5 minutes before (${notifUtcTime} UTC / ${notifLocalTime} ${timezoneString})\n`;
+    message += `   • Event Time: ${discordTimestamp}\n`;
+    message += `   • UTC Input: ${utcTime}\n`;
+    message += `   • Notification: 5 minutes before (${notifDiscordTimestamp})\n`;
     message += `   • Status: ${status}\n\n`;
   });
 
@@ -263,36 +264,20 @@ function stopEvent(eventName, guildId) {
   return { success: true, message: `✅ Stopped schedule for **${eventName}**` };
 }
 
-// Format time with timezone display
-function formatTimeWithTimezone(date) {
-  // UTC time
+// Format UTC time string for display
+function formatUTCTime(date) {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, '0');
   const day = String(date.getUTCDate()).padStart(2, '0');
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const utcTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
 
-  // Get timezone offset
-  const offset = -date.getTimezoneOffset();
-  const offsetHours = Math.floor(Math.abs(offset) / 60);
-  const offsetMinutes = Math.abs(offset) % 60;
-  const offsetSign = offset >= 0 ? '+' : '-';
-  const timezoneString = `GMT${offsetSign}${offsetHours}${offsetMinutes > 0 ? ':' + String(offsetMinutes).padStart(2, '0') : ''}`;
-
-  // Local time
-  const localYear = date.getFullYear();
-  const localMonth = String(date.getMonth() + 1).padStart(2, '0');
-  const localDay = String(date.getDate()).padStart(2, '0');
-  const localHours = String(date.getHours()).padStart(2, '0');
-  const localMinutes = String(date.getMinutes()).padStart(2, '0');
-  const localTime = `${localYear}-${localMonth}-${localDay} ${localHours}:${localMinutes}`;
-
-  return {
-    utcTime,
-    localTime,
-    timezoneString
-  };
+// Convert date to Discord timestamp
+function toDiscordTimestamp(date, style = 'F') {
+  const unixTimestamp = Math.floor(date.getTime() / 1000);
+  return `<t:${unixTimestamp}:${style}>`;
 }
 
 // Check and send notifications
@@ -319,9 +304,9 @@ async function checkAndSendNotifications(client) {
           const channel = await client.channels.fetch(data.channelId);
           if (channel) {
             const emoji = getEventEmoji(eventName, guildId);
-            const { utcTime, localTime, timezoneString } = formatTimeWithTimezone(eventTime);
+            const discordTimestamp = toDiscordTimestamp(eventTime, 'F');
 
-            const message = `🚨 @everyone\n\n${emoji} **${eventName}** starts in **5 minutes**!\n\n⏰ Start Time:\n   • UTC Time: ${utcTime}\n   • Your Time (${timezoneString}): ${localTime}\n\n🛡️ Get ready for the battle!`;
+            const message = `🚨 @everyone\n\n${emoji} **${eventName}** starts in **5 minutes**!\n\n⏰ Start Time: ${discordTimestamp}\n\n🛡️ Get ready for the battle!`;
 
             await channel.send(message);
             console.log(`✅ Sent notification for ${eventName} in guild ${guildId}`);

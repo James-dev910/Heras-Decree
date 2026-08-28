@@ -66,12 +66,16 @@ Notifications will be sent to **the channel where you execute the /setup_time co
 
 😂 **testevent** starts in **5 minutes**!
 
-⏰ Start Time:
-   • UTC Time: 2026-08-30 14:00
-   • Your Time (GMT+8): 2026-08-30 22:00
+⏰ Start Time: [Automatically displays in your local timezone]
 
 🛡️ Get ready for the battle!
 \`\`\`
+
+💡 **Smart Timezone Display:**
+The bot uses Discord's built-in timestamp feature, which automatically shows the event time in **each user's local timezone**!
+• Taiwan user sees: 2026年8月30日 22:00
+• Japan user sees: 2026年8月30日 23:00
+• US user sees: August 30, 2026 6:00 AM
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

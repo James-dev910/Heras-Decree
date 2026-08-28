@@ -11,7 +11,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
   - Bear Series Events: Auto-repeat every 48 hours
   - Other Events: One-time notifications
   - Custom Events: Choose recurring or single type
-- **Timezone Display**: Automatically shows both UTC time and your local timezone in notifications and event lists
+- **Smart Timezone Display**: Uses Discord's native timestamp feature to automatically show event times in each user's local timezone
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
@@ -77,12 +77,16 @@ Create your own events with:
 
 😂 **testevent** starts in **5 minutes**!
 
-⏰ Start Time:
-   • UTC Time: 2026-08-30 14:00
-   • Your Time (GMT+8): 2026-08-30 22:00
+⏰ Start Time: [Automatically displays in each user's local timezone]
 
 🛡️ Get ready for the battle!
 ```
+
+**Smart Timezone Feature:**
+- Taiwan users see: `2026年8月30日 22:00`
+- Japan users see: `2026年8月30日 23:00`
+- US users see: `August 30, 2026 6:00 AM`
+- The bot uses Discord's built-in timestamp feature, so everyone sees their own local time automatically!
 
 ### 📍 Important: Notification Channel Location
 
@@ -250,20 +254,25 @@ Heras_decree/
 
 ## Technical Details
 
-### Time Format
+### Time Format and Timezone Display
 - **Input format**: `YYYY-MM-DD HH:MM` (UTC timezone)
 - **Example**: `2026-08-30 14:00` represents August 30, 2026, 2:00 PM UTC
-- **Display format**: All notifications and event lists show both UTC time and your local timezone automatically
+- **Display format**: Uses Discord's native timestamp feature
 
-### Timezone Display
-- **Automatic Detection**: Bot automatically detects the server's timezone based on where it's deployed
-- **Dual Time Display**: All notifications show both UTC time and local time with timezone offset (e.g., GMT+8)
-- **Input Format**: All time inputs use UTC timezone for consistency
+### Smart Timezone Feature
+- **Discord Native Timestamps**: The bot uses Discord's `<t:timestamp:F>` format
+- **Automatic Per-User Display**: Each user automatically sees event times in their own local timezone
+- **No Configuration Required**: Discord handles timezone conversion automatically based on each user's device settings
 - **Examples**:
-  - Input: `2026-08-30 14:00` (UTC)
-  - Notification displays:
-    - UTC Time: 2026-08-30 14:00
-    - Your Time (GMT+8): 2026-08-30 22:00
+  - Input: `/setup_time event:testevent time:2026-08-30 14:00` (UTC)
+  - Taiwan user sees: `2026年8月30日 下午10:00`
+  - Japan user sees: `2026年8月30日 23:00`
+  - US user sees: `August 30, 2026 6:00 AM PST`
+- **Benefits**:
+  - ✅ Each user sees their own local time automatically
+  - ✅ No need for manual timezone settings
+  - ✅ Supports all timezones worldwide
+  - ✅ Discord handles daylight saving time automatically
 
 ### Scheduling Logic
 - **Check frequency**: Every 60 seconds
