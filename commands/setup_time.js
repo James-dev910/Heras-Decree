@@ -24,8 +24,10 @@ module.exports = {
     const timeString = interaction.options.getString('time');
     const channelId = interaction.channelId;
     const guildId = interaction.guildId;
+    const userId = interaction.user.id;
+    const discordLocale = interaction.locale;
 
-    const result = scheduleEvent(eventName, timeString, channelId, guildId);
+    const result = scheduleEvent(eventName, timeString, channelId, guildId, userId, discordLocale);
 
     await interaction.reply({
       content: result.message,

@@ -103,6 +103,9 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'remove_event') {
       const { handleRemoveEvent } = require('./commands/remove_event');
       await handleRemoveEvent(interaction);
+    } else if (commandName === 'language') {
+      const { handleLanguage } = require('./commands/language');
+      await handleLanguage(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

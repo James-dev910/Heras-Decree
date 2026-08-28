@@ -11,7 +11,8 @@ A Discord Bot designed for group event notifications with automatic scheduling a
   - Bear Series Events: Auto-repeat every 48 hours
   - Other Events: One-time notifications
   - Custom Events: Choose recurring or single type
-- **Smart Timezone Display**: Uses Discord's native timestamp feature to automatically show event times in each user's local timezone
+- **Smart Timezone Display**: Shows both UTC time and local time using Discord's native timestamp feature
+- **Multi-Language Support**: Notifications in 9 languages (Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German)
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
@@ -41,6 +42,7 @@ Create your own events with:
 | `/setup_time` | Schedule event notification time (autocomplete search for event, input UTC time) | Everyone |
 | `/list` | View all scheduled events | Everyone |
 | `/stop` | Stop specific event or clear all schedules (autocomplete search, select "All" to clear all) | Everyone |
+| `/language` | Set your preferred notification language (9 languages supported) | Everyone |
 | `/add_event` | Add a custom event with name, emoji, and type | **Manage Server** |
 | `/remove_event` | Remove a custom event (autocomplete search) | **Manage Server** |
 
@@ -71,22 +73,51 @@ Create your own events with:
 ```
 /setup_time event:testevent time:2026-08-30 14:00
 ```
-- Notification format:
+- Notification format (in your selected language):
 ```
 🚨 @everyone
 
 😂 **testevent** starts in **5 minutes**!
 
-⏰ Start Time: [Automatically displays in each user's local timezone]
+⏰ Start Time:
+   • UTC Time: 2026-08-30 14:00
+   • Your Time: [Displays in your local timezone automatically]
 
 🛡️ Get ready for the battle!
 ```
 
-**Smart Timezone Feature:**
-- Taiwan users see: `2026年8月30日 22:00`
-- Japan users see: `2026年8月30日 23:00`
-- US users see: `August 30, 2026 6:00 AM`
-- The bot uses Discord's built-in timestamp feature, so everyone sees their own local time automatically!
+**Smart Features:**
+- **Multi-Language**: Set your preferred language with `/language`
+- **Timezone Display**: Shows both UTC time and your local time
+- **Auto-Detection**: Uses your Discord language by default
+- **9 Languages Supported**: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
+
+### 🌍 Multi-Language Support
+
+The bot supports **9 languages** for notifications:
+
+| Language | Code | Flag |
+|----------|------|------|
+| Traditional Chinese | zh-TW | 🇹🇼 |
+| English | en-US | 🇺🇸 |
+| Tagalog | tl | 🇵🇭 |
+| Indonesian | id | 🇮🇩 |
+| Korean | ko | 🇰🇷 |
+| Japanese | ja | 🇯🇵 |
+| Thai | th | 🇹🇭 |
+| Spanish | es-ES | 🇪🇸 |
+| German | de | 🇩🇪 |
+
+**How it works:**
+1. **Default**: Bot uses your Discord language setting automatically
+2. **Custom**: Use `/language` to set your preferred language
+3. **Per-User**: Each user can have their own language preference
+
+**Example:**
+```
+/language lang:繁體中文
+→ All your future notifications will be in Traditional Chinese
+```
 
 ### 📍 Important: Notification Channel Location
 
@@ -261,18 +292,28 @@ Heras_decree/
 
 ### Smart Timezone Feature
 - **Discord Native Timestamps**: The bot uses Discord's `<t:timestamp:F>` format
+- **Dual Time Display**: Shows both UTC time (for scheduling reference) and local time (automatic conversion)
 - **Automatic Per-User Display**: Each user automatically sees event times in their own local timezone
 - **No Configuration Required**: Discord handles timezone conversion automatically based on each user's device settings
 - **Examples**:
   - Input: `/setup_time event:testevent time:2026-08-30 14:00` (UTC)
-  - Taiwan user sees: `2026年8月30日 下午10:00`
-  - Japan user sees: `2026年8月30日 23:00`
-  - US user sees: `August 30, 2026 6:00 AM PST`
+  - Notification shows:
+    - UTC Time: 2026-08-30 14:00
+    - Taiwan user's local time: `2026年8月30日 下午10:00`
+    - Japan user's local time: `2026年8月30日 23:00`
+    - US user's local time: `August 30, 2026 6:00 AM PST`
 - **Benefits**:
   - ✅ Each user sees their own local time automatically
-  - ✅ No need for manual timezone settings
+  - ✅ UTC time always visible for reference
   - ✅ Supports all timezones worldwide
   - ✅ Discord handles daylight saving time automatically
+
+### Multi-Language System
+- **Supported Languages**: 9 languages (繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch)
+- **Auto-Detection**: Automatically uses Discord's locale setting
+- **User Preferences**: Each user can override with `/language` command
+- **Persistent Storage**: Language preferences stored in `user-preferences.json`
+- **Per-Guild Per-User**: Each user has independent language settings for each server
 
 ### Scheduling Logic
 - **Check frequency**: Every 60 seconds
@@ -282,7 +323,10 @@ Heras_decree/
 
 ### Data Storage
 - Schedule data stored in `scheduler-data.json`
+- Custom events stored in `custom-events.json`
+- User language preferences stored in `user-preferences.json`
 - **Multi-server architecture**: Uses Guild ID as first-level key to ensure independent server data
+- **⚠️ Important**: All JSON files will be reset when redeploying to Zeabur (use database for production)
 - Format:
   ```json
   {

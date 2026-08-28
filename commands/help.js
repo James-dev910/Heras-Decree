@@ -43,6 +43,12 @@ module.exports = {
    • **name**: Custom event name to remove (autocomplete search)
    • Note: Cannot remove events with active schedules (stop them first)
 
+🔹 **/language** 🌍
+   Set your preferred notification language
+   • **lang**: Select your language
+   • Supported: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
+   • Default: Uses your Discord language setting
+
 🔒 **Permission Requirements:**
 • /add_event and /remove_event require "Manage Server" permission
 • All other commands are available to everyone
@@ -66,16 +72,18 @@ Notifications will be sent to **the channel where you execute the /setup_time co
 
 😂 **testevent** starts in **5 minutes**!
 
-⏰ Start Time: [Automatically displays in your local timezone]
+⏰ Start Time:
+   • UTC Time: 2026-08-30 14:00
+   • Your Time: [Displays in your local timezone]
 
 🛡️ Get ready for the battle!
 \`\`\`
 
-💡 **Smart Timezone Display:**
-The bot uses Discord's built-in timestamp feature, which automatically shows the event time in **each user's local timezone**!
-• Taiwan user sees: 2026年8月30日 22:00
-• Japan user sees: 2026年8月30日 23:00
-• US user sees: August 30, 2026 6:00 AM
+💡 **Smart Features:**
+• **Multi-Language**: Notifications appear in your preferred language
+• **Timezone Display**: Shows both UTC time and your local time automatically
+• **Auto-Detection**: Uses your Discord language by default
+• Use /language to change notification language anytime
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

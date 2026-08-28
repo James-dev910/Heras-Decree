@@ -172,7 +172,7 @@ function removeCustomEvent(eventName, guildId) {
 }
 
 // Schedule an event
-function scheduleEvent(eventName, timeString, channelId, guildId) {
+function scheduleEvent(eventName, timeString, channelId, guildId, userId, discordLocale) {
   const allEventNames = getAllEventNames(guildId);
   if (!allEventNames.includes(eventName)) {
     return { success: false, message: '❌ Invalid event name!' };
@@ -195,11 +195,17 @@ function scheduleEvent(eventName, timeString, channelId, guildId) {
   const guildSchedules = getGuildSchedules(guildId);
   const isRecurring = isBearEvent(eventName, guildId);
 
+  // Store user info for language preferences
+  const { getUserLanguage } = require('./user-preferences');
+  const userLanguage = getUserLanguage(guildId, userId, discordLocale);
+
   guildSchedules[eventName] = {
     time: eventTime.toISOString(),
     channelId: channelId,
     type: isRecurring ? 'recurring' : 'single',
-    lastNotified: null
+    lastNotified: null,
+    createdBy: userId,
+    language: userLanguage
   };
 
   saveGuildSchedules(guildId, guildSchedules);
@@ -305,11 +311,22 @@ async function checkAndSendNotifications(client) {
           if (channel) {
             const emoji = getEventEmoji(eventName, guildId);
             const discordTimestamp = toDiscordTimestamp(eventTime, 'F');
+            const utcTimeString = formatUTCTime(eventTime);
 
-            const message = `🚨 @everyone\n\n${emoji} **${eventName}** starts in **5 minutes**!\n\n⏰ Start Time: ${discordTimestamp}\n\n🛡️ Get ready for the battle!`;
+            // Get language for this event (use stored language or default to English)
+            const { getTranslation } = require('./i18n');
+            const language = data.language || 'en-US';
+
+            const title = getTranslation(language, 'notification.title');
+            const startTimeLabel = getTranslation(language, 'notification.startTime');
+            const utcTimeLabel = getTranslation(language, 'notification.utcTime');
+            const localTimeLabel = getTranslation(language, 'notification.localTime');
+            const footer = getTranslation(language, 'notification.footer');
+
+            const message = `🚨 @everyone\n\n${emoji} **${eventName}** ${title}\n\n${startTimeLabel}:\n   • ${utcTimeLabel}: ${utcTimeString}\n   • ${localTimeLabel}: ${discordTimestamp}\n\n${footer}`;
 
             await channel.send(message);
-            console.log(`✅ Sent notification for ${eventName} in guild ${guildId}`);
+            console.log(`✅ Sent notification for ${eventName} in guild ${guildId} (${language})`);
 
             // Update lastNotified
             guildSchedules[eventName].lastNotified = data.time;
