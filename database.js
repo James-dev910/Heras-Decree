@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 // Create PostgreSQL connection pool
 const pool = new Pool({
   connectionString: process.env.POSTGRES_CONNECTION_STRING,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: false  // Zeabur PostgreSQL doesn't require SSL for internal connections
 });
 
 // Initialize database tables
