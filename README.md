@@ -246,11 +246,12 @@ Add these environment variables to your **bot service** (not PostgreSQL):
 | `CLIENT_ID` | Discord Application ID | `1234567890123456789` |
 | `GUILD_ID` | Discord Server ID (Optional) | `9876543210987654321` |
 | `POSTGRES_CONNECTION_STRING` | PostgreSQL Connection | `${POSTGRES_CONNECTION_STRING}` |
-| `NODE_ENV` | Environment | `production` |
 
 **How to reference PostgreSQL:**
 - Click the value field for `POSTGRES_CONNECTION_STRING`
 - Type `${POSTGRES_CONNECTION_STRING}` - Zeabur will auto-link it to your PostgreSQL service
+
+**Note:** `NODE_ENV` is not required - Zeabur's internal PostgreSQL network doesn't use SSL
 
 > **GUILD_ID Explanation**:
 > - **Fill single server ID**: Commands take effect immediately on that server (recommended for main server)
@@ -491,9 +492,9 @@ Step 4: /list again
 
 ### Database connection failed?
 1. Check that PostgreSQL service is running in Zeabur
-2. Verify `POSTGRES_CONNECTION_STRING` environment variable is set correctly
+2. Verify `POSTGRES_CONNECTION_STRING` environment variable is set correctly as `${POSTGRES_CONNECTION_STRING}`
 3. Check bot logs for specific database errors
-4. Ensure `NODE_ENV=production` is set for SSL connection
+4. If you see "SSL connection" errors, remove `NODE_ENV` variable (not needed for Zeabur)
 
 ### Bot offline?
 1. Check Zeabur service status
