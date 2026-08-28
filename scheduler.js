@@ -313,9 +313,11 @@ async function checkAndSendNotifications(client) {
             const discordTimestamp = toDiscordTimestamp(eventTime, 'F');
             const utcTimeString = formatUTCTime(eventTime);
 
-            // Get language for this event (use stored language or default to English)
+            // Get current language for the user who created this event
+            const { getUserLanguage } = require('./user-preferences');
             const { getTranslation } = require('./i18n');
-            const language = data.language || 'en-US';
+            const creatorId = data.createdBy;
+            const language = creatorId ? getUserLanguage(guildId, creatorId, 'en-US') : (data.language || 'en-US');
 
             const title = getTranslation(language, 'notification.title');
             const startTimeLabel = getTranslation(language, 'notification.startTime');

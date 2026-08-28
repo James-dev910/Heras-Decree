@@ -111,13 +111,19 @@ The bot supports **9 languages** for notifications:
 **How it works:**
 1. **Default**: Bot uses your Discord language setting automatically
 2. **Custom**: Use `/language` to set your preferred language
-3. **Per-User**: Each user can have their own language preference
+3. **Real-Time**: Language preference applies immediately to all your scheduled events
+4. **Per-User**: Each user can have their own language preference
 
 **Example:**
 ```
 /language lang:繁體中文
-→ All your future notifications will be in Traditional Chinese
+→ All your notifications (including existing schedules) will now be in Traditional Chinese
 ```
+
+**Important Notes:**
+- ✅ Changing language applies to **all your existing schedules** immediately
+- ✅ Each user sees notifications in their own preferred language
+- ⚠️ Language settings will reset when redeploying (use database for production)
 
 ### 📍 Important: Notification Channel Location
 
@@ -363,6 +369,20 @@ Heras_decree/
 1. Verify Bot has `Send Messages` and `Mention Everyone` permissions
 2. Check time format is correct (UTC timezone)
 3. Verify time is set in the future (can't be past time)
+
+### Language not changing?
+1. Make sure you used `/language` to set your preference
+2. Language applies to **YOUR** schedules only (other users have their own settings)
+3. If issue persists, try stopping and re-creating the schedule
+
+### /help command error?
+1. This was fixed in the latest version - redeploy to get the fix
+2. If still failing, check Zeabur logs for detailed error messages
+
+### Data disappeared after redeployment?
+1. **This is expected behavior** - JSON files reset on every deployment
+2. Schedules, custom events, and language settings will be lost
+3. **Solution**: Implement PostgreSQL database for permanent storage
 
 ### Bot offline?
 1. Check Zeabur service status

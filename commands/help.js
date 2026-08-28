@@ -9,81 +9,37 @@ module.exports = {
     const helpMessage = `
 📖 **Hera's Decree Bot - Commands Guide**
 
-🔹 **/help**
-   Display this help message
+**Basic Commands:**
+🔹 **/setup_time** - Schedule event (event, time: YYYY-MM-DD HH:MM UTC)
+🔹 **/list** - View all scheduled events
+🔹 **/stop** - Stop event schedule or clear all
+🔹 **/language** - Set notification language (9 languages)
+🔹 **/help** - Display this help
 
-🔹 **/setup_time**
-   Schedule event notification time
-   • **event**: Select event type (autocomplete search)
-   • **time**: Set UTC time (format: YYYY-MM-DD HH:MM)
+**Admin Commands:** 🔒
+🔹 **/add_event** - Create custom event (name, emoji, type)
+🔹 **/remove_event** - Delete custom event
 
-   **Default Event Types:**
-   🐻 **Bear Series** (Recurring, auto-repeats every 48 hours)
-   • Bear Trap 1, Bear Trap 2, Academy Bear Trap 1, Academy Bear Trap 2
+**Default Events:**
+🐻 Bear Series (48h repeat): Bear Trap 1/2, Academy Bear Trap 1/2
+⚔️ Single Events: Caesar Boss, Viking
 
-   ⚔️ **Other Events** (One-time notification)
-   • Caesar Boss, Viking
+**Supported Languages:**
+🇹🇼 繁中 🇺🇸 English 🇵🇭 Tagalog 🇮🇩 Indonesia 🇰🇷 한국어
+🇯🇵 日本語 🇹🇭 ไทย 🇪🇸 Español 🇩🇪 Deutsch
 
-🔹 **/list**
-   View all scheduled events and their next trigger times
+**Key Features:**
+⏰ Notifications sent 5 minutes before event
+📍 Sent to channel where /setup_time was used
+🌍 Multi-language with auto-detection
+🕐 Shows UTC + your local time
 
-🔹 **/stop**
-   Stop event schedule
-   • **event**: Select event to stop (autocomplete search)
-   • Select "All" to clear all schedules
+**Example:**
+\`/language lang:繁體中文\`
+\`/add_event name:test emoji:😂 type:Single\`
+\`/setup_time event:test time:2026-08-30 14:00\`
 
-🔹 **/add_event** ✨ 🔒
-   Add a custom event (requires Manage Server permission)
-   • **name**: Event name (e.g., "testevent")
-   • **emoji**: Emoji for the event (e.g., 😂 or :joy:)
-   • **type**: Select "Recurring" (48h) or "Single" (one-time)
-
-🔹 **/remove_event** 🗑️ 🔒
-   Remove a custom event (requires Manage Server permission)
-   • **name**: Custom event name to remove (autocomplete search)
-   • Note: Cannot remove events with active schedules (stop them first)
-
-🔹 **/language** 🌍
-   Set your preferred notification language
-   • **lang**: Select your language
-   • Supported: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
-   • Default: Uses your Discord language setting
-
-🔒 **Permission Requirements:**
-• /add_event and /remove_event require "Manage Server" permission
-• All other commands are available to everyone
-
-⏰ **Notification System:**
-All events will send notifications **5 minutes** before the start time!
-
-📍 **Notification Channel:**
-Notifications will be sent to **the channel where you execute the /setup_time command**.
-• Set in Channel A → Notification sent to Channel A
-• Set in Channel B → Notification sent to Channel B
-• Re-setting an event in a different channel will change the notification location
-
-📝 **Examples:**
-\`/add_event name:testevent emoji:😂 type:Single\`
-\`/setup_time event:testevent time:2026-08-30 14:00\`
-
-→ Notification format:
-\`\`\`
-🚨 @everyone
-
-😂 **testevent** starts in **5 minutes**!
-
-⏰ Start Time:
-   • UTC Time: 2026-08-30 14:00
-   • Your Time: [Displays in your local timezone]
-
-🛡️ Get ready for the battle!
-\`\`\`
-
-💡 **Smart Features:**
-• **Multi-Language**: Notifications appear in your preferred language
-• **Timezone Display**: Shows both UTC time and your local time automatically
-• **Auto-Detection**: Uses your Discord language by default
-• Use /language to change notification language anytime
+💡 Notification appears in your selected language with both UTC and local time!
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });
