@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { stopEvent, getAllEventNames } = require('../scheduler');
+const { stopEvent, getAllEventNames } = require('../scheduler-db');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,7 +16,7 @@ module.exports = {
   async handleStop(interaction) {
     const eventName = interaction.options.getString('event');
     const guildId = interaction.guildId;
-    const result = stopEvent(eventName, guildId);
+    const result = await stopEvent(eventName, guildId);
 
     await interaction.reply({
       content: result.message,
@@ -26,7 +26,7 @@ module.exports = {
 
   async handleAutocomplete(interaction) {
     const guildId = interaction.guildId;
-    const allEvents = getAllEventNames(guildId);
+    const allEvents = await getAllEventNames(guildId);
     const focusedValue = interaction.options.getFocused();
 
     // Add "All" option

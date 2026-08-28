@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { setUserLanguage, getUserLanguage } = require('../user-preferences');
+const { setUserLanguage } = require('../user-preferences-db');
 const { languageNames } = require('../i18n');
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
     const guildId = interaction.guildId;
     const userId = interaction.user.id;
 
-    setUserLanguage(guildId, userId, language);
+    await setUserLanguage(guildId, userId, language);
 
     const languageName = languageNames[language];
 

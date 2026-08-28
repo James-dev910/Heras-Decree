@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { listScheduledEvents } = require('../scheduler');
+const { listScheduledEvents } = require('../scheduler-db');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
 
   async handleList(interaction) {
     const guildId = interaction.guildId;
-    const message = listScheduledEvents(guildId);
+    const message = await listScheduledEvents(guildId);
     await interaction.reply({ content: message, ephemeral: true });
   }
 };

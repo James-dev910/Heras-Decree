@@ -13,6 +13,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
   - Custom Events: Choose recurring or single type
 - **Smart Timezone Display**: Shows both UTC time and local time using Discord's native timestamp feature
 - **Multi-Language Support**: Notifications in 9 languages (Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German)
+- **PostgreSQL Database**: Permanent data storage - schedules persist through redeployments
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
@@ -221,15 +222,35 @@ git push -u origin main
 4. Authorize Zeabur to access your GitHub
 5. Select `Heras_decree` repository
 
-#### 3. Configure Environment Variables
+#### 3. Add PostgreSQL Database
 
-Add the following environment variables in Zeabur project settings:
+**IMPORTANT: Do this BEFORE deploying the bot!**
 
-| Variable Name | Description | Example |
+1. In your Zeabur project, click **"Create Service"** or **"+ Add Service"**
+2. Select **"Marketplace"** or **"Prebuilt"**
+3. Search for **"PostgreSQL"**
+4. Click **"Deploy"**
+5. Wait 1-2 minutes for PostgreSQL to finish deploying
+
+Zeabur will automatically generate these environment variables:
+- `POSTGRES_CONNECTION_STRING` (you'll reference this in bot settings)
+- `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DATABASE`, etc.
+
+#### 4. Configure Bot Environment Variables
+
+Add these environment variables to your **bot service** (not PostgreSQL):
+
+| Variable Name | Description | Example/Value |
 |--------------|-------------|---------|
 | `DISCORD_TOKEN` | Discord Bot Token | `MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GhIjKl.MnOpQrStUvWxYzAbCdEfGhIjKlMnOpQrSt` |
 | `CLIENT_ID` | Discord Application ID | `1234567890123456789` |
 | `GUILD_ID` | Discord Server ID (Optional) | `9876543210987654321` |
+| `POSTGRES_CONNECTION_STRING` | PostgreSQL Connection | `${POSTGRES_CONNECTION_STRING}` |
+| `NODE_ENV` | Environment | `production` |
+
+**How to reference PostgreSQL:**
+- Click the value field for `POSTGRES_CONNECTION_STRING`
+- Type `${POSTGRES_CONNECTION_STRING}` - Zeabur will auto-link it to your PostgreSQL service
 
 > **GUILD_ID Explanation**:
 > - **Fill single server ID**: Commands take effect immediately on that server (recommended for main server)
@@ -328,12 +349,32 @@ Heras_decree/
 - **Single events**: Automatically removed after sending notification
 
 ### Data Storage
-- Schedule data stored in `scheduler-data.json`
-- Custom events stored in `custom-events.json`
-- User language preferences stored in `user-preferences.json`
-- **Multi-server architecture**: Uses Guild ID as first-level key to ensure independent server data
-- **⚠️ Important**: All JSON files will be reset when redeploying to Zeabur (use database for production)
-- Format:
+
+**PostgreSQL Database Tables:**
+
+1. **schedules** - Event schedules
+   - Stores: guild_id, event_name, event_time, channel_id, type, language, created_by
+   - Primary Key: (guild_id, event_name)
+   - Automatic timezone handling and recurring logic
+
+2. **custom_events** - Custom events
+   - Stores: guild_id, event_name, emoji, type
+   - Primary Key: (guild_id, event_name)
+
+3. **user_preferences** - Language preferences
+   - Stores: guild_id, user_id, language
+   - Primary Key: (guild_id, user_id)
+
+**Benefits:**
+- ✅ **Permanent storage** - Data persists through redeployments
+- ✅ **Multi-server architecture** - Each guild's data is completely independent
+- ✅ **Automatic backups** - Zeabur PostgreSQL includes backup features
+- ✅ **No data loss** - Unlike JSON files, database data is never reset
+
+**Legacy JSON Files (Deprecated):**
+- Old versions used `scheduler-data.json`, `custom-events.json`, `user-preferences.json`
+- These are no longer used with PostgreSQL enabled
+- Format for reference:
   ```json
   {
     "1234567890123456789": {
@@ -355,6 +396,70 @@ Heras_decree/
   }
   ```
   > The above example shows two different servers (Guild ID: `1234567890123456789` and `9999999999999999999`) with their independent schedule data
+
+---
+
+## Testing Guide
+
+### How to Test PostgreSQL Integration
+
+After deploying with PostgreSQL, follow these steps to verify everything works:
+
+#### 1. Check Database Connection
+Look for these messages in Zeabur logs:
+```
+✅ Logged in as Hera's Decree#1234
+✅ Database connection successful
+✅ Database tables initialized successfully
+```
+
+#### 2. Test Event Scheduling
+```
+/setup_time event:Bear Trap 1 time:2026-08-28 XX:XX
+→ Should see: ✅ Bear Trap 1 (Recurring, every 48 hours) scheduled...
+```
+
+#### 3. Verify Data Persistence
+```
+Step 1: /setup_time event:Caesar Boss time:2026-08-29 10:00
+Step 2: /list
+        → Should show: Caesar Boss scheduled
+
+Step 3: Redeploy bot on Zeabur (trigger a new deployment)
+
+Step 4: /list again
+        → Should STILL show: Caesar Boss scheduled ✅
+```
+
+**If Caesar Boss is still there after redeployment, PostgreSQL is working correctly!**
+
+#### 4. Test Multi-Language
+```
+/language lang:繁體中文
+→ Wait for scheduled event notification
+→ Should appear in Traditional Chinese ✅
+```
+
+#### 5. Test Custom Events
+```
+/add_event name:testevent emoji:😂 type:Single
+/setup_time event:testevent time:2026-08-29 14:00
+→ Should work and persist after redeployment ✅
+```
+
+### Expected Behavior
+
+**With PostgreSQL (Current Version):**
+- ✅ Schedules persist through redeployments
+- ✅ Custom events persist
+- ✅ Language settings persist
+- ✅ No data loss on updates
+
+**Without PostgreSQL (Old Version):**
+- ❌ All data resets on redeployment
+- ❌ Need to recreate schedules
+- ❌ Custom events deleted
+- ❌ Language settings lost
 
 ---
 
@@ -380,9 +485,15 @@ Heras_decree/
 2. If still failing, check Zeabur logs for detailed error messages
 
 ### Data disappeared after redeployment?
-1. **This is expected behavior** - JSON files reset on every deployment
-2. Schedules, custom events, and language settings will be lost
-3. **Solution**: Implement PostgreSQL database for permanent storage
+1. **With PostgreSQL**: Data should NOT disappear - check database connection
+2. **Without PostgreSQL (old version)**: JSON files reset on every deployment
+3. **Solution**: Ensure PostgreSQL is properly configured with `POSTGRES_CONNECTION_STRING`
+
+### Database connection failed?
+1. Check that PostgreSQL service is running in Zeabur
+2. Verify `POSTGRES_CONNECTION_STRING` environment variable is set correctly
+3. Check bot logs for specific database errors
+4. Ensure `NODE_ENV=production` is set for SSL connection
 
 ### Bot offline?
 1. Check Zeabur service status

@@ -2,7 +2,8 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const { scheduleEvent, listScheduledEvents, stopEvent, checkAndSendNotifications } = require('./scheduler');
+const { initializeDatabase, testConnection } = require('./database');
+const { scheduleEvent, listScheduledEvents, stopEvent, checkAndSendNotifications } = require('./scheduler-db');
 
 const client = new Client({
   intents: [
@@ -25,6 +26,14 @@ for (const file of commandFiles) {
 // Register commands when bot is ready
 client.once('ready', async () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
+
+  // Test database connection and initialize tables
+  const dbConnected = await testConnection();
+  if (dbConnected) {
+    await initializeDatabase();
+  } else {
+    console.error('⚠️ Database connection failed - bot will not function correctly');
+  }
 
   const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 

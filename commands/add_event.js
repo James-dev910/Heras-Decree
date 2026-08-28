@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { addCustomEvent } = require('../scheduler');
+const { addCustomEvent } = require('../scheduler-db');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -35,7 +35,7 @@ module.exports = {
     const type = interaction.options.getString('type');
     const guildId = interaction.guildId;
 
-    const result = addCustomEvent(eventName, emoji, type, guildId);
+    const result = await addCustomEvent(eventName, emoji, type, guildId);
 
     await interaction.reply({
       content: result.message,

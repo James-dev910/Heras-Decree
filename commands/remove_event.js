@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { removeCustomEvent, getGuildCustomEvents } = require('../scheduler');
+const { removeCustomEvent, getGuildCustomEvents } = require('../scheduler-db');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,7 +18,7 @@ module.exports = {
     const eventName = interaction.options.getString('name');
     const guildId = interaction.guildId;
 
-    const result = removeCustomEvent(eventName, guildId);
+    const result = await removeCustomEvent(eventName, guildId);
 
     await interaction.reply({
       content: result.message,
@@ -28,7 +28,7 @@ module.exports = {
 
   async handleAutocomplete(interaction) {
     const guildId = interaction.guildId;
-    const customEvents = getGuildCustomEvents(guildId);
+    const customEvents = await getGuildCustomEvents(guildId);
     const focusedValue = interaction.options.getFocused();
 
     const choices = Object.keys(customEvents)
