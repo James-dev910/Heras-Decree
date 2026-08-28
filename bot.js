@@ -115,6 +115,12 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'language') {
       const { handleLanguage } = require('./commands/language');
       await handleLanguage(interaction);
+    } else if (commandName === 'setup_bear_series') {
+      const { handleSetupBearSeries } = require('./commands/setup_bear_series');
+      await handleSetupBearSeries(interaction);
+    } else if (commandName === 'countdown') {
+      const { handleCountdown } = require('./commands/countdown');
+      await handleCountdown(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

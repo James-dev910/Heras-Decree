@@ -5,11 +5,13 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 ## Features
 
 - **Slash Commands Interface**: Intuitive operation using Discord's native autocomplete search
+- **Batch Scheduling**: Schedule all 4 Bear Trap events at once with `/setup_bear_series`
+- **Countdown Timers**: View upcoming events with live countdown timers using `/countdown`
 - **Custom Events**: Add your own events with custom emojis and scheduling types
 - **Multi-Server Independent Operation**: Each Discord server's event data is completely independent
 - **Smart Scheduling System**:
   - Bear Series Events: Auto-repeat every 48 hours
-  - Other Events: One-time notifications
+  - Other Events: One-time notifications (auto-deleted after notification)
   - Custom Events: Choose recurring or single type
 - **Smart Timezone Display**: Shows both UTC time and local time using Discord's native timestamp feature
 - **Multi-Language Support**: Notifications in 9 languages (Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German)
@@ -41,7 +43,9 @@ Create your own events with:
 |---------|-------------|---------------------|
 | `/help` | Display all features and command instructions | Everyone |
 | `/setup_time` | Schedule event notification time (autocomplete search for event, input UTC time) | Everyone |
+| `/setup_bear_series` | Batch schedule all 4 Bear Trap events at once | **Manage Server** |
 | `/list` | View all scheduled events | Everyone |
+| `/countdown` | Show upcoming events with countdown timers | Everyone |
 | `/stop` | Stop specific event or clear all schedules (autocomplete search, select "All" to clear all) | Everyone |
 | `/language` | Set your preferred notification language (9 languages supported) | Everyone |
 | `/add_event` | Add a custom event with name, emoji, and type | **Manage Server** |
@@ -49,8 +53,11 @@ Create your own events with:
 
 ### 🔒 Permission Requirements
 
-- **Everyone**: All users can schedule events, view schedules, and stop events
-- **Manage Server**: Only users with "Manage Server" permission can create or remove custom events
+- **Everyone**: All users can schedule events, view schedules, stop events, view countdowns, and set language preferences
+- **Manage Server**: Only users with "Manage Server" permission can:
+  - Batch schedule Bear Trap series (`/setup_bear_series`)
+  - Create custom events (`/add_event`)
+  - Remove custom events (`/remove_event`)
   - This includes server owners and users with the "Manage Server" role permission
   - This prevents unauthorized users from modifying the event list
 
@@ -87,10 +94,48 @@ Create your own events with:
 🛡️ Get ready for the battle!
 ```
 
+#### Batch Schedule Bear Trap Series
+```
+/setup_bear_series
+  bear_trap_1:2026-08-30 14:00
+  bear_trap_2:2026-08-30 16:00
+  academy_bear_trap_1:2026-08-30 18:00
+  academy_bear_trap_2:2026-08-30 20:00
+  channel:#events
+```
+- Schedules all 4 Bear Trap events at once
+- Each event repeats every 48 hours automatically
+- Saves time compared to scheduling each event individually
+- Perfect for weekly Bear Trap coordination
+
+#### View Countdown Timers
+```
+/countdown
+```
+- Shows all upcoming events with live countdown timers
+- Example output:
+```
+⏰ Upcoming Events Countdown:
+
+⚔️ Bear Trap 1 🔄
+   • Time: in 2 hours
+   • Countdown: 2h 15m 30s
+   • Notification: 5 minutes before
+
+😂 testevent 📅
+   • Time: in 5 hours
+   • Countdown: 5h 42m 18s
+   • Notification: 5 minutes before
+
+💡 Use /list to see full event details
+```
+
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
 - **Timezone Display**: Shows both UTC time and your local time
 - **Auto-Detection**: Uses your Discord language by default
+- **Batch Scheduling**: Schedule all Bear Traps at once with `/setup_bear_series`
+- **Countdown Timers**: Track time remaining with `/countdown`
 - **9 Languages Supported**: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
 
 ### 🌍 Multi-Language Support

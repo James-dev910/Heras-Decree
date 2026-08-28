@@ -265,15 +265,16 @@ async function stopEvent(eventName, guildId) {
 async function checkAndSendNotifications(client) {
   try {
     const now = new Date();
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
-    const sixMinutesAgo = new Date(now.getTime() - 6 * 60 * 1000);
+    const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
+    const fourMinutesFromNow = new Date(now.getTime() + 4 * 60 * 1000);
+    const sixMinutesFromNow = new Date(now.getTime() + 6 * 60 * 1000);
 
-    // Find schedules that need notification
+    // Find schedules that need notification (events happening in ~5 minutes)
     const result = await pool.query(`
       SELECT * FROM schedules
       WHERE event_time BETWEEN $1 AND $2
       AND (last_notified IS NULL OR last_notified != event_time)
-    `, [sixMinutesAgo, fiveMinutesAgo]);
+    `, [fourMinutesFromNow, sixMinutesFromNow]);
 
     for (const schedule of result.rows) {
       try {
