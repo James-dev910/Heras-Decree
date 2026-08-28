@@ -59,7 +59,19 @@ Notifications will be sent to **the channel where you execute the /setup_time co
 📝 **Examples:**
 \`/add_event name:testevent emoji:😂 type:Single\`
 \`/setup_time event:testevent time:2026-08-30 14:00\`
-→ Notification: "🚨 @everyone 😂 **testevent** starts in **5 minutes**! Get ready for the battle! 🛡️"
+
+→ Notification format:
+\`\`\`
+🚨 @everyone
+
+😂 **testevent** starts in **5 minutes**!
+
+⏰ Start Time:
+   • UTC Time: 2026-08-30 14:00
+   • Your Time (GMT+8): 2026-08-30 22:00
+
+🛡️ Get ready for the battle!
+\`\`\`
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

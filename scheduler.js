@@ -227,20 +227,18 @@ function listScheduledEvents(guildId) {
     const now = new Date();
     const notificationTime = new Date(eventTime.getTime() - 5 * 60 * 1000);
 
-    const year = eventTime.getUTCFullYear();
-    const month = String(eventTime.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(eventTime.getUTCDate()).padStart(2, '0');
-    const hours = String(eventTime.getUTCHours()).padStart(2, '0');
-    const minutes = String(eventTime.getUTCMinutes()).padStart(2, '0');
-    const timeString = `${year}-${month}-${day} ${hours}:${minutes}`;
+    const { utcTime, localTime, timezoneString } = formatTimeWithTimezone(eventTime);
+    const { utcTime: notifUtcTime, localTime: notifLocalTime } = formatTimeWithTimezone(notificationTime);
 
+    const emoji = getEventEmoji(eventName, guildId);
     const typeIcon = data.type === 'recurring' ? '🔄' : '📅';
     const status = now >= notificationTime ? '⏳ Sending soon' : '⏰ Scheduled';
 
-    message += `${typeIcon} **${eventName}**\n`;
-    message += `   └ Event time: ${timeString} UTC\n`;
-    message += `   └ Notification: 5 minutes before\n`;
-    message += `   └ Status: ${status}\n\n`;
+    message += `${emoji} **${eventName}** ${typeIcon}\n`;
+    message += `   • UTC Time: ${utcTime}\n`;
+    message += `   • Your Time (${timezoneString}): ${localTime}\n`;
+    message += `   • Notification: 5 minutes before (${notifUtcTime} UTC / ${notifLocalTime} ${timezoneString})\n`;
+    message += `   • Status: ${status}\n\n`;
   });
 
   return message.trim();
@@ -263,6 +261,38 @@ function stopEvent(eventName, guildId) {
   delete guildSchedules[eventName];
   saveGuildSchedules(guildId, guildSchedules);
   return { success: true, message: `✅ Stopped schedule for **${eventName}**` };
+}
+
+// Format time with timezone display
+function formatTimeWithTimezone(date) {
+  // UTC time
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const utcTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+  // Get timezone offset
+  const offset = -date.getTimezoneOffset();
+  const offsetHours = Math.floor(Math.abs(offset) / 60);
+  const offsetMinutes = Math.abs(offset) % 60;
+  const offsetSign = offset >= 0 ? '+' : '-';
+  const timezoneString = `GMT${offsetSign}${offsetHours}${offsetMinutes > 0 ? ':' + String(offsetMinutes).padStart(2, '0') : ''}`;
+
+  // Local time
+  const localYear = date.getFullYear();
+  const localMonth = String(date.getMonth() + 1).padStart(2, '0');
+  const localDay = String(date.getDate()).padStart(2, '0');
+  const localHours = String(date.getHours()).padStart(2, '0');
+  const localMinutes = String(date.getMinutes()).padStart(2, '0');
+  const localTime = `${localYear}-${localMonth}-${localDay} ${localHours}:${localMinutes}`;
+
+  return {
+    utcTime,
+    localTime,
+    timezoneString
+  };
 }
 
 // Check and send notifications
@@ -289,7 +319,10 @@ async function checkAndSendNotifications(client) {
           const channel = await client.channels.fetch(data.channelId);
           if (channel) {
             const emoji = getEventEmoji(eventName, guildId);
-            const message = `🚨 @everyone ${emoji} **${eventName}** starts in **5 minutes**! Get ready for the battle! 🛡️`;
+            const { utcTime, localTime, timezoneString } = formatTimeWithTimezone(eventTime);
+
+            const message = `🚨 @everyone\n\n${emoji} **${eventName}** starts in **5 minutes**!\n\n⏰ Start Time:\n   • UTC Time: ${utcTime}\n   • Your Time (${timezoneString}): ${localTime}\n\n🛡️ Get ready for the battle!`;
+
             await channel.send(message);
             console.log(`✅ Sent notification for ${eventName} in guild ${guildId}`);
 

@@ -11,6 +11,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
   - Bear Series Events: Auto-repeat every 48 hours
   - Other Events: One-time notifications
   - Custom Events: Choose recurring or single type
+- **Timezone Display**: Automatically shows both UTC time and your local timezone in notifications and event lists
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 
@@ -70,7 +71,18 @@ Create your own events with:
 ```
 /setup_time event:testevent time:2026-08-30 14:00
 ```
-- Notification: "🚨 @everyone 😂 **testevent** starts in **5 minutes**! Get ready for the battle! 🛡️"
+- Notification format:
+```
+🚨 @everyone
+
+😂 **testevent** starts in **5 minutes**!
+
+⏰ Start Time:
+   • UTC Time: 2026-08-30 14:00
+   • Your Time (GMT+8): 2026-08-30 22:00
+
+🛡️ Get ready for the battle!
+```
 
 ### 📍 Important: Notification Channel Location
 
@@ -241,6 +253,17 @@ Heras_decree/
 ### Time Format
 - **Input format**: `YYYY-MM-DD HH:MM` (UTC timezone)
 - **Example**: `2026-08-30 14:00` represents August 30, 2026, 2:00 PM UTC
+- **Display format**: All notifications and event lists show both UTC time and your local timezone automatically
+
+### Timezone Display
+- **Automatic Detection**: Bot automatically detects the server's timezone based on where it's deployed
+- **Dual Time Display**: All notifications show both UTC time and local time with timezone offset (e.g., GMT+8)
+- **Input Format**: All time inputs use UTC timezone for consistency
+- **Examples**:
+  - Input: `2026-08-30 14:00` (UTC)
+  - Notification displays:
+    - UTC Time: 2026-08-30 14:00
+    - Your Time (GMT+8): 2026-08-30 22:00
 
 ### Scheduling Logic
 - **Check frequency**: Every 60 seconds
