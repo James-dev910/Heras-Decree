@@ -71,9 +71,9 @@ module.exports = {
       const gifUrl = data.data.images.original.url;
       const gifTitle = data.data.title || keyword;
 
-      // 只回傳 GIF URL，Discord 會自動嵌入顯示
+      // 回傳 GIF URL 和 "Powered by GIPHY" 標記
       await interaction.editReply({
-        content: gifUrl
+        content: `${gifUrl}\n\n_Powered by GIPHY_`
       });
 
     } catch (error) {

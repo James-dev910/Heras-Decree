@@ -140,8 +140,13 @@ Create your own events with:
 - **Autocomplete Suggestions**: Type to see 20+ suggested keywords (happy, sad, excited, cat, dog, etc.)
 - **Custom Keywords**: Enter any keyword you want (not limited to suggestions)
 - **True Randomness**: Each search returns a different GIF (powered by Giphy Random API)
-- **Clean Output**: Only shows the GIF image, no extra text
-- Example: The bot will send a random GIF URL that Discord automatically displays as an embedded image
+- **Attribution**: Displays "Powered by GIPHY" as required by Giphy's terms
+- Example output:
+```
+[Random GIF Image]
+
+Powered by GIPHY
+```
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
