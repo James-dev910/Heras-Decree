@@ -136,17 +136,13 @@ Create your own events with:
 ```
 /gif keyword:happy
 ```
-- Searches Giphy for "happy" GIFs and returns a random GIF (auto-embeds in Discord)
+- Searches Giphy for "happy" GIFs and returns a random GIF with clean display
 - **Autocomplete Suggestions**: Type to see 20+ suggested keywords (happy, sad, excited, cat, dog, etc.)
 - **Custom Keywords**: Enter any keyword you want (not limited to suggestions)
 - **True Randomness**: Each search returns a different GIF (powered by Giphy Random API)
+- **Clean Display**: GIF displays in embed format with attribution in footer
 - **Attribution**: Displays "Powered by GIPHY" as required by Giphy's terms
-- Example output:
-```
-[Random GIF Image]
-
-Powered by GIPHY
-```
+- Example output: GIF displays as a clean embed with "Powered by GIPHY" in small text at the bottom
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`

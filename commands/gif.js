@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 // 預設的關鍵字建議（含 emoji）
 const SUGGESTED_KEYWORDS = [
@@ -71,10 +71,13 @@ module.exports = {
       const gifUrl = data.data.images.original.url;
       const gifTitle = data.data.title || keyword;
 
-      // 回傳 GIF URL 和 "Powered by GIPHY" 標記
-      await interaction.editReply({
-        content: `${gifUrl}\n\n_Powered by GIPHY_`
-      });
+      // 使用 Embed 顯示 GIF，讓圖片乾淨顯示且標記在 footer
+      const embed = new EmbedBuilder()
+        .setImage(gifUrl)
+        .setColor(0x00D9FF) // Giphy 品牌顏色（藍色）
+        .setFooter({ text: 'Powered by GIPHY' });
+
+      await interaction.editReply({ embeds: [embed] });
 
     } catch (error) {
       console.error('Error fetching GIF from Giphy:', error);
