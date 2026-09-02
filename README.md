@@ -55,6 +55,7 @@ Create your own events with:
 | `/roll` | Roll a dice with customizable range (default: 1-100) | Everyone |
 | `/flip` | Flip a coin - heads or tails | Everyone |
 | `/choose` | Let the bot randomly choose from your options | Everyone |
+| `/8ball` | Ask the Magic 8 Ball a yes/no question | Everyone |
 
 ### 🔒 Permission Requirements
 
@@ -155,8 +156,9 @@ Create your own events with:
 ```
 - Default range: 1-100
 - Customize min and max values (1-1000)
-- Special reactions for extreme results (max, min, high, low)
+- Special reactions for extreme results (maximum, minimum, high, low rolls)
 - Perfect for loot distribution or team leader selection
+- Example output: "🎉 **Username** rolled **100**! ✨ **Maximum roll! Amazing luck!**"
 
 #### Flip a Coin
 ```
@@ -165,16 +167,29 @@ Create your own events with:
 - Simple heads or tails
 - Animated result reveal (1.5 second suspense)
 - Quick decision making tool
+- Example output: "🪙 **The coin has landed!** ✅ Result: **Heads**"
 
 #### Random Choice
 ```
-/choose options:打熊,打Viking,睡覺,掛機
-/choose options:pizza,burger,sushi
+/choose options:pizza,burger,sushi,ramen
+/choose options:raid,rest,farm
 ```
 - Enter 2-20 options separated by commas
 - Supports both English and Chinese commas (`,` or `，`)
-- Highlights the chosen option
-- Great for solving choice paralysis
+- Highlights the chosen option with ⭐
+- Shows all options with the winner marked
+- Example output: "🎯 **Fate has decided...** I choose: **pizza** ✨"
+
+#### Magic 8 Ball
+```
+/8ball question:Will I win the raid?
+/8ball question:Should I join the event?
+```
+- Classic Magic 8 Ball fortune telling
+- Ask any yes/no question
+- 20 possible answers (positive, neutral, negative)
+- 1.5 second dramatic reveal animation
+- Example answers: "It is certain.", "Ask again later.", "Very doubtful."
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
@@ -415,7 +430,8 @@ Heras_decree/
 │   ├── gif.js             # GIF search command (Giphy API)
 │   ├── roll.js            # Dice rolling
 │   ├── flip.js            # Coin flipping
-│   └── choose.js          # Random choice
+│   ├── choose.js          # Random choice
+│   └── 8ball.js           # Magic 8 Ball
 ├── package.json            # Project dependencies
 ├── .env.example            # Environment variables template
 ├── .gitignore              # Git ignore list

@@ -25,39 +25,39 @@ module.exports = {
     const maxValue = interaction.options.getInteger('max') || 100;
     const minValue = interaction.options.getInteger('min') || 1;
 
-    // 驗證範圍
+    // Validate range
     if (minValue >= maxValue) {
       await interaction.reply({
-        content: '❌ 最小值必須小於最大值！',
+        content: '❌ Minimum value must be less than maximum value!',
         ephemeral: true
       });
       return;
     }
 
-    // 生成隨機數字
+    // Generate random number
     const result = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
 
-    // 根據結果顯示不同的 emoji
+    // Show different emoji based on result
     let emoji = '🎲';
     let comment = '';
 
     if (result === maxValue) {
       emoji = '🎉';
-      comment = '\n✨ **最大值！運氣爆棚！**';
+      comment = '\n✨ **Maximum roll! Amazing luck!**';
     } else if (result === minValue) {
       emoji = '😭';
-      comment = '\n💔 **最小值...好慘...**';
+      comment = '\n💔 **Minimum roll... Unlucky...**';
     } else if (result >= maxValue * 0.9) {
       emoji = '🔥';
-      comment = '\n🌟 **高分！手氣不錯！**';
+      comment = '\n🌟 **High roll! Great luck!**';
     } else if (result <= maxValue * 0.1) {
       emoji = '💀';
-      comment = '\n😰 **低分...運氣不佳...**';
+      comment = '\n😰 **Low roll... Bad luck...**';
     }
 
-    // 回應結果
+    // Reply with result
     await interaction.reply({
-      content: `${emoji} **${interaction.user.username}** 擲出了 **${result}** 點！\n範圍：${minValue} - ${maxValue}${comment}`
+      content: `${emoji} **${interaction.user.username}** rolled **${result}**!\nRange: ${minValue} - ${maxValue}${comment}`
     });
   }
 };

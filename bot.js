@@ -136,6 +136,9 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'choose') {
       const { handleChoose } = require('./commands/choose');
       await handleChoose(interaction);
+    } else if (commandName === '8ball') {
+      const { handle8ball } = require('./commands/8ball');
+      await handle8ball(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

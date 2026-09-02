@@ -6,22 +6,21 @@ module.exports = {
     .setDescription('Flip a coin - heads or tails'),
 
   async handleFlip(interaction) {
-    // 生成隨機結果（0 或 1）
+    // Generate random result (0 or 1)
     const result = Math.random() < 0.5;
 
-    // 動畫效果：先顯示投擲中
+    // Animation effect: show flipping
     await interaction.reply({
-      content: '🪙 硬幣在空中旋轉...'
+      content: '🪙 *The coin is flipping...*'
     });
 
-    // 等待 1.5 秒後顯示結果
+    // Wait 1.5 seconds then show result
     setTimeout(async () => {
-      const resultText = result ? '正面' : '反面';
+      const resultText = result ? 'Heads' : 'Tails';
       const emoji = result ? '✅' : '❌';
-      const englishText = result ? 'Heads' : 'Tails';
 
       await interaction.editReply({
-        content: `🪙 硬幣落地了！\n\n${emoji} 結果：**${resultText}** (${englishText})`
+        content: `🪙 **The coin has landed!**\n\n${emoji} Result: **${resultText}**`
       });
     }, 1500);
   }

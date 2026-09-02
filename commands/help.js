@@ -22,6 +22,7 @@ module.exports = {
 🔹 **/roll** - Roll a dice (1-100 or custom range)
 🔹 **/flip** - Flip a coin (heads or tails)
 🔹 **/choose** - Let fate decide from your options
+🔹 **/8ball** - Ask the Magic 8 Ball a yes/no question
 
 **Admin Commands:** 🔒
 🔹 **/setup_bear_series** - Batch schedule all 4 Bear Traps
@@ -50,6 +51,7 @@ module.exports = {
 \`/gif keyword:happy\` - Get a random happy GIF
 \`/roll max:20\` - Roll 1-20
 \`/choose options:pizza,burger,sushi\` - Pick one
+\`/8ball question:Will I win?\` - Ask the 8 ball
 
 💡 Use /setup_bear_series to schedule all Bear Traps at once!
 `;
