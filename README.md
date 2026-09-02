@@ -18,7 +18,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 - **PostgreSQL Database**: Permanent data storage - schedules persist through redeployments
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
-- **Fun GIF Feature**: Search and share random GIFs from Giphy with `/gif` command
+- **Fun Interactive Commands**: GIF search, dice rolling, coin flipping, and random choice maker
 
 ## Supported Event Types
 
@@ -52,6 +52,9 @@ Create your own events with:
 | `/add_event` | Add a custom event with name, emoji, and type | **Manage Server** |
 | `/remove_event` | Remove a custom event (autocomplete search) | **Manage Server** |
 | `/gif` | Search and share random GIFs from Giphy (autocomplete suggestions + custom keywords) | Everyone |
+| `/roll` | Roll a dice with customizable range (default: 1-100) | Everyone |
+| `/flip` | Flip a coin - heads or tails | Everyone |
+| `/choose` | Let the bot randomly choose from your options | Everyone |
 
 ### 🔒 Permission Requirements
 
@@ -144,13 +147,42 @@ Create your own events with:
 - **Attribution**: Displays "Powered by GIPHY" as required by Giphy's terms
 - Example output: GIF displays as a clean embed with "Powered by GIPHY" in small text at the bottom
 
+#### Roll a Dice
+```
+/roll
+/roll max:20
+/roll min:10 max:50
+```
+- Default range: 1-100
+- Customize min and max values (1-1000)
+- Special reactions for extreme results (max, min, high, low)
+- Perfect for loot distribution or team leader selection
+
+#### Flip a Coin
+```
+/flip
+```
+- Simple heads or tails
+- Animated result reveal (1.5 second suspense)
+- Quick decision making tool
+
+#### Random Choice
+```
+/choose options:打熊,打Viking,睡覺,掛機
+/choose options:pizza,burger,sushi
+```
+- Enter 2-20 options separated by commas
+- Supports both English and Chinese commas (`,` or `，`)
+- Highlights the chosen option
+- Great for solving choice paralysis
+
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
 - **Timezone Display**: Shows both UTC time and your local time
 - **Auto-Detection**: Uses your Discord language by default
 - **Batch Scheduling**: Schedule all Bear Traps at once with `/setup_bear_series`
 - **Countdown Timers**: Track time remaining with `/countdown`
-- **Fun GIFs**: Share random GIFs from Giphy with `/gif`
+- **Fun Interactive Tools**: GIF search, dice rolling, coin flipping, random choice
 - **9 Languages Supported**: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
 
 ### 🌍 Multi-Language Support
@@ -380,7 +412,10 @@ Heras_decree/
 │   ├── add_event.js
 │   ├── remove_event.js
 │   ├── language.js
-│   └── gif.js             # GIF search command (Giphy API)
+│   ├── gif.js             # GIF search command (Giphy API)
+│   ├── roll.js            # Dice rolling
+│   ├── flip.js            # Coin flipping
+│   └── choose.js          # Random choice
 ├── package.json            # Project dependencies
 ├── .env.example            # Environment variables template
 ├── .gitignore              # Git ignore list

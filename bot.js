@@ -127,6 +127,15 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'gif') {
       const { handleGif } = require('./commands/gif');
       await handleGif(interaction);
+    } else if (commandName === 'roll') {
+      const { handleRoll } = require('./commands/roll');
+      await handleRoll(interaction);
+    } else if (commandName === 'flip') {
+      const { handleFlip } = require('./commands/flip');
+      await handleFlip(interaction);
+    } else if (commandName === 'choose') {
+      const { handleChoose } = require('./commands/choose');
+      await handleChoose(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

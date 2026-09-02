@@ -15,8 +15,13 @@ module.exports = {
 🔹 **/countdown** - Show upcoming events with timers
 🔹 **/stop** - Stop event schedule or clear all
 🔹 **/language** - Set notification language (9 languages)
-🔹 **/gif** - Search & share random GIFs from Giphy
 🔹 **/help** - Display this help
+
+**Fun Commands:** 🎮
+🔹 **/gif** - Search & share random GIFs from Giphy
+🔹 **/roll** - Roll a dice (1-100 or custom range)
+🔹 **/flip** - Flip a coin (heads or tails)
+🔹 **/choose** - Let fate decide from your options
 
 **Admin Commands:** 🔒
 🔹 **/setup_bear_series** - Batch schedule all 4 Bear Traps
@@ -43,6 +48,8 @@ module.exports = {
 \`/language lang:繁體中文\`
 \`/setup_time event:Bear Trap 1 time:2026-08-30 14:00\`
 \`/gif keyword:happy\` - Get a random happy GIF
+\`/roll max:20\` - Roll 1-20
+\`/choose options:pizza,burger,sushi\` - Pick one
 
 💡 Use /setup_bear_series to schedule all Bear Traps at once!
 `;
