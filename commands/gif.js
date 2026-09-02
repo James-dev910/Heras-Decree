@@ -71,9 +71,9 @@ module.exports = {
       const gifUrl = data.data.images.original.url;
       const gifTitle = data.data.title || keyword;
 
-      // 回傳 GIF
+      // 只回傳 GIF URL，Discord 會自動嵌入顯示
       await interaction.editReply({
-        content: `🎬 **GIF 搜尋結果**\n關鍵字: **${keyword}**\n\n${gifUrl}\n\n🎲 想要不同的結果？再次使用 \`/gif keyword:${keyword}\` 來獲得隨機 GIF！\n\n_Powered by Giphy_`
+        content: gifUrl
       });
 
     } catch (error) {

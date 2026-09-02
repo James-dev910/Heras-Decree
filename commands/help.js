@@ -15,6 +15,7 @@ module.exports = {
 🔹 **/countdown** - Show upcoming events with timers
 🔹 **/stop** - Stop event schedule or clear all
 🔹 **/language** - Set notification language (9 languages)
+🔹 **/gif** - Search & share random GIFs from Giphy
 🔹 **/help** - Display this help
 
 **Admin Commands:** 🔒
@@ -41,6 +42,7 @@ module.exports = {
 \`/countdown\` - View live countdown timers
 \`/language lang:繁體中文\`
 \`/setup_time event:Bear Trap 1 time:2026-08-30 14:00\`
+\`/gif keyword:happy\` - Get a random happy GIF
 
 💡 Use /setup_bear_series to schedule all Bear Traps at once!
 `;

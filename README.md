@@ -136,21 +136,12 @@ Create your own events with:
 ```
 /gif keyword:happy
 ```
-- Searches Giphy for "happy" GIFs and returns a random result
+- Searches Giphy for "happy" GIFs and returns a random GIF (auto-embeds in Discord)
 - **Autocomplete Suggestions**: Type to see 20+ suggested keywords (happy, sad, excited, cat, dog, etc.)
 - **Custom Keywords**: Enter any keyword you want (not limited to suggestions)
 - **True Randomness**: Each search returns a different GIF (powered by Giphy Random API)
-- Example output:
-```
-🎬 GIF 搜尋結果
-關鍵字: happy
-
-[Random happy GIF from Giphy]
-
-🎲 想要不同的結果？再次使用 /gif keyword:happy 來獲得隨機 GIF！
-
-Powered by Giphy
-```
+- **Clean Output**: Only shows the GIF image, no extra text
+- Example: The bot will send a random GIF URL that Discord automatically displays as an embedded image
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
