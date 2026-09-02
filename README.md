@@ -18,6 +18,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 - **PostgreSQL Database**: Permanent data storage - schedules persist through redeployments
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
+- **Fun GIF Feature**: Search and share random GIFs from Giphy with `/gif` command
 
 ## Supported Event Types
 
@@ -50,6 +51,7 @@ Create your own events with:
 | `/language` | Set your preferred notification language (9 languages supported) | Everyone |
 | `/add_event` | Add a custom event with name, emoji, and type | **Manage Server** |
 | `/remove_event` | Remove a custom event (autocomplete search) | **Manage Server** |
+| `/gif` | Search and share random GIFs from Giphy (autocomplete suggestions + custom keywords) | Everyone |
 
 ### 🔒 Permission Requirements
 
@@ -130,12 +132,33 @@ Create your own events with:
 💡 Use /list to see full event details
 ```
 
+#### Search and Share GIFs
+```
+/gif keyword:happy
+```
+- Searches Giphy for "happy" GIFs and returns a random result
+- **Autocomplete Suggestions**: Type to see 20+ suggested keywords (happy, sad, excited, cat, dog, etc.)
+- **Custom Keywords**: Enter any keyword you want (not limited to suggestions)
+- **True Randomness**: Each search returns a different GIF (powered by Giphy Random API)
+- Example output:
+```
+🎬 GIF 搜尋結果
+關鍵字: happy
+
+[Random happy GIF from Giphy]
+
+🎲 想要不同的結果？再次使用 /gif keyword:happy 來獲得隨機 GIF！
+
+Powered by Giphy
+```
+
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
 - **Timezone Display**: Shows both UTC time and your local time
 - **Auto-Detection**: Uses your Discord language by default
 - **Batch Scheduling**: Schedule all Bear Traps at once with `/setup_bear_series`
 - **Countdown Timers**: Track time remaining with `/countdown`
+- **Fun GIFs**: Share random GIFs from Giphy with `/gif`
 - **9 Languages Supported**: 繁體中文, English, Tagalog, Indonesia, 한국어, 日本語, ไทย, Español, Deutsch
 
 ### 🌍 Multi-Language Support
@@ -281,7 +304,17 @@ Zeabur will automatically generate these environment variables:
 - `POSTGRES_CONNECTION_STRING` (you'll reference this in bot settings)
 - `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DATABASE`, etc.
 
-#### 4. Configure Bot Environment Variables
+#### 4. Get Giphy API Key (For `/gif` Command)
+
+1. Go to [Giphy Developers](https://developers.giphy.com/)
+2. Sign in or create an account
+3. Click **"Create an App"** → Select **"API"**
+4. Fill in:
+   - App Name: `Hera's Decree Discord Bot`
+   - App Description: `A Discord bot for event notifications and fun GIF commands`
+5. Copy your **API Key** (looks like: `abc123def456...`)
+
+#### 5. Configure Bot Environment Variables
 
 Add these environment variables to your **bot service** (not PostgreSQL):
 
@@ -291,12 +324,15 @@ Add these environment variables to your **bot service** (not PostgreSQL):
 | `CLIENT_ID` | Discord Application ID | `1234567890123456789` |
 | `GUILD_ID` | Discord Server ID (Optional) | `9876543210987654321` |
 | `POSTGRES_CONNECTION_STRING` | PostgreSQL Connection | `${POSTGRES_CONNECTION_STRING}` |
+| `GIPHY_API_KEY` | Giphy API Key (for `/gif` command) | `abc123def456ghi789...` |
 
 **How to reference PostgreSQL:**
 - Click the value field for `POSTGRES_CONNECTION_STRING`
 - Type `${POSTGRES_CONNECTION_STRING}` - Zeabur will auto-link it to your PostgreSQL service
 
-**Note:** `NODE_ENV` is not required - Zeabur's internal PostgreSQL network doesn't use SSL
+**Notes:**
+- `NODE_ENV` is not required - Zeabur's internal PostgreSQL network doesn't use SSL
+- `GIPHY_API_KEY` is optional - if not set, the `/gif` command will show an error message to users
 
 > **GUILD_ID Explanation**:
 > - **Fill single server ID**: Commands take effect immediately on that server (recommended for main server)
@@ -345,8 +381,14 @@ Heras_decree/
 ├── commands/               # Slash Commands definitions
 │   ├── help.js
 │   ├── setup_time.js
+│   ├── setup_bear_series.js
 │   ├── list.js
-│   └── stop.js
+│   ├── countdown.js
+│   ├── stop.js
+│   ├── add_event.js
+│   ├── remove_event.js
+│   ├── language.js
+│   └── gif.js             # GIF search command (Giphy API)
 ├── package.json            # Project dependencies
 ├── .env.example            # Environment variables template
 ├── .gitignore              # Git ignore list

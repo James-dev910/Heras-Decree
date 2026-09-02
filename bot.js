@@ -82,6 +82,9 @@ client.on('interactionCreate', async interaction => {
       } else if (commandName === 'remove_event') {
         const { handleAutocomplete } = require('./commands/remove_event');
         await handleAutocomplete(interaction);
+      } else if (commandName === 'gif') {
+        const { handleAutocomplete } = require('./commands/gif');
+        await handleAutocomplete(interaction);
       }
     } catch (error) {
       console.error(`Error in autocomplete for ${commandName}:`, error);
@@ -121,6 +124,9 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'countdown') {
       const { handleCountdown } = require('./commands/countdown');
       await handleCountdown(interaction);
+    } else if (commandName === 'gif') {
+      const { handleGif } = require('./commands/gif');
+      await handleGif(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);
