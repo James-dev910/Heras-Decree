@@ -195,44 +195,54 @@ Create your own events with:
 
 #### Holiday Greetings System
 ```
+/holiday setup language:"Traditional Chinese" channel:#chinese
 /holiday list
 /holiday test name:"Chinese New Year" language:Traditional Chinese
-/holiday add name:"Custom Holiday" calendar:solar month:3 day:15 ...
 ```
-- **Automatic Greetings**: Sends holiday greetings automatically on special days
-- **23+ Pre-configured Holidays**: Chinese, Tagalog, Bisaya, Indonesian, and English holidays
+- **Multi-Server Support**: Each Discord server can configure its own holidays independently
+- **Easy Setup**: Install pre-configured holiday templates with one command
+- **5 Language Templates**: Traditional Chinese (5 holidays), Tagalog (4), Bisaya/Cebuano (4), Indonesian (3), English (7)
 - **Lunar Calendar Support**: Automatically converts lunar calendar dates (e.g., Chinese New Year, Mid-Autumn Festival)
   - No manual date updates needed - the bot calculates lunar dates automatically every year
   - Example: Mid-Autumn Festival (Lunar 8/15) automatically converts to different solar dates each year
-- **Multi-Language**: Greetings sent in appropriate language to designated channels
+- **Flexible Testing**: Test holidays in any channel (perfect for test servers)
 - **GIF Integration**: Each greeting includes a themed GIF from Giphy
-- **Channel Routing**:
-  - Taiwan/Hong Kong holidays → #chinese channel
-  - Philippines holidays (Tagalog) → #tagalog channel
-  - Philippines holidays (Bisaya/Cebuano) → #bisaya channel
-  - Indonesian holidays → #indonesian channel
-  - Universal holidays (English) → #general channel
 
-**Pre-configured Holidays:**
-- **Chinese (Lunar)**: Chinese New Year (1/1), Lantern Festival (1/15), Dragon Boat Festival (5/5), Mid-Autumn Festival (8/15)
-- **Taiwan (Solar)**: National Day (10/10)
-- **Philippines**: Independence Day (6/12), Rizal Day (12/30), New Year, Christmas
-- **Indonesia**: Independence Day (8/17), New Year, Christmas
-- **Universal (English)**: New Year, Valentine's Day, Easter, Halloween, Thanksgiving, Christmas Eve, Christmas
+**Quick Start:**
+1. Install a holiday template:
+   ```
+   /holiday setup language:"Traditional Chinese (Taiwan/HK)" channel:#chinese
+   /holiday setup language:"English (Universal)" channel:#general
+   ```
+2. List configured holidays:
+   ```
+   /holiday list
+   ```
+3. Test a holiday (optional channel override for test servers):
+   ```
+   /holiday test name:"Chinese New Year" language:Traditional Chinese
+   /holiday test name:"Christmas" language:English channel:#test-channel
+   ```
+
+**Available Templates:**
+- **Traditional Chinese (Taiwan/HK)** - 5 holidays:
+  - Chinese New Year (Lunar 1/1), Lantern Festival (Lunar 1/15), Dragon Boat Festival (Lunar 5/5), Mid-Autumn Festival (Lunar 8/15), National Day (10/10)
+- **Tagalog (Philippines)** - 4 holidays:
+  - Independence Day (6/12), Rizal Day (12/30), New Year (1/1), Christmas (12/25)
+- **Bisaya/Cebuano (Philippines)** - 4 holidays:
+  - Independence Day (6/12), Rizal Day (12/30), New Year (1/1), Christmas (12/25)
+- **Indonesian** - 3 holidays:
+  - Independence Day (8/17), New Year (1/1), Christmas (12/25)
+- **English (Universal)** - 7 holidays:
+  - New Year, Valentine's Day, Easter, Halloween, Thanksgiving, Christmas Eve, Christmas
 
 **Admin Commands:**
-- `/holiday add` - Add new holiday greeting
-- `/holiday list` - View all configured holidays
+- `/holiday setup` - Install holiday template for your server
+- `/holiday add` - Add custom holiday greeting
+- `/holiday list` - View all configured holidays for this server
 - `/holiday delete` - Remove a holiday
 - `/holiday enable/disable` - Toggle holiday greetings
-- `/holiday test` - Send test greeting immediately (for verification)
-
-**Testing Holidays:**
-Use `/holiday test` to verify greetings will send correctly:
-```
-/holiday test name:"Chinese New Year" language:Traditional Chinese
-```
-This sends a test greeting immediately to the configured channel with "(TEST)" in the title.
+- `/holiday test` - Send test greeting immediately (supports channel override)
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`

@@ -6,14 +6,40 @@ const {
   toggleHoliday,
   testHolidayGreeting,
   getAllHolidayNames,
-  getHolidayLanguages
+  getHolidayLanguages,
+  installHolidaysFromTemplate
 } = require('../holiday-scheduler');
+const { getAvailableTemplates } = require('../holiday-templates');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('holiday')
     .setDescription('Manage automatic holiday greetings')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('setup')
+        .setDescription('Install holiday templates for your server')
+        .addStringOption(option =>
+          option
+            .setName('language')
+            .setDescription('Holiday language/region to install')
+            .setRequired(true)
+            .addChoices(
+              { name: 'Traditional Chinese (Taiwan/HK) - 5 holidays', value: 'zh-TW' },
+              { name: 'Tagalog (Philippines) - 4 holidays', value: 'tl' },
+              { name: 'Bisaya/Cebuano (Philippines) - 4 holidays', value: 'ceb' },
+              { name: 'Indonesian - 3 holidays', value: 'id' },
+              { name: 'English (Universal) - 7 holidays', value: 'en' }
+            )
+        )
+        .addChannelOption(option =>
+          option
+            .setName('channel')
+            .setDescription('Channel where holiday greetings will be sent')
+            .setRequired(true)
+        )
+    )
     .addSubcommand(subcommand =>
       subcommand
         .setName('add')
@@ -85,7 +111,7 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand
         .setName('list')
-        .setDescription('List all configured holidays')
+        .setDescription('List all configured holidays for this server')
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -162,15 +188,22 @@ module.exports = {
             .setRequired(true)
             .setAutocomplete(true)
         )
+        .addChannelOption(option =>
+          option
+            .setName('channel')
+            .setDescription('Override channel (optional - for testing in test server)')
+            .setRequired(false)
+        )
     ),
 
   async handleAutocomplete(interaction) {
     const subcommand = interaction.options.getSubcommand();
     const focusedOption = interaction.options.getFocused(true);
+    const guildId = interaction.guildId;
 
     try {
       if (focusedOption.name === 'name') {
-        const holidayNames = await getAllHolidayNames();
+        const holidayNames = await getAllHolidayNames(guildId);
         const filtered = holidayNames
           .filter(name => name.toLowerCase().includes(focusedOption.value.toLowerCase()))
           .slice(0, 25);
@@ -181,7 +214,7 @@ module.exports = {
       } else if (focusedOption.name === 'language') {
         const holidayName = interaction.options.getString('name');
         if (holidayName) {
-          const languages = await getHolidayLanguages(holidayName);
+          const languages = await getHolidayLanguages(guildId, holidayName);
           const languageNames = {
             'zh-TW': 'Traditional Chinese',
             'tl': 'Tagalog',
@@ -208,9 +241,22 @@ module.exports = {
 
   async handleHoliday(interaction) {
     const subcommand = interaction.options.getSubcommand();
+    const guildId = interaction.guildId;
 
     try {
-      if (subcommand === 'add') {
+      if (subcommand === 'setup') {
+        const language = interaction.options.getString('language');
+        const channel = interaction.options.getChannel('channel');
+
+        await interaction.deferReply({ ephemeral: true });
+
+        const result = await installHolidaysFromTemplate(guildId, language, channel.id);
+
+        await interaction.editReply({
+          content: result.message
+        });
+
+      } else if (subcommand === 'add') {
         const name = interaction.options.getString('name');
         const calendarType = interaction.options.getString('calendar');
         const month = interaction.options.getInteger('month');
@@ -221,6 +267,7 @@ module.exports = {
         const gifKeyword = interaction.options.getString('gif_keyword');
 
         const result = await addHoliday(
+          guildId,
           name,
           calendarType,
           month,
@@ -235,55 +282,75 @@ module.exports = {
           content: result.message,
           ephemeral: true
         });
+
       } else if (subcommand === 'list') {
-        const list = await listHolidays();
-        await interaction.reply({
-          content: list,
-          ephemeral: true
+        await interaction.deferReply({ ephemeral: true });
+        const list = await listHolidays(guildId);
+        await interaction.editReply({
+          content: list
         });
+
       } else if (subcommand === 'delete') {
         const name = interaction.options.getString('name');
         const language = interaction.options.getString('language');
 
-        const result = await deleteHoliday(name, language);
+        const result = await deleteHoliday(guildId, name, language);
         await interaction.reply({
           content: result.message,
           ephemeral: true
         });
+
       } else if (subcommand === 'disable') {
         const name = interaction.options.getString('name');
         const language = interaction.options.getString('language');
 
-        const result = await toggleHoliday(name, language, false);
+        const result = await toggleHoliday(guildId, name, language, false);
         await interaction.reply({
           content: result.message,
           ephemeral: true
         });
+
       } else if (subcommand === 'enable') {
         const name = interaction.options.getString('name');
         const language = interaction.options.getString('language');
 
-        const result = await toggleHoliday(name, language, true);
+        const result = await toggleHoliday(guildId, name, language, true);
         await interaction.reply({
           content: result.message,
           ephemeral: true
         });
+
       } else if (subcommand === 'test') {
         const name = interaction.options.getString('name');
         const language = interaction.options.getString('language');
+        const channelOverride = interaction.options.getChannel('channel');
 
-        const result = await testHolidayGreeting(interaction.client, name, language);
-        await interaction.reply({
-          content: result.message,
-          ephemeral: true
+        await interaction.deferReply({ ephemeral: true });
+
+        const result = await testHolidayGreeting(
+          interaction.client,
+          guildId,
+          name,
+          language,
+          channelOverride?.id
+        );
+
+        await interaction.editReply({
+          content: result.message
         });
       }
     } catch (error) {
       console.error('Error in /holiday command:', error);
-      await interaction.reply({
-        content: '❌ An error occurred while processing the command',
-        ephemeral: true
-      });
+
+      const errorMessage = '❌ An error occurred while processing the command';
+      if (interaction.deferred) {
+        await interaction.editReply({ content: errorMessage });
+      } else {
+        await interaction.reply({
+          content: errorMessage,
+          ephemeral: true
+        });
+      }
     }
   }
 };

@@ -53,10 +53,11 @@ async function initializeDatabase() {
       )
     `);
 
-    // Create holidays table
+    // Create holidays table (multi-server support)
     await client.query(`
       CREATE TABLE IF NOT EXISTS holidays (
         id SERIAL PRIMARY KEY,
+        guild_id VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
         calendar_type VARCHAR(10) NOT NULL,
         month INTEGER NOT NULL,
@@ -67,15 +68,26 @@ async function initializeDatabase() {
         gif_keyword VARCHAR(255) NOT NULL,
         enabled BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(name, language)
+        UNIQUE(guild_id, name, language)
       )
     `);
 
-    console.log('✅ Database tables initialized successfully');
+    // Migration: Add guild_id column if it doesn't exist (for existing databases)
+    await client.query(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name='holidays' AND column_name='guild_id'
+        ) THEN
+          ALTER TABLE holidays ADD COLUMN guild_id VARCHAR(255);
+          DROP INDEX IF EXISTS holidays_name_language_key;
+          CREATE UNIQUE INDEX holidays_guild_name_lang_key ON holidays(guild_id, name, language);
+        END IF;
+      END $$;
+    `);
 
-    // Initialize default holidays
-    const { initializeHolidays } = require('./init-holidays');
-    await initializeHolidays();
+    console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error);
     throw error;

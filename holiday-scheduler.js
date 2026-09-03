@@ -3,7 +3,7 @@ const { Lunar, Solar } = require('lunar-javascript');
 const { EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 
-// Check for holidays and send greetings
+// Check for holidays and send greetings (multi-server support)
 async function checkAndSendHolidayGreetings(client) {
   try {
     const today = new Date();
@@ -16,22 +16,24 @@ async function checkAndSendHolidayGreetings(client) {
     const lunarMonth = lunar.getMonth();
     const lunarDay = lunar.getDay();
 
-    // Check solar calendar holidays
+    // Check solar calendar holidays (all guilds)
     const solarResult = await pool.query(`
       SELECT * FROM holidays
       WHERE calendar_type = 'solar'
       AND month = $1
       AND day = $2
       AND enabled = true
+      AND guild_id IS NOT NULL
     `, [currentMonth, currentDay]);
 
-    // Check lunar calendar holidays
+    // Check lunar calendar holidays (all guilds)
     const lunarResult = await pool.query(`
       SELECT * FROM holidays
       WHERE calendar_type = 'lunar'
       AND month = $1
       AND day = $2
       AND enabled = true
+      AND guild_id IS NOT NULL
     `, [lunarMonth, lunarDay]);
 
     const allHolidays = [...solarResult.rows, ...lunarResult.rows];
@@ -87,8 +89,8 @@ async function getHolidayGif(keyword) {
   }
 }
 
-// Add holiday
-async function addHoliday(name, calendarType, month, day, language, channelId, greetingMessage, gifKeyword) {
+// Add holiday (with guild_id support)
+async function addHoliday(guildId, name, calendarType, month, day, language, channelId, greetingMessage, gifKeyword) {
   try {
     // Validate calendar type
     if (calendarType !== 'solar' && calendarType !== 'lunar') {
@@ -105,9 +107,9 @@ async function addHoliday(name, calendarType, month, day, language, channelId, g
     }
 
     await pool.query(`
-      INSERT INTO holidays (name, calendar_type, month, day, language, channel_id, greeting_message, gif_keyword)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      ON CONFLICT (name, language)
+      INSERT INTO holidays (guild_id, name, calendar_type, month, day, language, channel_id, greeting_message, gif_keyword)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (guild_id, name, language)
       DO UPDATE SET
         calendar_type = EXCLUDED.calendar_type,
         month = EXCLUDED.month,
@@ -115,7 +117,7 @@ async function addHoliday(name, calendarType, month, day, language, channelId, g
         channel_id = EXCLUDED.channel_id,
         greeting_message = EXCLUDED.greeting_message,
         gif_keyword = EXCLUDED.gif_keyword
-    `, [name, calendarType, month, day, language, channelId, greetingMessage, gifKeyword]);
+    `, [guildId, name, calendarType, month, day, language, channelId, greetingMessage, gifKeyword]);
 
     const calendarText = calendarType === 'solar' ? 'Solar Calendar' : 'Lunar Calendar';
     return {
@@ -128,16 +130,17 @@ async function addHoliday(name, calendarType, month, day, language, channelId, g
   }
 }
 
-// List all holidays
-async function listHolidays() {
+// List all holidays for a specific guild
+async function listHolidays(guildId) {
   try {
     const result = await pool.query(`
       SELECT * FROM holidays
+      WHERE guild_id = $1
       ORDER BY calendar_type, month, day, language
-    `);
+    `, [guildId]);
 
     if (result.rows.length === 0) {
-      return '📅 No holidays configured';
+      return '📅 No holidays configured for this server\n\n💡 Use `/holiday setup` to configure holidays!';
     }
 
     let message = '📅 **Configured Holidays:**\n\n';
@@ -174,11 +177,11 @@ async function listHolidays() {
 }
 
 // Delete holiday
-async function deleteHoliday(name, language) {
+async function deleteHoliday(guildId, name, language) {
   try {
     const result = await pool.query(
-      'DELETE FROM holidays WHERE name = $1 AND language = $2',
-      [name, language]
+      'DELETE FROM holidays WHERE guild_id = $1 AND name = $2 AND language = $3',
+      [guildId, name, language]
     );
 
     if (result.rowCount === 0) {
@@ -196,11 +199,11 @@ async function deleteHoliday(name, language) {
 }
 
 // Toggle holiday enabled status
-async function toggleHoliday(name, language, enabled) {
+async function toggleHoliday(guildId, name, language, enabled) {
   try {
     const result = await pool.query(
-      'UPDATE holidays SET enabled = $1 WHERE name = $2 AND language = $3',
-      [enabled, name, language]
+      'UPDATE holidays SET enabled = $1 WHERE guild_id = $2 AND name = $3 AND language = $4',
+      [enabled, guildId, name, language]
     );
 
     if (result.rowCount === 0) {
@@ -219,11 +222,11 @@ async function toggleHoliday(name, language, enabled) {
 }
 
 // Test holiday greeting (send immediately)
-async function testHolidayGreeting(client, name, language) {
+async function testHolidayGreeting(client, guildId, name, language, channelOverride = null) {
   try {
     const result = await pool.query(
-      'SELECT * FROM holidays WHERE name = $1 AND language = $2',
-      [name, language]
+      'SELECT * FROM holidays WHERE guild_id = $1 AND name = $2 AND language = $3',
+      [guildId, name, language]
     );
 
     if (result.rows.length === 0) {
@@ -231,7 +234,9 @@ async function testHolidayGreeting(client, name, language) {
     }
 
     const holiday = result.rows[0];
-    const channel = await client.channels.fetch(holiday.channel_id);
+    // Use channel override if provided, otherwise use configured channel
+    const targetChannelId = channelOverride || holiday.channel_id;
+    const channel = await client.channels.fetch(targetChannelId);
 
     if (!channel) {
       return { success: false, message: `❌ Channel not found!` };
@@ -253,7 +258,7 @@ async function testHolidayGreeting(client, name, language) {
 
     return {
       success: true,
-      message: `✅ Test greeting sent for **${holiday.name}** (${language}) to <#${holiday.channel_id}>!`
+      message: `✅ Test greeting sent for **${holiday.name}** (${language}) to <#${targetChannelId}>!`
     };
   } catch (error) {
     console.error('Error testing holiday greeting:', error);
@@ -261,11 +266,12 @@ async function testHolidayGreeting(client, name, language) {
   }
 }
 
-// Get all holiday names for autocomplete
-async function getAllHolidayNames() {
+// Get all holiday names for autocomplete (guild-specific)
+async function getAllHolidayNames(guildId) {
   try {
     const result = await pool.query(
-      'SELECT DISTINCT name FROM holidays ORDER BY name'
+      'SELECT DISTINCT name FROM holidays WHERE guild_id = $1 ORDER BY name',
+      [guildId]
     );
     return result.rows.map(row => row.name);
   } catch (error) {
@@ -274,17 +280,58 @@ async function getAllHolidayNames() {
   }
 }
 
-// Get languages for a specific holiday
-async function getHolidayLanguages(name) {
+// Get languages for a specific holiday (guild-specific)
+async function getHolidayLanguages(guildId, name) {
   try {
     const result = await pool.query(
-      'SELECT language FROM holidays WHERE name = $1 ORDER BY language',
-      [name]
+      'SELECT language FROM holidays WHERE guild_id = $1 AND name = $2 ORDER BY language',
+      [guildId, name]
     );
     return result.rows.map(row => row.language);
   } catch (error) {
     console.error('Error getting holiday languages:', error);
     return [];
+  }
+}
+
+// Install holidays from template
+async function installHolidaysFromTemplate(guildId, languageCode, channelId) {
+  try {
+    const { getTemplateHolidays } = require('./holiday-templates');
+    const holidays = getTemplateHolidays(languageCode);
+
+    if (holidays.length === 0) {
+      return { success: false, message: '❌ Invalid template language!' };
+    }
+
+    let count = 0;
+    for (const holiday of holidays) {
+      await pool.query(`
+        INSERT INTO holidays (guild_id, name, calendar_type, month, day, language, channel_id, greeting_message, gif_keyword)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT (guild_id, name, language) DO NOTHING
+      `, [
+        guildId,
+        holiday.name,
+        holiday.calendar_type,
+        holiday.month,
+        holiday.day,
+        languageCode,
+        channelId,
+        holiday.greeting_message,
+        holiday.gif_keyword
+      ]);
+      count++;
+    }
+
+    return {
+      success: true,
+      message: `✅ Installed ${count} holidays from ${languageCode} template!`,
+      count
+    };
+  } catch (error) {
+    console.error('Error installing holidays from template:', error);
+    return { success: false, message: '❌ Database error occurred' };
   }
 }
 
@@ -296,5 +343,6 @@ module.exports = {
   toggleHoliday,
   testHolidayGreeting,
   getAllHolidayNames,
-  getHolidayLanguages
+  getHolidayLanguages,
+  installHolidaysFromTemplate
 };
