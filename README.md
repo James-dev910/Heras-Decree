@@ -19,6 +19,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 - **Precise Reminders**: Automatic notifications sent 5 minutes before event start
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 - **Fun Interactive Commands**: GIF search, dice rolling, coin flipping, and random choice maker
+- **Automatic Holiday Greetings**: Multi-language holiday greetings with GIFs (solar & lunar calendar support)
 
 ## Supported Event Types
 
@@ -56,6 +57,7 @@ Create your own events with:
 | `/flip` | Flip a coin - heads or tails | Everyone |
 | `/choose` | Let the bot randomly choose from your options | Everyone |
 | `/8ball` | Ask the Magic 8 Ball a yes/no question | Everyone |
+| `/holiday` | Manage automatic holiday greetings (add, list, delete, test) | **Administrator** |
 
 ### 🔒 Permission Requirements
 
@@ -190,6 +192,47 @@ Create your own events with:
 - 20 possible answers (positive, neutral, negative)
 - 1.5 second dramatic reveal animation
 - Example answers: "It is certain.", "Ask again later.", "Very doubtful."
+
+#### Holiday Greetings System
+```
+/holiday list
+/holiday test name:"Chinese New Year" language:Traditional Chinese
+/holiday add name:"Custom Holiday" calendar:solar month:3 day:15 ...
+```
+- **Automatic Greetings**: Sends holiday greetings automatically on special days
+- **23+ Pre-configured Holidays**: Chinese, Tagalog, Bisaya, Indonesian, and English holidays
+- **Lunar Calendar Support**: Automatically converts lunar calendar dates (e.g., Chinese New Year, Mid-Autumn Festival)
+  - No manual date updates needed - the bot calculates lunar dates automatically every year
+  - Example: Mid-Autumn Festival (Lunar 8/15) automatically converts to different solar dates each year
+- **Multi-Language**: Greetings sent in appropriate language to designated channels
+- **GIF Integration**: Each greeting includes a themed GIF from Giphy
+- **Channel Routing**:
+  - Taiwan/Hong Kong holidays → #chinese channel
+  - Philippines holidays (Tagalog) → #tagalog channel
+  - Philippines holidays (Bisaya/Cebuano) → #bisaya channel
+  - Indonesian holidays → #indonesian channel
+  - Universal holidays (English) → #general channel
+
+**Pre-configured Holidays:**
+- **Chinese (Lunar)**: Chinese New Year (1/1), Lantern Festival (1/15), Dragon Boat Festival (5/5), Mid-Autumn Festival (8/15)
+- **Taiwan (Solar)**: National Day (10/10)
+- **Philippines**: Independence Day (6/12), Rizal Day (12/30), New Year, Christmas
+- **Indonesia**: Independence Day (8/17), New Year, Christmas
+- **Universal (English)**: New Year, Valentine's Day, Easter, Halloween, Thanksgiving, Christmas Eve, Christmas
+
+**Admin Commands:**
+- `/holiday add` - Add new holiday greeting
+- `/holiday list` - View all configured holidays
+- `/holiday delete` - Remove a holiday
+- `/holiday enable/disable` - Toggle holiday greetings
+- `/holiday test` - Send test greeting immediately (for verification)
+
+**Testing Holidays:**
+Use `/holiday test` to verify greetings will send correctly:
+```
+/holiday test name:"Chinese New Year" language:Traditional Chinese
+```
+This sends a test greeting immediately to the configured channel with "(TEST)" in the title.
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`

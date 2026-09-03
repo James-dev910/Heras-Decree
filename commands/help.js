@@ -28,6 +28,7 @@ module.exports = {
 🔹 **/setup_bear_series** - Batch schedule all 4 Bear Traps
 🔹 **/add_event** - Create custom event (name, emoji, type)
 🔹 **/remove_event** - Delete custom event
+🔹 **/holiday** - Manage automatic holiday greetings
 
 **Default Events:**
 🐻 Bear Series (48h repeat): Bear Trap 1/2, Academy Bear Trap 1/2
@@ -43,6 +44,7 @@ module.exports = {
 🌍 Multi-language with auto-detection
 🕐 Shows UTC + your local time
 🗑️ Single events auto-delete after notification
+🎉 Automatic holiday greetings (solar & lunar calendar)
 
 **Example:**
 \`/countdown\` - View live countdown timers
@@ -54,6 +56,13 @@ module.exports = {
 \`/8ball question:Will I win?\` - Ask the 8 ball
 
 💡 Use /setup_bear_series to schedule all Bear Traps at once!
+
+**Holiday Greetings:**
+The bot automatically sends holiday greetings with GIFs on special days!
+Supports 23+ holidays across 5 languages (Chinese, Tagalog, Bisaya, Indonesian, English)
+Lunar calendar holidays auto-convert (e.g., Chinese New Year, Mid-Autumn Festival)
+Use \`/holiday list\` to see all configured holidays
+Use \`/holiday test\` to preview a greeting
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

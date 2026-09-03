@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { initializeDatabase, testConnection } = require('./database');
 const { scheduleEvent, listScheduledEvents, stopEvent, checkAndSendNotifications } = require('./scheduler-db');
+const { checkAndSendHolidayGreetings } = require('./holiday-scheduler');
 
 const client = new Client({
   intents: [
@@ -65,6 +66,26 @@ client.once('ready', async () => {
   }, 60000); // Check every 60 seconds
 
   console.log('⏰ Scheduler initialized - checking for events every minute');
+
+  // Check for holidays once per day at midnight UTC
+  const checkHolidays = () => {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setUTCHours(0, 0, 0, 0);
+
+    // Check at midnight and every hour (in case bot restarts)
+    if (now.getUTCHours() === 0 || now.getUTCMinutes() === 0) {
+      checkAndSendHolidayGreetings(client);
+    }
+  };
+
+  // Check immediately on startup
+  checkAndSendHolidayGreetings(client);
+
+  // Check every hour for holidays
+  setInterval(checkHolidays, 60 * 60 * 1000);
+
+  console.log('🎉 Holiday greeting system initialized');
 });
 
 // Handle autocomplete interactions
@@ -84,6 +105,9 @@ client.on('interactionCreate', async interaction => {
         await handleAutocomplete(interaction);
       } else if (commandName === 'gif') {
         const { handleAutocomplete } = require('./commands/gif');
+        await handleAutocomplete(interaction);
+      } else if (commandName === 'holiday') {
+        const { handleAutocomplete } = require('./commands/holiday');
         await handleAutocomplete(interaction);
       }
     } catch (error) {
@@ -139,6 +163,9 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === '8ball') {
       const { handle8ball } = require('./commands/8ball');
       await handle8ball(interaction);
+    } else if (commandName === 'holiday') {
+      const { handleHoliday } = require('./commands/holiday');
+      await handleHoliday(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

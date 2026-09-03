@@ -53,7 +53,29 @@ async function initializeDatabase() {
       )
     `);
 
+    // Create holidays table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS holidays (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        calendar_type VARCHAR(10) NOT NULL,
+        month INTEGER NOT NULL,
+        day INTEGER NOT NULL,
+        language VARCHAR(20) NOT NULL,
+        channel_id VARCHAR(255) NOT NULL,
+        greeting_message TEXT NOT NULL,
+        gif_keyword VARCHAR(255) NOT NULL,
+        enabled BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(name, language)
+      )
+    `);
+
     console.log('✅ Database tables initialized successfully');
+
+    // Initialize default holidays
+    const { initializeHolidays } = require('./init-holidays');
+    await initializeHolidays();
   } catch (error) {
     console.error('❌ Error initializing database:', error);
     throw error;
