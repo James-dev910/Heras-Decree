@@ -7,62 +7,40 @@ module.exports = {
 
   async handleHelp(interaction) {
     const helpMessage = `
-📖 **Hera's Decree Bot - Commands Guide**
+📖 **Hera's Decree Bot - Commands**
 
-**Basic Commands:**
-🔹 **/setup_time** - Schedule event (event, time: YYYY-MM-DD HH:MM UTC)
-🔹 **/list** - View all scheduled events
-🔹 **/countdown** - Show upcoming events with timers
-🔹 **/stop** - Stop event schedule or clear all
-🔹 **/language** - Set notification language (9 languages)
-🔹 **/help** - Display this help
+**Event Scheduling:**
+• \`/setup_time\` - Schedule event (YYYY-MM-DD HH:MM UTC)
+• \`/list\` - View scheduled events
+• \`/countdown\` - Show event timers
+• \`/stop\` - Stop event or clear all
+• \`/setup_bear_series\` - Schedule all 4 Bear Traps 🔒
 
 **Fun Commands:** 🎮
-🔹 **/gif** - Search & share random GIFs from Giphy
-🔹 **/roll** - Roll a dice (1-100 or custom range)
-🔹 **/flip** - Flip a coin (heads or tails)
-🔹 **/choose** - Let fate decide from your options
-🔹 **/8ball** - Ask the Magic 8 Ball a yes/no question
+• \`/gif\` - Random GIFs • \`/roll\` - Dice roll
+• \`/flip\` - Coin flip • \`/choose\` - Random choice
+• \`/8ball\` - Magic 8 Ball
 
-**Admin Commands:** 🔒
-🔹 **/setup_bear_series** - Batch schedule all 4 Bear Traps
-🔹 **/add_event** - Create custom event (name, emoji, type)
-🔹 **/remove_event** - Delete custom event
-🔹 **/holiday** - Manage automatic holiday greetings
+**Holiday Greetings:** 🎉
+• \`/holiday setup\` - Install holiday templates 🔒
+• \`/holiday list\` - View configured holidays
+• \`/holiday test\` - Test greeting
+Supports 23+ holidays (Chinese, Tagalog, Bisaya, Indonesian, English)
+Auto lunar calendar conversion (Chinese New Year, Mid-Autumn, etc.)
 
-**Default Events:**
-🐻 Bear Series (48h repeat): Bear Trap 1/2, Academy Bear Trap 1/2
-⚔️ Single Events: Caesar Boss, Viking
+**Other:**
+• \`/language\` - Set notification language
+• \`/add_event\` / \`/remove_event\` - Custom events 🔒
 
-**Supported Languages:**
-🇹🇼 繁中 🇺🇸 English 🇵🇭 Tagalog 🇮🇩 Indonesia 🇰🇷 한국어
-🇯🇵 日本語 🇹🇭 ไทย 🇪🇸 Español 🇩🇪 Deutsch
+**Features:**
+⏰ Notifications 5min before • 🌍 9 languages
+🕐 UTC + local time • 🎯 Multi-server support
 
-**Key Features:**
-⏰ Notifications 5 min before event
-📍 Sent to channel where command was used
-🌍 Multi-language with auto-detection
-🕐 Shows UTC + your local time
-🗑️ Single events auto-delete after notification
-🎉 Automatic holiday greetings (solar & lunar calendar)
-
-**Example:**
-\`/countdown\` - View live countdown timers
-\`/language lang:繁體中文\`
-\`/setup_time event:Bear Trap 1 time:2026-08-30 14:00\`
-\`/gif keyword:happy\` - Get a random happy GIF
-\`/roll max:20\` - Roll 1-20
-\`/choose options:pizza,burger,sushi\` - Pick one
-\`/8ball question:Will I win?\` - Ask the 8 ball
-
-💡 Use /setup_bear_series to schedule all Bear Traps at once!
-
-**Holiday Greetings:**
-The bot automatically sends holiday greetings with GIFs on special days!
-Supports 23+ holidays across 5 languages (Chinese, Tagalog, Bisaya, Indonesian, English)
-Lunar calendar holidays auto-convert (e.g., Chinese New Year, Mid-Autumn Festival)
-Use \`/holiday list\` to see all configured holidays
-Use \`/holiday test\` to preview a greeting
+**Examples:**
+\`/countdown\`
+\`/setup_time event:Bear Trap 1 time:2026-12-25 14:00\`
+\`/holiday setup language:English channel:#general\`
+\`/roll max:20\` • \`/8ball question:Will I win?\`
 `;
 
     await interaction.reply({ content: helpMessage, ephemeral: true });

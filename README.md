@@ -21,6 +21,51 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 - **Fun Interactive Commands**: GIF search, dice rolling, coin flipping, and random choice maker
 - **Automatic Holiday Greetings**: Multi-language holiday greetings with GIFs (solar & lunar calendar support)
 
+## Quick Start Guide
+
+### First Time Setup
+
+1. **Install Holiday Templates** (Optional but recommended):
+   ```
+   /holiday setup language:"English (Universal) - 7 holidays" channel:#general
+   ```
+
+2. **Schedule an Event**:
+   ```
+   /setup_time event:Bear Trap 1 time:2026-12-25 14:00
+   ```
+
+3. **View Your Events**:
+   ```
+   /list
+   /countdown
+   ```
+
+### Testing Holiday Greetings
+
+**In Production Server:**
+```
+/holiday setup language:"Traditional Chinese (Taiwan/HK) - 5 holidays" channel:#chinese
+/holiday list
+/holiday test name:"Chinese New Year" language:Traditional Chinese
+```
+
+**In Test Server (with channel override):**
+```
+/holiday setup language:"English (Universal) - 7 holidays" channel:#test
+/holiday test name:"Christmas" language:English channel:#any-channel
+```
+
+The `channel` parameter in `/holiday test` allows testing in any channel, perfect for test servers.
+
+### Common Commands
+
+- `/help` - Show all commands
+- `/language` - Set your notification language
+- `/gif keyword:happy` - Get a random GIF
+- `/roll max:20` - Roll a dice (1-20)
+- `/8ball question:Will I win?` - Ask Magic 8 Ball
+
 ## Supported Event Types
 
 ### 🐻 Default Bear Series (Recurring, every 48 hours)
