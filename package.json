@@ -15,6 +15,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.20.0",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "lunar-javascript": "^1.7.7",
