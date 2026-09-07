@@ -305,11 +305,17 @@ Automatically celebrate your community members' birthdays with personalized gree
 
 **Commands:**
 - `/birthday add` - Add or update a birthday for a user
-  - Parameters: user, month, day, channel (optional), message (optional), language (optional)
+  - Parameters: user, month, day, channel (optional), message (optional), language (optional), template (optional)
+  - **Template Options**: Choose from 5 different greeting styles (1-5):
+    - Template 1: Classic/經典祝福 - Traditional formal greetings
+    - Template 2: Warm Wishes/溫馨祝福 - Heartwarming messages
+    - Template 3: Simple & Sweet/簡約祝福 - Short and sweet
+    - Template 4: Poetic/詩意祝福 - Elegant and poetic
+    - Template 5: Energetic/活力祝福 - Fun and energetic
   - **Note:** Running this command again for the same user will overwrite previous birthday data
 - `/birthday list` - View all birthdays for this server (grouped by month)
 - `/birthday info` - View detailed birthday information for a specific user
-  - Shows: date, custom message, language, channel, days until birthday, and template preview
+  - Shows: date, selected template, custom message, language, channel, days until birthday, and template preview
 - `/birthday remove` - Remove a birthday
 - `/birthday test` - Send a test birthday greeting immediately
 - `/birthday upcoming` - Show upcoming birthdays (default: next 7 days)
@@ -317,9 +323,10 @@ Automatically celebrate your community members' birthdays with personalized gree
 **Features:**
 - 🎉 **Automatic Greetings**: Bot sends birthday wishes at midnight UTC on the user's birthday
 - 🌍 **9 Languages**: Choose from Traditional Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German
-- 💬 **Custom Messages**: Add personal birthday wishes (or use beautiful default templates)
+- 🎨 **5 Template Styles**: Select from 5 different greeting templates per language (Classic, Warm Wishes, Simple & Sweet, Poetic, Energetic)
+- 💬 **Custom Messages**: Add personal birthday wishes (or use beautifully formatted default templates)
 - 📍 **Flexible Channels**: Send to specific channels or use server default
-- 🎨 **Animated GIFs**: Each greeting includes a random birthday GIF from Giphy
+- 🎁 **Animated GIFs**: Each greeting includes a random birthday GIF from Giphy
 - 👤 **User Mention**: Birthday person gets mentioned with their avatar displayed
 - 📅 **Smart Tracking**: See upcoming birthdays and days until next celebration
 
@@ -330,15 +337,25 @@ Automatically celebrate your community members' birthdays with personalized gree
   month:12
   day:25
   channel:#celebrations
-  message:"Happy Birthday James! 🎉 Wishing you an amazing year ahead!"
   language:English
+  template:2
 
 Result on Dec 25:
 🎊 @James
 🎉 James Happy Birthday! 🎂
-🎈 Happy Birthday James! 🎉 Wishing you an amazing year ahead!
+🎈 Happy Birthday!
+
+On this special day:
+🌸 May your smile be always bright
+🎵 May all your dreams come true
+🌈 May you stay healthy and happy
+💖 May good luck follow you everywhere
+
+Wishing you a wonderful day! ✨
 [Beautiful Birthday GIF]
 Powered by GIPHY
+
+💡 Tip: You can use 'message' parameter for custom greeting or choose from 5 template styles!
 ```
 
 **Smart Features:**

@@ -69,6 +69,21 @@ module.exports = {
               { name: 'ไทย (Thai)', value: 'th' }
             )
         )
+        .addIntegerOption(option =>
+          option
+            .setName('template')
+            .setDescription('Birthday greeting template (1-5, default: 1)')
+            .setRequired(false)
+            .setMinValue(1)
+            .setMaxValue(5)
+            .addChoices(
+              { name: 'Template 1 - Classic/經典祝福', value: 1 },
+              { name: 'Template 2 - Warm Wishes/溫馨祝福', value: 2 },
+              { name: 'Template 3 - Simple & Sweet/簡約祝福', value: 3 },
+              { name: 'Template 4 - Poetic/詩意祝福', value: 4 },
+              { name: 'Template 5 - Energetic/活力祝福', value: 5 }
+            )
+        )
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -140,6 +155,7 @@ module.exports = {
         const channel = interaction.options.getChannel('channel');
         const customMessage = interaction.options.getString('message');
         const language = interaction.options.getString('language') || 'en-US';
+        const templateId = interaction.options.getInteger('template') || 1;
 
         const result = await addBirthday(
           guildId,
@@ -149,7 +165,8 @@ module.exports = {
           day,
           customMessage,
           language,
-          channel?.id
+          channel?.id,
+          templateId
         );
 
         await interaction.reply({

@@ -130,7 +130,7 @@ async function addHoliday(guildId, name, calendarType, month, day, language, cha
   }
 }
 
-// List all holidays for a specific guild (returns embed for better formatting)
+// List all holidays for a specific guild (returns embed with compact format)
 async function listHolidays(guildId) {
   try {
     const result = await pool.query(`
@@ -153,48 +153,54 @@ async function listHolidays(guildId) {
     const embed = new EmbedBuilder()
       .setTitle('📅 Configured Holidays')
       .setColor(0x5865F2)
-      .setFooter({ text: `Total: ${result.rows.length} holidays` })
+      .setDescription(`Total: ${result.rows.length} holidays\n💡 Showing compact view for better overview`)
       .setTimestamp();
 
-    // Add solar holidays (with 1024 char limit per field)
+    // Compact format for solar holidays (no channel info to save space)
     if (solarHolidays.length > 0) {
-      let solarText = '';
-      for (const holiday of solarHolidays) {
-        const status = holiday.enabled ? '✅' : '❌';
-        const holidayText = `${status} **${holiday.name}** (${holiday.language})\n   • Date: ${holiday.month}/${holiday.day}\n   • Channel: <#${holiday.channel_id}>\n\n`;
-
-        // Check if adding this would exceed 1024 chars
-        if (solarText.length + holidayText.length > 1020) {
-          solarText += `... and ${solarHolidays.length - solarHolidays.indexOf(holiday)} more`;
-          break;
+      // Split into multiple fields if needed (max 10 holidays per field)
+      const chunked = chunkArray(solarHolidays, 10);
+      chunked.forEach((chunk, index) => {
+        let solarText = '';
+        for (const holiday of chunk) {
+          const status = holiday.enabled ? '✅' : '❌';
+          solarText += `${status} **${holiday.name}** (${holiday.language}) - ${holiday.month}/${holiday.day}\n`;
         }
-        solarText += holidayText;
-      }
-      embed.addFields({ name: '☀️ Solar Calendar Holidays', value: solarText.trim() || 'None', inline: false });
+        const fieldName = chunked.length > 1 ? `☀️ Solar Calendar (${index + 1}/${chunked.length})` : '☀️ Solar Calendar Holidays';
+        embed.addFields({ name: fieldName, value: solarText.trim(), inline: false });
+      });
     }
 
-    // Add lunar holidays (with 1024 char limit per field)
+    // Compact format for lunar holidays
     if (lunarHolidays.length > 0) {
-      let lunarText = '';
-      for (const holiday of lunarHolidays) {
-        const status = holiday.enabled ? '✅' : '❌';
-        const holidayText = `${status} **${holiday.name}** (${holiday.language})\n   • Date: Lunar ${holiday.month}/${holiday.day}\n   • Channel: <#${holiday.channel_id}>\n\n`;
-
-        // Check if adding this would exceed 1024 chars
-        if (lunarText.length + holidayText.length > 1020) {
-          lunarText += `... and ${lunarHolidays.length - lunarHolidays.indexOf(holiday)} more`;
-          break;
+      const chunked = chunkArray(lunarHolidays, 10);
+      chunked.forEach((chunk, index) => {
+        let lunarText = '';
+        for (const holiday of chunk) {
+          const status = holiday.enabled ? '✅' : '❌';
+          lunarText += `${status} **${holiday.name}** (${holiday.language}) - Lunar ${holiday.month}/${holiday.day}\n`;
         }
-        lunarText += holidayText;
-      }
-      embed.addFields({ name: '🌙 Lunar Calendar Holidays', value: lunarText.trim() || 'None', inline: false });
+        const fieldName = chunked.length > 1 ? `🌙 Lunar Calendar (${index + 1}/${chunked.length})` : '🌙 Lunar Calendar Holidays';
+        embed.addFields({ name: fieldName, value: lunarText.trim(), inline: false });
+      });
     }
+
+    embed.setFooter({ text: 'To see channel info, use /holiday setup to view your configuration' });
 
     return { type: 'embed', embed };
   } catch (error) {
     console.error('Error listing holidays:', error);
     return { type: 'text', content: '❌ Database error occurred' };
   }
+}
+
+// Helper function to chunk array
+function chunkArray(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
 }
 
 // Delete holiday

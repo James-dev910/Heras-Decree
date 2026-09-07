@@ -43,8 +43,8 @@ async function checkAndSendBirthdayGreetings(client) {
         if (!user) continue;
 
         // Get birthday message template
-        const template = getBirthdayTemplate(birthday.language);
-        const birthdayMessage = birthday.custom_message || template.defaultMessage;
+        const template = getBirthdayTemplate(birthday.language, birthday.template_id);
+        const birthdayMessage = birthday.custom_message || template.message;
 
         // Get birthday GIF from Giphy
         const gifUrl = await getBirthdayGif(template.gifKeyword);
@@ -97,7 +97,7 @@ async function getBirthdayGif(keyword) {
 }
 
 // Add birthday
-async function addBirthday(guildId, userId, username, month, day, customMessage, language, channelId) {
+async function addBirthday(guildId, userId, username, month, day, customMessage, language, channelId, templateId = 1) {
   try {
     // Validate month and day
     if (month < 1 || month > 12) {
@@ -106,6 +106,11 @@ async function addBirthday(guildId, userId, username, month, day, customMessage,
 
     if (day < 1 || day > 31) {
       return { success: false, message: '❌ Invalid day! Must be 1-31' };
+    }
+
+    // Validate template_id
+    if (templateId < 1 || templateId > 5) {
+      return { success: false, message: '❌ Invalid template! Must be 1-5' };
     }
 
     // Check if birthday already exists
@@ -122,17 +127,18 @@ async function addBirthday(guildId, userId, username, month, day, customMessage,
     }
 
     await pool.query(`
-      INSERT INTO birthdays (guild_id, user_id, username, month, day, custom_message, language, channel_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      INSERT INTO birthdays (guild_id, user_id, username, month, day, template_id, custom_message, language, channel_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       ON CONFLICT (guild_id, user_id)
       DO UPDATE SET
         username = EXCLUDED.username,
         month = EXCLUDED.month,
         day = EXCLUDED.day,
+        template_id = EXCLUDED.template_id,
         custom_message = EXCLUDED.custom_message,
         language = EXCLUDED.language,
         channel_id = EXCLUDED.channel_id
-    `, [guildId, userId, username, month, day, customMessage, language, channelId]);
+    `, [guildId, userId, username, month, day, templateId, customMessage, language, channelId]);
 
     const channelText = channelId ? ` to <#${channelId}>` : ' (will use default channel)';
     const actionText = isUpdate ? 'updated' : 'set';
@@ -293,8 +299,8 @@ async function testBirthdayGreeting(client, guildId, userId, channelOverride = n
     }
 
     // Get birthday message template
-    const template = getBirthdayTemplate(birthday.language);
-    const birthdayMessage = birthday.custom_message || template.defaultMessage;
+    const template = getBirthdayTemplate(birthday.language, birthday.template_id);
+    const birthdayMessage = birthday.custom_message || template.message;
 
     // Get birthday GIF from Giphy
     const gifUrl = await getBirthdayGif(template.gifKeyword);
@@ -413,7 +419,7 @@ async function getBirthdayInfo(guildId, userId) {
     }
 
     const birthday = result.rows[0];
-    const template = getBirthdayTemplate(birthday.language);
+    const template = getBirthdayTemplate(birthday.language, birthday.template_id);
 
     // Calculate days until birthday
     const today = new Date();
@@ -442,8 +448,9 @@ async function getBirthdayInfo(guildId, userId) {
         { name: '⏰ Days Until', value: daysUntil === 0 ? '**Today!**' : `${daysUntil} days`, inline: true },
         { name: '🌍 Language', value: languageNames[birthday.language] || birthday.language, inline: true },
         { name: '📍 Channel', value: birthday.channel_id ? `<#${birthday.channel_id}>` : 'Default channel', inline: false },
-        { name: '💬 Custom Message', value: birthday.custom_message || '_Using default template_', inline: false },
-        { name: '📝 Default Template Preview', value: template.defaultMessage.substring(0, 200) + '...', inline: false }
+        { name: '🎨 Template', value: `${template.name} (ID: ${birthday.template_id || 1})`, inline: false },
+        { name: '💬 Custom Message', value: birthday.custom_message || '_Using template message_', inline: false },
+        { name: '📝 Template Message Preview', value: template.message.substring(0, 200) + '...', inline: false }
       )
       .setFooter({ text: `Status: ${birthday.enabled ? 'Enabled ✅' : 'Disabled ❌'}` })
       .setTimestamp();
