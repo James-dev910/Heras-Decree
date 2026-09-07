@@ -4,6 +4,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 
 ## Features
 
+- **Interactive Help Menu**: Beautiful button-based help system with 5 categories (📅 Events, 🎂 Birthdays, 🎉 Holidays, 🎮 Fun, ⚙️ Settings)
 - **Slash Commands Interface**: Intuitive operation using Discord's native autocomplete search
 - **Batch Scheduling**: Schedule all 4 Bear Trap events at once with `/setup_bear_series`
 - **Countdown Timers**: View upcoming events with live countdown timers using `/countdown`
@@ -26,17 +27,23 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 
 ### First Time Setup
 
-1. **Install Holiday Templates** (Optional but recommended):
+1. **View Interactive Help Menu**:
+   ```
+   /help
+   ```
+   Click buttons to explore different command categories with detailed explanations.
+
+2. **Install Holiday Templates** (Optional but recommended):
    ```
    /holiday setup language:"English (Universal) - 7 holidays" channel:#general
    ```
 
-2. **Schedule an Event**:
+3. **Schedule an Event**:
    ```
    /setup_time event:Bear Trap 1 time:2026-12-25 14:00
    ```
 
-3. **View Your Events**:
+4. **View Your Events**:
    ```
    /list
    /countdown

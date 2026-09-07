@@ -120,6 +120,22 @@ client.on('interactionCreate', async interaction => {
     return;
   }
 
+  // Handle button interactions
+  if (interaction.isButton()) {
+    try {
+      // Help menu buttons
+      if (interaction.customId.startsWith('help_')) {
+        const { handleHelpButton } = require('./commands/help');
+        await handleHelpButton(interaction);
+        return;
+      }
+    } catch (error) {
+      console.error('Error handling button interaction:', error);
+      await interaction.reply({ content: '❌ An error occurred while processing this button.', ephemeral: true });
+    }
+    return;
+  }
+
   if (!interaction.isChatInputCommand()) return;
 
   const { commandName } = interaction;
