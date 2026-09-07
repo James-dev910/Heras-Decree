@@ -108,6 +108,19 @@ async function addBirthday(guildId, userId, username, month, day, customMessage,
       return { success: false, message: '❌ Invalid day! Must be 1-31' };
     }
 
+    // Check if birthday already exists
+    const existingCheck = await pool.query(
+      'SELECT month, day FROM birthdays WHERE guild_id = $1 AND user_id = $2',
+      [guildId, userId]
+    );
+
+    const isUpdate = existingCheck.rows.length > 0;
+    let oldBirthday = '';
+    if (isUpdate) {
+      const old = existingCheck.rows[0];
+      oldBirthday = `\n⚠️ Previous birthday (${old.month}/${old.day}) has been overwritten`;
+    }
+
     await pool.query(`
       INSERT INTO birthdays (guild_id, user_id, username, month, day, custom_message, language, channel_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -122,9 +135,10 @@ async function addBirthday(guildId, userId, username, month, day, customMessage,
     `, [guildId, userId, username, month, day, customMessage, language, channelId]);
 
     const channelText = channelId ? ` to <#${channelId}>` : ' (will use default channel)';
+    const actionText = isUpdate ? 'updated' : 'set';
     return {
       success: true,
-      message: `✅ Birthday for **${username}** set to **${month}/${day}**${channelText}`
+      message: `✅ Birthday for **${username}** ${actionText} to **${month}/${day}**${channelText}${oldBirthday}\n\n💡 Tip: Use \`/birthday info user:@${username}\` to view all details`
     };
   } catch (error) {
     console.error('Error adding birthday:', error);
@@ -383,6 +397,64 @@ async function getAllBirthdayUsers(guildId) {
   }
 }
 
+// Get birthday info for a specific user
+async function getBirthdayInfo(guildId, userId) {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM birthdays WHERE guild_id = $1 AND user_id = $2',
+      [guildId, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return {
+        type: 'text',
+        content: '❌ No birthday found for this user!'
+      };
+    }
+
+    const birthday = result.rows[0];
+    const template = getBirthdayTemplate(birthday.language);
+
+    // Calculate days until birthday
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentDay = today.getDate();
+    const daysUntil = calculateDaysUntil(currentMonth, currentDay, birthday.month, birthday.day);
+
+    const languageNames = {
+      'zh-TW': '繁體中文 (Traditional Chinese)',
+      'en-US': 'English',
+      'tl': 'Tagalog',
+      'id': 'Indonesian',
+      'ko': '한국어 (Korean)',
+      'ja': '日本語 (Japanese)',
+      'es-ES': 'Español (Spanish)',
+      'de': 'Deutsch (German)',
+      'th': 'ไทย (Thai)'
+    };
+
+    const embed = new EmbedBuilder()
+      .setTitle(`🎂 Birthday Information`)
+      .setDescription(`<@${birthday.user_id}>`)
+      .setColor(0xFF6B9D)
+      .addFields(
+        { name: '📅 Birthday Date', value: `${birthday.month}/${birthday.day}`, inline: true },
+        { name: '⏰ Days Until', value: daysUntil === 0 ? '**Today!**' : `${daysUntil} days`, inline: true },
+        { name: '🌍 Language', value: languageNames[birthday.language] || birthday.language, inline: true },
+        { name: '📍 Channel', value: birthday.channel_id ? `<#${birthday.channel_id}>` : 'Default channel', inline: false },
+        { name: '💬 Custom Message', value: birthday.custom_message || '_Using default template_', inline: false },
+        { name: '📝 Default Template Preview', value: template.defaultMessage.substring(0, 200) + '...', inline: false }
+      )
+      .setFooter({ text: `Status: ${birthday.enabled ? 'Enabled ✅' : 'Disabled ❌'}` })
+      .setTimestamp();
+
+    return { type: 'embed', embed };
+  } catch (error) {
+    console.error('Error getting birthday info:', error);
+    return { type: 'text', content: '❌ Database error occurred' };
+  }
+}
+
 module.exports = {
   checkAndSendBirthdayGreetings,
   addBirthday,
@@ -390,5 +462,6 @@ module.exports = {
   removeBirthday,
   testBirthdayGreeting,
   getUpcomingBirthdays,
-  getAllBirthdayUsers
+  getAllBirthdayUsers,
+  getBirthdayInfo
 };

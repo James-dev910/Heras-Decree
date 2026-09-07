@@ -5,7 +5,8 @@ const {
   removeBirthday,
   testBirthdayGreeting,
   getUpcomingBirthdays,
-  getAllBirthdayUsers
+  getAllBirthdayUsers,
+  getBirthdayInfo
 } = require('../birthday-scheduler');
 const { getAvailableLanguages } = require('../birthday-templates');
 
@@ -73,6 +74,17 @@ module.exports = {
       subcommand
         .setName('list')
         .setDescription('List all birthdays for this server')
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('info')
+        .setDescription('View detailed birthday information for a user')
+        .addUserOption(option =>
+          option
+            .setName('user')
+            .setDescription('The user to view info for')
+            .setRequired(true)
+        )
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -148,6 +160,22 @@ module.exports = {
       } else if (subcommand === 'list') {
         await interaction.deferReply({ ephemeral: true });
         const result = await listBirthdays(guildId);
+
+        if (result.type === 'embed') {
+          await interaction.editReply({
+            embeds: [result.embed]
+          });
+        } else {
+          await interaction.editReply({
+            content: result.content
+          });
+        }
+
+      } else if (subcommand === 'info') {
+        const user = interaction.options.getUser('user');
+
+        await interaction.deferReply({ ephemeral: true });
+        const result = await getBirthdayInfo(guildId, user.id);
 
         if (result.type === 'embed') {
           await interaction.editReply({

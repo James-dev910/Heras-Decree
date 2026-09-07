@@ -299,13 +299,17 @@ Automatically celebrate your community members' birthdays with personalized gree
 ```
 /birthday add user:@Alice month:9 day:15 channel:#general
 /birthday list
+/birthday info user:@Alice    # View Alice's birthday details
 /birthday upcoming days:7
 ```
 
 **Commands:**
-- `/birthday add` - Add a birthday for a user
+- `/birthday add` - Add or update a birthday for a user
   - Parameters: user, month, day, channel (optional), message (optional), language (optional)
-- `/birthday list` - View all birthdays for this server
+  - **Note:** Running this command again for the same user will overwrite previous birthday data
+- `/birthday list` - View all birthdays for this server (grouped by month)
+- `/birthday info` - View detailed birthday information for a specific user
+  - Shows: date, custom message, language, channel, days until birthday, and template preview
 - `/birthday remove` - Remove a birthday
 - `/birthday test` - Send a test birthday greeting immediately
 - `/birthday upcoming` - Show upcoming birthdays (default: next 7 days)

@@ -156,28 +156,38 @@ async function listHolidays(guildId) {
       .setFooter({ text: `Total: ${result.rows.length} holidays` })
       .setTimestamp();
 
-    // Add solar holidays
+    // Add solar holidays (with 1024 char limit per field)
     if (solarHolidays.length > 0) {
       let solarText = '';
       for (const holiday of solarHolidays) {
         const status = holiday.enabled ? '✅' : '❌';
-        solarText += `${status} **${holiday.name}** (${holiday.language})\n`;
-        solarText += `   • Date: ${holiday.month}/${holiday.day}\n`;
-        solarText += `   • Channel: <#${holiday.channel_id}>\n\n`;
+        const holidayText = `${status} **${holiday.name}** (${holiday.language})\n   • Date: ${holiday.month}/${holiday.day}\n   • Channel: <#${holiday.channel_id}>\n\n`;
+
+        // Check if adding this would exceed 1024 chars
+        if (solarText.length + holidayText.length > 1020) {
+          solarText += `... and ${solarHolidays.length - solarHolidays.indexOf(holiday)} more`;
+          break;
+        }
+        solarText += holidayText;
       }
-      embed.addFields({ name: '☀️ Solar Calendar Holidays', value: solarText.trim() || 'None' });
+      embed.addFields({ name: '☀️ Solar Calendar Holidays', value: solarText.trim() || 'None', inline: false });
     }
 
-    // Add lunar holidays
+    // Add lunar holidays (with 1024 char limit per field)
     if (lunarHolidays.length > 0) {
       let lunarText = '';
       for (const holiday of lunarHolidays) {
         const status = holiday.enabled ? '✅' : '❌';
-        lunarText += `${status} **${holiday.name}** (${holiday.language})\n`;
-        lunarText += `   • Date: Lunar ${holiday.month}/${holiday.day}\n`;
-        lunarText += `   • Channel: <#${holiday.channel_id}>\n\n`;
+        const holidayText = `${status} **${holiday.name}** (${holiday.language})\n   • Date: Lunar ${holiday.month}/${holiday.day}\n   • Channel: <#${holiday.channel_id}>\n\n`;
+
+        // Check if adding this would exceed 1024 chars
+        if (lunarText.length + holidayText.length > 1020) {
+          lunarText += `... and ${lunarHolidays.length - lunarHolidays.indexOf(holiday)} more`;
+          break;
+        }
+        lunarText += holidayText;
       }
-      embed.addFields({ name: '🌙 Lunar Calendar Holidays', value: lunarText.trim() || 'None' });
+      embed.addFields({ name: '🌙 Lunar Calendar Holidays', value: lunarText.trim() || 'None', inline: false });
     }
 
     return { type: 'embed', embed };
