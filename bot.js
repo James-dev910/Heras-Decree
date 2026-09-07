@@ -5,6 +5,7 @@ const path = require('path');
 const { initializeDatabase, testConnection } = require('./database');
 const { scheduleEvent, listScheduledEvents, stopEvent, checkAndSendNotifications } = require('./scheduler-db');
 const { checkAndSendHolidayGreetings } = require('./holiday-scheduler');
+const { checkAndSendBirthdayGreetings } = require('./birthday-scheduler');
 
 const client = new Client({
   intents: [
@@ -67,7 +68,7 @@ client.once('ready', async () => {
 
   console.log('⏰ Scheduler initialized - checking for events every minute');
 
-  // Check for holidays once per day at midnight UTC
+  // Check for holidays and birthdays once per day at midnight UTC
   const checkHolidays = () => {
     const now = new Date();
     const midnight = new Date(now);
@@ -76,16 +77,19 @@ client.once('ready', async () => {
     // Check at midnight and every hour (in case bot restarts)
     if (now.getUTCHours() === 0 || now.getUTCMinutes() === 0) {
       checkAndSendHolidayGreetings(client);
+      checkAndSendBirthdayGreetings(client);
     }
   };
 
   // Check immediately on startup
   checkAndSendHolidayGreetings(client);
+  checkAndSendBirthdayGreetings(client);
 
-  // Check every hour for holidays
+  // Check every hour for holidays and birthdays
   setInterval(checkHolidays, 60 * 60 * 1000);
 
   console.log('🎉 Holiday greeting system initialized');
+  console.log('🎂 Birthday greeting system initialized');
 });
 
 // Handle autocomplete interactions
@@ -166,6 +170,9 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'holiday') {
       const { handleHoliday } = require('./commands/holiday');
       await handleHoliday(interaction);
+    } else if (commandName === 'birthday') {
+      const { handleBirthday } = require('./commands/birthday');
+      await handleBirthday(interaction);
     }
   } catch (error) {
     console.error(`Error executing ${commandName}:`, error);

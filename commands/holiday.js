@@ -3,6 +3,7 @@ const {
   addHoliday,
   listHolidays,
   deleteHoliday,
+  deleteAllHolidays,
   toggleHoliday,
   testHolidayGreeting,
   getAllHolidayNames,
@@ -131,6 +132,11 @@ module.exports = {
             .setRequired(true)
             .setAutocomplete(true)
         )
+    )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('delete_all')
+        .setDescription('Delete all holidays for this server')
     )
     .addSubcommand(subcommand =>
       subcommand
@@ -285,16 +291,30 @@ module.exports = {
 
       } else if (subcommand === 'list') {
         await interaction.deferReply({ ephemeral: true });
-        const list = await listHolidays(guildId);
-        await interaction.editReply({
-          content: list
-        });
+        const result = await listHolidays(guildId);
+
+        if (result.type === 'embed') {
+          await interaction.editReply({
+            embeds: [result.embed]
+          });
+        } else {
+          await interaction.editReply({
+            content: result.content
+          });
+        }
 
       } else if (subcommand === 'delete') {
         const name = interaction.options.getString('name');
         const language = interaction.options.getString('language');
 
         const result = await deleteHoliday(guildId, name, language);
+        await interaction.reply({
+          content: result.message,
+          ephemeral: true
+        });
+
+      } else if (subcommand === 'delete_all') {
+        const result = await deleteAllHolidays(guildId);
         await interaction.reply({
           content: result.message,
           ephemeral: true

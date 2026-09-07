@@ -130,7 +130,7 @@ async function addHoliday(guildId, name, calendarType, month, day, language, cha
   }
 }
 
-// List all holidays for a specific guild
+// List all holidays for a specific guild (returns embed for better formatting)
 async function listHolidays(guildId) {
   try {
     const result = await pool.query(`
@@ -140,39 +140,50 @@ async function listHolidays(guildId) {
     `, [guildId]);
 
     if (result.rows.length === 0) {
-      return '📅 No holidays configured for this server\n\n💡 Use `/holiday setup` to configure holidays!';
+      return {
+        type: 'text',
+        content: '📅 No holidays configured for this server\n\n💡 Use `/holiday setup` to configure holidays!'
+      };
     }
-
-    let message = '📅 **Configured Holidays:**\n\n';
 
     // Group by calendar type
     const solarHolidays = result.rows.filter(h => h.calendar_type === 'solar');
     const lunarHolidays = result.rows.filter(h => h.calendar_type === 'lunar');
 
+    const embed = new EmbedBuilder()
+      .setTitle('📅 Configured Holidays')
+      .setColor(0x5865F2)
+      .setFooter({ text: `Total: ${result.rows.length} holidays` })
+      .setTimestamp();
+
+    // Add solar holidays
     if (solarHolidays.length > 0) {
-      message += '**☀️ Solar Calendar Holidays:**\n';
+      let solarText = '';
       for (const holiday of solarHolidays) {
         const status = holiday.enabled ? '✅' : '❌';
-        message += `${status} **${holiday.name}** (${holiday.language})\n`;
-        message += `   • Date: ${holiday.month}/${holiday.day}\n`;
-        message += `   • Channel: <#${holiday.channel_id}>\n\n`;
+        solarText += `${status} **${holiday.name}** (${holiday.language})\n`;
+        solarText += `   • Date: ${holiday.month}/${holiday.day}\n`;
+        solarText += `   • Channel: <#${holiday.channel_id}>\n\n`;
       }
+      embed.addFields({ name: '☀️ Solar Calendar Holidays', value: solarText.trim() || 'None' });
     }
 
+    // Add lunar holidays
     if (lunarHolidays.length > 0) {
-      message += '**🌙 Lunar Calendar Holidays:**\n';
+      let lunarText = '';
       for (const holiday of lunarHolidays) {
         const status = holiday.enabled ? '✅' : '❌';
-        message += `${status} **${holiday.name}** (${holiday.language})\n`;
-        message += `   • Date: Lunar ${holiday.month}/${holiday.day}\n`;
-        message += `   • Channel: <#${holiday.channel_id}>\n\n`;
+        lunarText += `${status} **${holiday.name}** (${holiday.language})\n`;
+        lunarText += `   • Date: Lunar ${holiday.month}/${holiday.day}\n`;
+        lunarText += `   • Channel: <#${holiday.channel_id}>\n\n`;
       }
+      embed.addFields({ name: '🌙 Lunar Calendar Holidays', value: lunarText.trim() || 'None' });
     }
 
-    return message.trim();
+    return { type: 'embed', embed };
   } catch (error) {
     console.error('Error listing holidays:', error);
-    return '❌ Database error occurred';
+    return { type: 'text', content: '❌ Database error occurred' };
   }
 }
 
@@ -194,6 +205,28 @@ async function deleteHoliday(guildId, name, language) {
     };
   } catch (error) {
     console.error('Error deleting holiday:', error);
+    return { success: false, message: '❌ Database error occurred' };
+  }
+}
+
+// Delete all holidays for a guild
+async function deleteAllHolidays(guildId) {
+  try {
+    const result = await pool.query(
+      'DELETE FROM holidays WHERE guild_id = $1',
+      [guildId]
+    );
+
+    if (result.rowCount === 0) {
+      return { success: false, message: '❌ No holidays found to delete!' };
+    }
+
+    return {
+      success: true,
+      message: `✅ Successfully deleted all holidays (${result.rowCount} total)`
+    };
+  } catch (error) {
+    console.error('Error deleting all holidays:', error);
     return { success: false, message: '❌ Database error occurred' };
   }
 }
@@ -340,6 +373,7 @@ module.exports = {
   addHoliday,
   listHolidays,
   deleteHoliday,
+  deleteAllHolidays,
   toggleHoliday,
   testHolidayGreeting,
   getAllHolidayNames,

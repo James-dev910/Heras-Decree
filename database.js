@@ -87,6 +87,24 @@ async function initializeDatabase() {
       END $$;
     `);
 
+    // Create birthdays table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS birthdays (
+        id SERIAL PRIMARY KEY,
+        guild_id VARCHAR(255) NOT NULL,
+        user_id VARCHAR(255) NOT NULL,
+        username VARCHAR(100),
+        month INTEGER NOT NULL CHECK (month >= 1 AND month <= 12),
+        day INTEGER NOT NULL CHECK (day >= 1 AND day <= 31),
+        custom_message TEXT,
+        language VARCHAR(10) DEFAULT 'en',
+        channel_id VARCHAR(255),
+        enabled BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(guild_id, user_id)
+      )
+    `);
+
     console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error);

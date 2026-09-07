@@ -20,6 +20,7 @@ A Discord Bot designed for group event notifications with automatic scheduling a
 - **Cloud Deployment Optimized**: Commands auto-register on startup, no manual configuration needed
 - **Fun Interactive Commands**: GIF search, dice rolling, coin flipping, and random choice maker
 - **Automatic Holiday Greetings**: Multi-language holiday greetings with GIFs (solar & lunar calendar support)
+- **Birthday Celebration System**: Automatic birthday greetings with custom messages and GIFs (9 languages supported)
 
 ## Quick Start Guide
 
@@ -103,6 +104,7 @@ Create your own events with:
 | `/choose` | Let the bot randomly choose from your options | Everyone |
 | `/8ball` | Ask the Magic 8 Ball a yes/no question | Everyone |
 | `/holiday` | Manage automatic holiday greetings (add, list, delete, test) | **Administrator** |
+| `/birthday` | Manage birthday greetings (add, list, remove, test, upcoming) | Everyone |
 
 ### 🔒 Permission Requirements
 
@@ -288,6 +290,52 @@ Create your own events with:
 - `/holiday delete` - Remove a holiday
 - `/holiday enable/disable` - Toggle holiday greetings
 - `/holiday test` - Send test greeting immediately (supports channel override)
+
+#### Birthday Celebration System 🎂
+
+Automatically celebrate your community members' birthdays with personalized greetings!
+
+**Quick Start:**
+```
+/birthday add user:@Alice month:9 day:15 channel:#general
+/birthday list
+/birthday upcoming days:7
+```
+
+**Commands:**
+- `/birthday add` - Add a birthday for a user
+  - Parameters: user, month, day, channel (optional), message (optional), language (optional)
+- `/birthday list` - View all birthdays for this server
+- `/birthday remove` - Remove a birthday
+- `/birthday test` - Send a test birthday greeting immediately
+- `/birthday upcoming` - Show upcoming birthdays (default: next 7 days)
+
+**Features:**
+- 🎉 **Automatic Greetings**: Bot sends birthday wishes at midnight UTC on the user's birthday
+- 🌍 **9 Languages**: Choose from Traditional Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German
+- 💬 **Custom Messages**: Add personal birthday wishes (or use beautiful default templates)
+- 📍 **Flexible Channels**: Send to specific channels or use server default
+- 🎨 **Animated GIFs**: Each greeting includes a random birthday GIF from Giphy
+- 👤 **User Mention**: Birthday person gets mentioned with their avatar displayed
+- 📅 **Smart Tracking**: See upcoming birthdays and days until next celebration
+
+**Example:**
+```
+/birthday add
+  user:@James
+  month:12
+  day:25
+  channel:#celebrations
+  message:"Happy Birthday James! 🎉 Wishing you an amazing year ahead!"
+  language:English
+
+Result on Dec 25:
+🎊 @James
+🎉 James Happy Birthday! 🎂
+🎈 Happy Birthday James! 🎉 Wishing you an amazing year ahead!
+[Beautiful Birthday GIF]
+Powered by GIPHY
+```
 
 **Smart Features:**
 - **Multi-Language**: Set your preferred language with `/language`
