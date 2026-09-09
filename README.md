@@ -313,12 +313,17 @@ Automatically celebrate your community members' birthdays with personalized gree
 **Commands:**
 - `/birthday add` - Add or update a birthday for a user
   - Parameters: user, month, day, channel (optional), message (optional), language (optional), template (optional)
-  - **Template Options**: Choose from 5 different greeting styles (1-5):
-    - Template 1: Classic/經典祝福 - Traditional formal greetings
-    - Template 2: Warm Wishes/溫馨祝福 - Heartwarming messages
-    - Template 3: Simple & Sweet/簡約祝福 - Short and sweet
-    - Template 4: Poetic/詩意祝福 - Elegant and poetic
-    - Template 5: Energetic/活力祝福 - Fun and energetic
+  - **Template Options**: Choose from 8 different greeting styles (1-8):
+    - **Classic Greetings (1-3)**:
+      - Template 1: Classic - Traditional formal greetings
+      - Template 2: Warm Wishes - Heartwarming messages
+      - Template 3: Simple & Sweet - Short and sweet
+    - **Fun PWL Gaming Style (4-8)**:
+      - Template 4: PWL Alert - Level Up - Gaming level up style
+      - Template 5: PWL Alert - Stats Update - Character stats style
+      - Template 6: PWL Alert - Survival - Survival mode humor
+      - Template 7: PWL Alert - Achievement - Achievement unlocked style
+      - Template 8: PWL Alert - Boss Battle - Boss defeat celebration
   - **Note:** Running this command again for the same user will overwrite previous birthday data
 - `/birthday list` - View all birthdays for this server (grouped by month)
 - `/birthday info` - View detailed birthday information for a specific user
@@ -330,7 +335,9 @@ Automatically celebrate your community members' birthdays with personalized gree
 **Features:**
 - 🎉 **Automatic Greetings**: Bot sends birthday wishes at midnight UTC on the user's birthday
 - 🌍 **9 Languages**: Choose from Traditional Chinese, English, Tagalog, Indonesian, Korean, Japanese, Thai, Spanish, German
-- 🎨 **5 Template Styles**: Select from 5 different greeting templates per language (Classic, Warm Wishes, Simple & Sweet, Poetic, Energetic)
+- 🎨 **8 Template Styles**:
+  - 3 Classic templates (Traditional, Warm, Simple)
+  - 5 Fun PWL gaming-style templates (Level Up, Stats, Survival, Achievement, Boss Battle)
 - 💬 **Custom Messages**: Add personal birthday wishes (or use beautifully formatted default templates)
 - 📍 **Flexible Channels**: Send to specific channels or use server default
 - 🎁 **Animated GIFs**: Each greeting includes a random birthday GIF from Giphy
@@ -345,24 +352,27 @@ Automatically celebrate your community members' birthdays with personalized gree
   day:25
   channel:#celebrations
   language:English
-  template:2
+  template:5
 
 Result on Dec 25:
 🎊 @James
 🎉 James Happy Birthday! 🎂
-🎈 Happy Birthday!
+🎂 PWL BIRTHDAY ALERT! 🚨
 
-On this special day:
-🌸 May your smile be always bright
-🎵 May all your dreams come true
-🌈 May you stay healthy and happy
-💖 May good luck follow you everywhere
+Everyone say HAPPY BIRTHDAY to @James! 🎉
 
-Wishing you a wonderful day! ✨
-[Beautiful Birthday GIF]
+You've gained:
+• Age: +1
+• Wisdom: +0 😂
+• Confidence: +100
+
+May your pulls be lucky, your troops be safe, and your enemies stay rallyable. 🔥
+
+🥳 Enjoy your day, Birthday Legend!
+[Fun Birthday GIF]
 Powered by GIPHY
 
-💡 Tip: You can use 'message' parameter for custom greeting or choose from 5 template styles!
+💡 Tip: Choose from 8 template styles! Templates 1-3 for classic greetings, 4-8 for fun gaming style!
 ```
 
 **Smart Features:**

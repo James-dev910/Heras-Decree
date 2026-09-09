@@ -96,7 +96,7 @@ async function initializeDatabase() {
         username VARCHAR(100),
         month INTEGER NOT NULL CHECK (month >= 1 AND month <= 12),
         day INTEGER NOT NULL CHECK (day >= 1 AND day <= 31),
-        template_id INTEGER DEFAULT 1 CHECK (template_id >= 1 AND template_id <= 5),
+        template_id INTEGER DEFAULT 1 CHECK (template_id >= 1 AND template_id <= 8),
         custom_message TEXT,
         language VARCHAR(10) DEFAULT 'en',
         channel_id VARCHAR(255),
@@ -114,7 +114,7 @@ async function initializeDatabase() {
           SELECT 1 FROM information_schema.columns
           WHERE table_name='birthdays' AND column_name='template_id'
         ) THEN
-          ALTER TABLE birthdays ADD COLUMN template_id INTEGER DEFAULT 1 CHECK (template_id >= 1 AND template_id <= 5);
+          ALTER TABLE birthdays ADD COLUMN template_id INTEGER DEFAULT 1 CHECK (template_id >= 1 AND template_id <= 8);
         END IF;
       END $$;
     `);

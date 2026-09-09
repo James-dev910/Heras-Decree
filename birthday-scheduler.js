@@ -109,8 +109,8 @@ async function addBirthday(guildId, userId, username, month, day, customMessage,
     }
 
     // Validate template_id
-    if (templateId < 1 || templateId > 5) {
-      return { success: false, message: '❌ Invalid template! Must be 1-5' };
+    if (templateId < 1 || templateId > 8) {
+      return { success: false, message: '❌ Invalid template! Must be 1-8' };
     }
 
     // Check if birthday already exists

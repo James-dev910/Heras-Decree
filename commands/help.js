@@ -99,12 +99,12 @@ function createBirthdayPage() {
     .addFields(
       {
         name: '📝 Commands',
-        value: '`/birthday add` - Add/update user birthday\n  └ Parameters: user, month, day, template (1-5), language, channel, message\n`/birthday list` - View all server birthdays\n`/birthday info` - View detailed birthday information\n`/birthday test` - Send test greeting immediately\n`/birthday remove` - Remove a birthday\n`/birthday upcoming` - Show upcoming birthdays (default: 7 days)',
+        value: '`/birthday add` - Add/update user birthday\n  └ Parameters: user, month, day, template (1-8), language, channel, message\n`/birthday list` - View all server birthdays\n`/birthday info` - View detailed birthday information\n`/birthday test` - Send test greeting immediately\n`/birthday remove` - Remove a birthday\n`/birthday upcoming` - Show upcoming birthdays (default: 7 days)',
         inline: false
       },
       {
         name: '✨ Features',
-        value: '🎨 5 template styles per language (Classic, Warm Wishes, Simple, Poetic, Energetic)\n🌍 9 languages supported\n⏰ Auto greeting at midnight UTC\n🎁 Animated GIFs from Giphy\n👤 User mention with avatar',
+        value: '🎨 8 template styles per language:\n  • Templates 1-3: Classic greetings\n  • Templates 4-8: Fun PWL gaming style\n🌍 9 languages supported\n⏰ Auto greeting at midnight UTC\n🎁 Animated GIFs from Giphy\n👤 User mention with avatar',
         inline: false
       },
       {

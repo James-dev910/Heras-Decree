@@ -1,5 +1,5 @@
 // Birthday greeting templates for different languages
-// Each language has 5 different template versions to choose from
+// Each language has 8 different template versions to choose from
 
 const BIRTHDAY_TEMPLATES = {
   'zh-TW': {
@@ -7,7 +7,7 @@ const BIRTHDAY_TEMPLATES = {
     templates: [
       {
         id: 1,
-        name: '經典祝福',
+        name: 'Classic',
         message: `🎈 祝你生日快樂！
 
 願你在新的一歲裡：
@@ -20,7 +20,7 @@ May all your dreams come true! 🎁`
       },
       {
         id: 2,
-        name: '溫馨祝福',
+        name: 'Warm Wishes',
         message: `🎂 生日快樂！
 
 在這特別的日子裡：
@@ -33,7 +33,7 @@ May all your dreams come true! 🎁`
       },
       {
         id: 3,
-        name: '簡約祝福',
+        name: 'Simple & Sweet',
         message: `🎉 Happy Birthday! 生日快樂！
 
 🎈 祝福你：
@@ -46,33 +46,70 @@ May all your dreams come true! 🎁`
       },
       {
         id: 4,
-        name: '詩意祝福',
-        message: `🌟 生日快樂！
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL 生日警報！🎂
 
-🎂 在你生命中的這一天
-願陽光為你燦爛
-願鮮花為你綻放
-願歡笑與你相伴
+🚨 @BirthdayPerson 等級提升了！
++1 歲，距離成為古董又近了一步 💀😂
 
-✨ 祝福你：
-前程似錦，未來可期
-歲月靜好，幸福安康
-
-💝 Happy Birthday!`
+生日快樂！🥳
+願你的運氣爆棚，部隊全活，敵人全滅！🔥`
       },
       {
         id: 5,
-        name: '活力祝福',
-        message: `🎊 生日快樂！Let's Celebrate! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL 生日警報！🚨
 
-🎉 今天是你的大日子！
-🎈 願你：
-⚡ 充滿活力與熱情
-🌟 閃耀如星光般耀眼
-🚀 勇敢追夢，無所畏懼
-💪 越來越棒，越來越好
+大家一起說：生日快樂 @BirthdayPerson！🎉
 
-Let's make this year the best one yet! 🎁✨`
+你獲得了：
+• 年齡 +1
+• 智慧 +0 😂
+• 自信 +100
+
+願你抽卡必出金，部隊不陣亡，敵人好Rally！🔥
+
+🥳 享受你的生日，傳奇玩家！`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL 生日警報！🎂
+
+🚨 @BirthdayPerson 又存活了一年！
+
+請送上禮物、蛋糕，最好還有資源包 😂
+願你的運氣無敵，敵人都是菜雞 🔥
+
+🥳 生日快樂，傳奇！`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL 生日警報！🎉
+
+🏆 成就解鎖：@BirthdayPerson 完成了又一年！
+
+新屬性：
+• 年齡：+1 ⬆️
+• 智慧：存疑 😂
+• 帥氣度：滿等 🔥
+
+生日快樂！願你的戰利品都是傳說級！🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL 生日警報！🎂
+
+⚔️ @BirthdayPerson 擊敗了生日魔王！🐉
+
+勝利獎勵：
+• +1 年經驗值
+• +無限蛋糕 🍰
+• +傳奇稱號 🌟
+
+GG！生日快樂，冠軍！🏆`
       }
     ],
     gifKeyword: 'happy birthday celebration'
@@ -122,34 +159,70 @@ Hope your birthday is as amazing as you are! 🎁`
       },
       {
         id: 4,
-        name: 'Poetic',
-        message: `🌟 Happy Birthday!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
 
-🎂 On this day you were born
-A star began to shine
-May your path be bright and warm
-And happiness be thine
+🚨 @BirthdayPerson has leveled up!
++1 year older, +1 year closer to becoming an ancient relic. 💀😂
 
-✨ Wishing you:
-Success in all you do
-Joy in every moment
-And dreams that do come true
-
-💝 Celebrate big today!`
+Happy Birthday! 🥳
+May your RNG be blessed, your troops survive, and your enemies burn! 🔥`
       },
       {
         id: 5,
-        name: 'Energetic',
-        message: `🎊 Happy Birthday! Let's Party! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL BIRTHDAY ALERT! 🚨
 
-🎉 It's YOUR special day!
-🎈 May you be:
-⚡ Full of energy and passion
-🌟 Shining like a superstar
-🚀 Bold and fearless
-💪 Stronger and better
+Everyone say HAPPY BIRTHDAY to @BirthdayPerson! 🎉
 
-Let's make this year LEGENDARY! 🎁✨`
+You've gained:
+• Age: +1
+• Wisdom: +0 😂
+• Confidence: +100
+
+May your pulls be lucky, your troops be safe, and your enemies stay rallyable. 🔥
+
+🥳 Enjoy your day, Birthday Legend!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+🚨 @BirthdayPerson has survived another year!
+
+Please send gifts, cake, and preferably RSS. 😂
+May your RNG be cracked and your enemies be weak. 🔥
+
+🥳 Happy Birthday, legend!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL BIRTHDAY ALERT! 🎉
+
+🏆 ACHIEVEMENT UNLOCKED: @BirthdayPerson completed another year!
+
+New Stats:
+• Age: +1 ⬆️
+• Wisdom: Debatable 😂
+• Coolness: MAX LEVEL 🔥
+
+Happy Birthday! May your loot be legendary! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+⚔️ @BirthdayPerson has defeated the BIRTHDAY BOSS! 🐉
+
+Victory Rewards:
+• +1 Year Experience
+• +Infinite Cake 🍰
+• +Legendary Status 🌟
+
+GG! Happy Birthday, champion! 🏆`
       }
     ],
     gifKeyword: 'happy birthday party'
@@ -160,7 +233,7 @@ Let's make this year LEGENDARY! 🎁✨`
     templates: [
       {
         id: 1,
-        name: 'Klasiko',
+        name: 'Classic',
         message: `🎈 Maligayang Kaarawan!
 
 Nawa'y puno ng:
@@ -173,7 +246,7 @@ Maligayang bati sa iyong espesyal na araw! 🎁`
       },
       {
         id: 2,
-        name: 'Mainit na Pagbati',
+        name: 'Warm Wishes',
         message: `🎂 Maligayang Bati sa Iyong Kaarawan!
 
 Sa espesyal mong araw:
@@ -186,7 +259,7 @@ Pagpalain ka nawa! ✨`
       },
       {
         id: 3,
-        name: 'Simple',
+        name: 'Simple & Sweet',
         message: `🎉 Happy Birthday!
 
 🎈 Para sa iyo:
@@ -199,34 +272,70 @@ Sana'y special ang iyong araw! 🎁`
       },
       {
         id: 4,
-        name: 'Makata',
-        message: `🌟 Maligayang Kaarawan!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
 
-🎂 Sa araw na ito
-Ipinanganak ang isang bituin
-Nawa'y laging maliwanag
-Ang iyong landas
+🚨 Nag-level up si @BirthdayPerson!
++1 taon na mas matanda, +1 taon papalapit sa ancient relic 💀😂
 
-✨ Nawa'y:
-Magtagumpay ka sa lahat
-Maging masaya lagi
-At matupad ang pangarap
-
-💝 Celebrate!`
+Happy Birthday! 🥳
+Sana blessed ang RNG mo, ligtas troops mo, at masunog enemies mo! 🔥`
       },
       {
         id: 5,
-        name: 'Masigla',
-        message: `🎊 Maligayang Kaarawan! Party Na! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL BIRTHDAY ALERT! 🚨
 
-🎉 Ito ang IYONG araw!
-🎈 Nawa'y:
-⚡ Puno ng sigla at lakas
-🌟 Kumikinang na parang bituin
-🚀 Matapang at walang takot
-💪 Lumalakas pa
+Sabay-sabay: HAPPY BIRTHDAY kay @BirthdayPerson! 🎉
 
-Gawing LEGENDARY ang taong ito! 🎁✨`
+Nakuha mo:
+• Age: +1
+• Wisdom: +0 😂
+• Confidence: +100
+
+Sana lucky pulls mo, safe troops mo, at rallyable enemies mo! 🔥
+
+🥳 Enjoy ang birthday mo, Legend!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+🚨 Nakaligtas si @BirthdayPerson ng isa pang taon!
+
+Paki-send ng gifts, cake, at mas better kung may RSS 😂
+Sana cracked RNG mo at mahina enemies mo 🔥
+
+🥳 Happy Birthday, legend!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL BIRTHDAY ALERT! 🎉
+
+🏆 ACHIEVEMENT UNLOCKED: Natapos ni @BirthdayPerson ang isa pang taon!
+
+Bagong Stats:
+• Age: +1 ⬆️
+• Wisdom: Questionable 😂
+• Coolness: MAX LEVEL 🔥
+
+Happy Birthday! Sana legendary loot mo! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+⚔️ Tinalo ni @BirthdayPerson ang BIRTHDAY BOSS! 🐉
+
+Victory Rewards:
+• +1 Year Experience
+• +Infinite Cake 🍰
+• +Legendary Status 🌟
+
+GG! Happy Birthday, champion! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -237,7 +346,7 @@ Gawing LEGENDARY ang taong ito! 🎁✨`
     templates: [
       {
         id: 1,
-        name: 'Klasik',
+        name: 'Classic',
         message: `🎈 Selamat Ulang Tahun!
 
 Semoga hari istimewamu dipenuhi dengan:
@@ -250,7 +359,7 @@ Semoga tahun depan penuh berkah! 🎁`
       },
       {
         id: 2,
-        name: 'Hangat',
+        name: 'Warm Wishes',
         message: `🎂 Selamat Ulang Tahun!
 
 Di hari spesialmu:
@@ -263,7 +372,7 @@ Selamat merayakan! ✨`
       },
       {
         id: 3,
-        name: 'Sederhana',
+        name: 'Simple & Sweet',
         message: `🎉 Selamat Ulang Tahun!
 
 🎈 Untuk Anda:
@@ -276,34 +385,70 @@ Semoga harimu istimewa! 🎁`
       },
       {
         id: 4,
-        name: 'Puitis',
-        message: `🌟 Selamat Ulang Tahun!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
 
-🎂 Di hari kelahiranmu
-Bintang mulai bersinar
-Semoga jalanmu cerah
-Dan kebahagiaan selalu ada
+🚨 @BirthdayPerson naik level!
++1 tahun lebih tua, +1 tahun lebih dekat jadi barang antik 💀😂
 
-✨ Semoga:
-Sukses dalam semua hal
-Bahagia di setiap saat
-Dan mimpi menjadi nyata
-
-💝 Rayakan dengan meriah!`
+Happy Birthday! 🥳
+Semoga RNG kamu blessed, pasukan selamat, musuh terbakar! 🔥`
       },
       {
         id: 5,
-        name: 'Energik',
-        message: `🎊 Selamat Ulang Tahun! Mari Berpesta! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL BIRTHDAY ALERT! 🚨
 
-🎉 Ini hari ISTIMEWAMU!
-🎈 Semoga kamu:
-⚡ Penuh energi dan semangat
-🌟 Bersinar seperti bintang
-🚀 Berani dan tanpa takut
-💪 Semakin kuat dan hebat
+Semua ucapkan HAPPY BIRTHDAY untuk @BirthdayPerson! 🎉
 
-Mari buat tahun ini LUAR BIASA! 🎁✨`
+Kamu dapat:
+• Umur: +1
+• Kebijaksanaan: +0 😂
+• Percaya Diri: +100
+
+Semoga gacha beruntung, pasukan aman, musuh gampang di-rally! 🔥
+
+🥳 Nikmati harimu, Birthday Legend!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+🚨 @BirthdayPerson bertahan satu tahun lagi!
+
+Tolong kirim hadiah, kue, dan lebih baik RSS 😂
+Semoga RNG kamu pecah dan musuh lemah 🔥
+
+🥳 Happy Birthday, legend!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL BIRTHDAY ALERT! 🎉
+
+🏆 ACHIEVEMENT UNLOCKED: @BirthdayPerson menyelesaikan tahun lagi!
+
+Stats Baru:
+• Umur: +1 ⬆️
+• Kebijaksanaan: Diragukan 😂
+• Keren-nya: MAX LEVEL 🔥
+
+Happy Birthday! Semoga loot legendary! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL BIRTHDAY ALERT! 🎂
+
+⚔️ @BirthdayPerson mengalahkan BIRTHDAY BOSS! 🐉
+
+Hadiah Kemenangan:
+• +1 Tahun Pengalaman
+• +Kue Tak Terbatas 🍰
+• +Status Legendaris 🌟
+
+GG! Happy Birthday, juara! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -314,73 +459,109 @@ Mari buat tahun ini LUAR BIASA! 🎁✨`
     templates: [
       {
         id: 1,
-        name: '클래식',
+        name: 'Classic',
         message: `🎈 생일 축하합니다!
 
-특별한 날이 가득하기를:
+특별한 날이 가득하길:
 ✨ 기쁨과 웃음
 🌟 사랑과 행복
 🎯 놀라운 선물
 💝 아름다운 추억
 
-멋진 한 해가 되시길 바랍니다! 🎁`
+멋진 한 해가 되길 바랍니다! 🎁`
       },
       {
         id: 2,
-        name: '따뜻한',
+        name: 'Warm Wishes',
         message: `🎂 생일 축하해요!
 
-오늘 이 특별한 날:
-🌸 항상 웃음 가득하길
-🎵 꿈이 이루어지길
-🌈 건강하시길
-💖 사랑 가득하길
+이 특별한 날에:
+🌸 웃음이 가득하고
+🎵 꿈이 이루어지고
+🌈 마음이 가벼워지고
+💖 모든 것이 잘 되길
 
-행복한 하루 보내세요! ✨`
+사랑 가득한 하루 보내세요! ✨`
       },
       {
         id: 3,
-        name: '심플',
+        name: 'Simple & Sweet',
         message: `🎉 생일 축하합니다!
 
-🎈 당신을 위해:
-• 매일 행복하세요
-• 항상 건강하세요
-• 꿈이 이루어지길
-• 새로운 모험들
+🎈 당신을 위한 축복:
+• 매일 행복
+• 항상 건강
+• 이루어지는 꿈
+• 새로운 모험
 
-멋진 생일 보내세요! 🎁`
+당신만큼 멋진 생일 보내세요! 🎁`
       },
       {
         id: 4,
-        name: '시적인',
-        message: `🌟 생일 축하합니다!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL 생일 알림! 🎂
 
-🎂 당신이 태어난 이 날
-별이 빛나기 시작했죠
-당신의 길이 밝고
-행복이 가득하길
+🚨 @BirthdayPerson 레벨업!
++1살 더 늙음, +1살 고대 유물에 가까워짐 💀😂
 
-✨ 기원합니다:
-모든 일에 성공을
-매 순간 기쁨을
-그리고 꿈이 현실로
-
-💝 축하합니다!`
+생일 축하해! 🥳
+행운이 가득하고, 부대는 생존하고, 적은 불타길! 🔥`
       },
       {
         id: 5,
-        name: '활기찬',
-        message: `🎊 생일 축하합니다! 파티하자! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL 생일 알림! 🚨
 
-🎉 오늘은 당신의 날!
-🎈 당신이:
-⚡ 열정과 에너지로 가득
-🌟 슈퍼스타처럼 빛나길
-🚀 대담하고 두려움 없이
-💪 더 강하고 멋지게
+모두 함께: @BirthdayPerson 생일 축하해! 🎉
 
-올해를 전설로 만들어요! 🎁✨`
+획득한 스탯:
+• 나이: +1
+• 지혜: +0 😂
+• 자신감: +100
+
+뽑기 운 좋고, 부대 안전하고, 적은 랠리 가능하길! 🔥
+
+🥳 즐거운 생일 보내, 전설이여!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL 생일 알림! 🎂
+
+🚨 @BirthdayPerson이 또 한 해를 생존했다!
+
+선물, 케이크, 그리고 가능하면 자원도 보내주세요 😂
+행운 터지고 적은 약하길 🔥
+
+🥳 생일 축하해, 전설!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL 생일 알림! 🎉
+
+🏆 업적 달성: @BirthdayPerson이 한 해를 완료했다!
+
+새 스탯:
+• 나이: +1 ⬆️
+• 지혜: 의문 😂
+• 멋짐: 만렙 🔥
+
+생일 축하! 전설 아이템 득템하길! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL 생일 알림! 🎂
+
+⚔️ @BirthdayPerson이 생일 보스를 격파했다! 🐉
+
+승리 보상:
+• +1년 경험치
+• +무한 케이크 🍰
+• +전설 칭호 🌟
+
+GG! 생일 축하, 챔피언! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -391,73 +572,109 @@ Mari buat tahun ini LUAR BIASA! 🎁✨`
     templates: [
       {
         id: 1,
-        name: 'クラシック',
+        name: 'Classic',
         message: `🎈 お誕生日おめでとうございます！
 
-素敵な一日になりますように：
+特別な日が満たされますように：
 ✨ 喜びと笑顔
 🌟 愛と幸せ
-🎯 素晴らしいサプライズ
-💝 最高の思い出
+🎯 素晴らしい驚き
+💝 大切な思い出
 
-素晴らしい一年になりますように！ 🎁`
+素敵な一年になりますように！🎁`
       },
       {
         id: 2,
-        name: 'あたたかい',
-        message: `🎂 お誕生日おめでとうございます！
+        name: 'Warm Wishes',
+        message: `🎂 お誕生日おめでとう！
 
 この特別な日に：
-🌸 笑顔いっぱいでありますように
+🌸 笑顔が輝きますように
 🎵 夢が叶いますように
-🌈 健康でありますように
-💖 愛に満たされますように
+🌈 心が軽くなりますように
+💖 全てが上手くいきますように
 
-素敵な一日をお過ごしください！ ✨`
+愛に満ちた素敵な一日を！✨`
       },
       {
         id: 3,
-        name: 'シンプル',
+        name: 'Simple & Sweet',
         message: `🎉 お誕生日おめでとう！
 
-🎈 あなたへ：
-• 毎日が幸せでありますように
-• いつも健康でいてください
-• 夢が叶いますように
-• 新しい冒険を
+🎈 あなたへの祝福：
+• 毎日幸せ
+• いつも健康
+• 叶う夢
+• 新しい冒険
 
-素晴らしい誕生日を！ 🎁`
+あなたのような素敵な誕生日を！🎁`
       },
       {
         id: 4,
-        name: '詩的',
-        message: `🌟 お誕生日おめでとうございます！
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL 誕生日アラート！🎂
 
-🎂 あなたが生まれた日
-星が輝き始めました
-あなたの道が明るく
-幸せに満ちますように
+🚨 @BirthdayPersonがレベルアップ！
++1歳年上、+1歳古代遺物に接近 💀😂
 
-✨ 願います：
-全てにおいて成功を
-全ての瞬間に喜びを
-そして夢が現実に
-
-💝 お祝いしましょう！`
+ハッピーバースデー！🥳
+運が祝福され、部隊が生き残り、敵が燃えますように！🔥`
       },
       {
         id: 5,
-        name: 'エネルギッシュ',
-        message: `🎊 お誕生日おめでとう！パーティーだ！🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL 誕生日アラート！🚨
 
-🎉 今日は君の特別な日！
-🎈 あなたが：
-⚡ エネルギーと情熱で満ちている
-🌟 スーパースターのように輝く
-🚀 大胆で恐れ知らず
-💪 もっと強く素晴らしく
+みんなで：@BirthdayPersonお誕生日おめでとう！🎉
 
-今年を伝説にしよう！ 🎁✨`
+獲得したステータス：
+• 年齢：+1
+• 知恵：+0 😂
+• 自信：+100
+
+ガチャ運良く、部隊安全、敵はラリー可能に！🔥
+
+🥳 楽しい誕生日を、レジェンド！`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL 誕生日アラート！🎂
+
+🚨 @BirthdayPersonがまた一年生き延びた！
+
+プレゼント、ケーキ、できれば資源も送ってください 😂
+運が爆発して敵が弱くなりますように 🔥
+
+🥳 ハッピーバースデー、レジェンド！`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL 誕生日アラート！🎉
+
+🏆 実績解除：@BirthdayPersonがまた一年完了！
+
+新ステータス：
+• 年齢：+1 ⬆️
+• 知恵：不明 😂
+• カッコよさ：最大レベル 🔥
+
+ハッピーバースデー！伝説の戦利品を！🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL 誕生日アラート！🎂
+
+⚔️ @BirthdayPersonが誕生日ボスを倒した！🐉
+
+勝利報酬：
+• +1年の経験値
+• +無限ケーキ 🍰
+• +伝説の称号 🌟
+
+GG！ハッピーバースデー、チャンピオン！🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -468,8 +685,8 @@ Mari buat tahun ini LUAR BIASA! 🎁✨`
     templates: [
       {
         id: 1,
-        name: 'Clásico',
-        message: `🎈 ¡Feliz Cumpleaños!
+        name: 'Classic',
+        message: `🎈 ¡Feliz cumpleaños!
 
 Que tu día especial esté lleno de:
 ✨ Alegría y risas
@@ -477,64 +694,100 @@ Que tu día especial esté lleno de:
 🎯 Sorpresas increíbles
 💝 Recuerdos maravillosos
 
-¡Que tengas un año fantástico por delante! 🎁`
+¡Por un año fantástico por delante! 🎁`
       },
       {
         id: 2,
-        name: 'Cálido',
-        message: `🎂 ¡Feliz Cumpleaños!
+        name: 'Warm Wishes',
+        message: `🎂 ¡Feliz cumpleaños!
 
 En este día especial:
-🌸 Que siempre sonrías
-🎵 Que tus sueños se cumplan
-🌈 Que estés saludable
-💖 Que estés lleno de amor
+🌸 Que tu sonrisa brille
+🎵 Que tus sueños vuelen
+🌈 Que tu corazón sea ligero
+💖 Que todo salga bien
 
-¡Que tengas un día maravilloso! ✨`
+¡Te deseo un día lleno de amor! ✨`
       },
       {
         id: 3,
-        name: 'Simple',
-        message: `🎉 ¡Feliz Cumpleaños!
+        name: 'Simple & Sweet',
+        message: `🎉 ¡Feliz cumpleaños!
 
-🎈 Para ti:
+🎈 Te deseo:
 • Felicidad cada día
 • Salud siempre
-• Sueños cumplidos
-• Nuevas aventuras
+• Sueños que se hacen realidad
+• Aventuras nuevas
 
-¡Que tu día sea especial! 🎁`
+¡Espero que tu cumpleaños sea tan increíble como tú! 🎁`
       },
       {
         id: 4,
-        name: 'Poético',
-        message: `🌟 ¡Feliz Cumpleaños!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 ¡ALERTA DE CUMPLEAÑOS PWL! 🎂
 
-🎂 En el día que naciste
-Una estrella comenzó a brillar
-Que tu camino sea luminoso
-Y la felicidad te acompañe
+🚨 ¡@BirthdayPerson subió de nivel!
++1 año más viejo, +1 año más cerca de ser una reliquia 💀😂
 
-✨ Deseo que:
-Tengas éxito en todo
-Alegría en cada momento
-Y que tus sueños se hagan realidad
-
-💝 ¡Celebra a lo grande!`
+¡Feliz cumpleaños! 🥳
+¡Que tu RNG sea bendecido, tus tropas sobrevivan y tus enemigos ardan! 🔥`
       },
       {
         id: 5,
-        name: 'Enérgico',
-        message: `🎊 ¡Feliz Cumpleaños! ¡A Celebrar! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 ¡ALERTA DE CUMPLEAÑOS PWL! 🚨
 
-🎉 ¡Es TU día especial!
-🎈 Que seas:
-⚡ Lleno de energía y pasión
-🌟 Brillante como una estrella
-🚀 Audaz y sin miedo
-💪 Más fuerte y mejor
+¡Todos digan FELIZ CUMPLEAÑOS a @BirthdayPerson! 🎉
 
-¡Hagamos de este año algo LEGENDARIO! 🎁✨`
+Has ganado:
+• Edad: +1
+• Sabiduría: +0 😂
+• Confianza: +100
+
+¡Que tus pulls sean afortunados, tus tropas seguras y tus enemigos ralleable! 🔥
+
+🥳 ¡Disfruta tu día, Leyenda de Cumpleaños!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 ¡ALERTA DE CUMPLEAÑOS PWL! 🎂
+
+🚨 ¡@BirthdayPerson sobrevivió otro año!
+
+Por favor envíen regalos, pastel, y preferiblemente RSS 😂
+Que tu RNG sea perfecto y tus enemigos débiles 🔥
+
+🥳 ¡Feliz cumpleaños, leyenda!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 ¡ALERTA DE CUMPLEAÑOS PWL! 🎉
+
+🏆 LOGRO DESBLOQUEADO: ¡@BirthdayPerson completó otro año!
+
+Nuevas Stats:
+• Edad: +1 ⬆️
+• Sabiduría: Discutible 😂
+• Genialidad: NIVEL MÁXIMO 🔥
+
+¡Feliz cumpleaños! ¡Que tu botín sea legendario! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 ¡ALERTA DE CUMPLEAÑOS PWL! 🎂
+
+⚔️ ¡@BirthdayPerson derrotó al JEFE DE CUMPLEAÑOS! 🐉
+
+Recompensas de Victoria:
+• +1 Año de Experiencia
+• +Pastel Infinito 🍰
+• +Estado Legendario 🌟
+
+¡GG! ¡Feliz cumpleaños, campeón! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -545,7 +798,7 @@ Y que tus sueños se hagan realidad
     templates: [
       {
         id: 1,
-        name: 'Klassisch',
+        name: 'Classic',
         message: `🎈 Alles Gute zum Geburtstag!
 
 Möge dein besonderer Tag erfüllt sein mit:
@@ -558,60 +811,96 @@ Auf ein fantastisches Jahr! 🎁`
       },
       {
         id: 2,
-        name: 'Herzlich',
+        name: 'Warm Wishes',
         message: `🎂 Herzlichen Glückwunsch zum Geburtstag!
 
 An diesem besonderen Tag:
-🌸 Mögest du immer lächeln
-🎵 Mögen deine Träume wahr werden
-🌈 Mögest du gesund sein
-💖 Mögest du voller Liebe sein
+🌸 Möge dein Lächeln hell strahlen
+🎵 Mögen deine Träume fliegen
+🌈 Möge dein Herz leicht sein
+💖 Möge alles gut gehen
 
-Hab einen wundervollen Tag! ✨`
+Einen wundervollen Tag voller Liebe! ✨`
       },
       {
         id: 3,
-        name: 'Einfach',
+        name: 'Simple & Sweet',
         message: `🎉 Alles Gute zum Geburtstag!
 
-🎈 Für dich:
+🎈 Ich wünsche dir:
 • Glück jeden Tag
 • Gesundheit immer
-• Träume werden wahr
+• Träume die wahr werden
 • Neue Abenteuer
 
-Hab einen tollen Geburtstag! 🎁`
+Ich hoffe, dein Geburtstag ist so großartig wie du! 🎁`
       },
       {
         id: 4,
-        name: 'Poetisch',
-        message: `🌟 Alles Gute zum Geburtstag!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 PWL GEBURTSTAGS-ALARM! 🎂
 
-🎂 An dem Tag, als du geboren wurdest
-Begann ein Stern zu leuchten
-Möge dein Weg hell sein
-Und Glück dich begleiten
+🚨 @BirthdayPerson ist aufgestiegen!
++1 Jahr älter, +1 Jahr näher am antiken Relikt 💀😂
 
-✨ Ich wünsche dir:
-Erfolg in allem
-Freude in jedem Moment
-Und dass deine Träume wahr werden
-
-💝 Feiere groß!`
+Alles Gute zum Geburtstag! 🥳
+Möge dein RNG gesegnet sein, deine Truppen überleben und deine Feinde brennen! 🔥`
       },
       {
         id: 5,
-        name: 'Energisch',
-        message: `🎊 Alles Gute zum Geburtstag! Lass uns feiern! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 PWL GEBURTSTAGS-ALARM! 🚨
 
-🎉 Es ist DEIN besonderer Tag!
-🎈 Mögest du:
-⚡ Voller Energie und Leidenschaft sein
-🌟 Wie ein Superstar strahlen
-🚀 Mutig und furchtlos sein
-💪 Stärker und besser werden
+Alle sagen ALLES GUTE ZUM GEBURTSTAG zu @BirthdayPerson! 🎉
 
-Lass uns dieses Jahr LEGENDÄR machen! 🎁✨`
+Du hast gewonnen:
+• Alter: +1
+• Weisheit: +0 😂
+• Selbstvertrauen: +100
+
+Mögen deine Pulls glücklich sein, deine Truppen sicher und deine Feinde rallyfähig! 🔥
+
+🥳 Genieße deinen Tag, Geburtstags-Legende!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 PWL GEBURTSTAGS-ALARM! 🎂
+
+🚨 @BirthdayPerson hat ein weiteres Jahr überlebt!
+
+Bitte sendet Geschenke, Kuchen und vorzugsweise RSS 😂
+Möge dein RNG perfekt sein und deine Feinde schwach 🔥
+
+🥳 Alles Gute zum Geburtstag, Legende!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 PWL GEBURTSTAGS-ALARM! 🎉
+
+🏆 ERFOLG FREIGESCHALTET: @BirthdayPerson hat ein weiteres Jahr abgeschlossen!
+
+Neue Stats:
+• Alter: +1 ⬆️
+• Weisheit: Fraglich 😂
+• Coolness: MAX LEVEL 🔥
+
+Alles Gute zum Geburtstag! Möge deine Beute legendär sein! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 PWL GEBURTSTAGS-ALARM! 🎂
+
+⚔️ @BirthdayPerson hat den GEBURTSTAGS-BOSS besiegt! 🐉
+
+Siegesbelohnungen:
+• +1 Jahr Erfahrung
+• +Unendlicher Kuchen 🍰
+• +Legendärer Status 🌟
+
+GG! Alles Gute zum Geburtstag, Champion! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
@@ -622,80 +911,116 @@ Lass uns dieses Jahr LEGENDÄR machen! 🎁✨`
     templates: [
       {
         id: 1,
-        name: 'คลาสสิก',
+        name: 'Classic',
         message: `🎈 สุขสันต์วันเกิด!
 
 ขอให้วันพิเศษของคุณเต็มไปด้วย:
 ✨ ความสุขและเสียงหัวเราะ
 🌟 ความรักและความสุข
-🎯 ความประหลาดใจที่ยอดเยี่ยม
-💝 ความทรงจำที่ดี
+🎯 เซอร์ไพรส์ที่น่าทึ่ง
+💝 ความทรงจำที่วิเศษ
 
-ขอให้มีปีที่ยอดเยี่ยมข้างหน้า! 🎁`
+ขอให้ปีหน้ายอดเยี่ยม! 🎁`
       },
       {
         id: 2,
-        name: 'อบอุ่น',
+        name: 'Warm Wishes',
         message: `🎂 สุขสันต์วันเกิด!
 
 ในวันพิเศษนี้:
-🌸 ขอให้ยิ้มแย้มเสมอ
-🎵 ขอให้ฝันเป็นจริง
-🌈 ขอให้แข็งแรง
-💖 ขอให้เต็มไปด้วยความรัก
+🌸 ขอให้รอยยิ้มสดใส
+🎵 ขอให้ความฝันเป็นจริง
+🌈 ขอให้หัวใจเบาสบาย
+💖 ขอให้ทุกอย่างเป็นไปด้วยดี
 
-ขอให้มีวันที่วิเศษ! ✨`
+ขอให้มีวันที่เต็มไปด้วยความรัก! ✨`
       },
       {
         id: 3,
-        name: 'เรียบง่าย',
+        name: 'Simple & Sweet',
         message: `🎉 สุขสันต์วันเกิด!
 
-🎈 สำหรับคุณ:
+🎈 ขออวยพร:
 • ความสุขทุกวัน
-• สุขภาพดีเสมอ
-• ฝันเป็นจริง
-• การผจญภัยใหม่ๆ
+• สุขภาพแข็งแรง
+• ความฝันเป็นจริง
+• การผจญภัยใหม่
 
-ขอให้วันของคุณพิเศษ! 🎁`
+ขอให้วันเกิดของคุณยอดเยี่ยมเหมือนตัวคุณ! 🎁`
       },
       {
         id: 4,
-        name: 'กวี',
-        message: `🌟 สุขสันต์วันเกิด!
+        name: 'PWL Alert - Level Up',
+        message: `🎉 แจ้งเตือนวันเกิด PWL! 🎂
 
-🎂 ในวันที่คุณเกิด
-ดาวเริ่มส่องแสง
-ขอให้เส้นทางของคุณสว่าง
-และความสุขอยู่กับคุณ
+🚨 @BirthdayPerson เลเวลอัพแล้ว!
++1 ปีแก่ขึ้น +1 ปีใกล้เป็นของโบราณ 💀😂
 
-✨ ขออวยพร:
-ประสบความสำเร็จในทุกสิ่ง
-มีความสุขในทุกช่วงเวลา
-และฝันเป็นจริง
-
-💝 ฉลองกันเถอะ!`
+สุขสันต์วันเกิด! 🥳
+ขอให้ RNG เจริญ ทหารรอด ศัตรูไหม้! 🔥`
       },
       {
         id: 5,
-        name: 'มีพลัง',
-        message: `🎊 สุขสันต์วันเกิด! มาปาร์ตี้กัน! 🎊
+        name: 'PWL Alert - Stats Update',
+        message: `🎂 แจ้งเตือนวันเกิด PWL! 🚨
 
-🎉 วันนี้เป็นวันของคุณ!
-🎈 ขอให้คุณ:
-⚡ เต็มไปด้วยพลังและความกระตือรือร้น
-🌟 เปล่งประกายเหมือนดารา
-🚀 กล้าหาญและไม่กลัว
-💪 แข็งแกร่งและดีขึ้น
+ทุกคนพูดพร้อมกัน: สุขสันต์วันเกิด @BirthdayPerson! 🎉
 
-มาทำให้ปีนี้เป็นปีที่ยอดเยี่ยม! 🎁✨`
+คุณได้รับ:
+• อายุ: +1
+• ภูมิปัญญา: +0 😂
+• ความมั่นใจ: +100
+
+ขอให้สุ่มโชคดี ทหารปลอดภัย ศัตรู rally ได้! 🔥
+
+🥳 สนุกกับวันของคุณ ตำนานวันเกิด!`
+      },
+      {
+        id: 6,
+        name: 'PWL Alert - Survival',
+        message: `🎉 แจ้งเตือนวันเกิด PWL! 🎂
+
+🚨 @BirthdayPerson รอดชีวิตอีกหนึ่งปี!
+
+กรุณาส่งของขวัญ เค้ก และดีที่สุดคือ RSS 😂
+ขอให้ RNG แตก ศัตรูอ่อนแอ 🔥
+
+🥳 สุขสันต์วันเกิด ตำนาน!`
+      },
+      {
+        id: 7,
+        name: 'PWL Alert - Achievement',
+        message: `🎂 แจ้งเตือนวันเกิด PWL! 🎉
+
+🏆 ปลดล็อกความสำเร็จ: @BirthdayPerson ผ่านไปอีกหนึ่งปี!
+
+สถิติใหม่:
+• อายุ: +1 ⬆️
+• ภูมิปัญญา: น่าสงสัย 😂
+• ความเท่: เต็มเลเวล 🔥
+
+สุขสันต์วันเกิด! ขอให้ได้ของตำนาน! 🎁`
+      },
+      {
+        id: 8,
+        name: 'PWL Alert - Boss Battle',
+        message: `🎉 แจ้งเตือนวันเกิด PWL! 🎂
+
+⚔️ @BirthdayPerson เอาชนะบอสวันเกิดแล้ว! 🐉
+
+รางวัลชัยชนะ:
+• +1 ปีประสบการณ์
+• +เค้กไม่จำกัด 🍰
+• +สถานะตำนาน 🌟
+
+GG! สุขสันต์วันเกิด แชมป์! 🏆`
       }
     ],
     gifKeyword: 'happy birthday'
   }
 };
 
-// Get template by language code and template ID
+// Get a specific birthday template
 function getBirthdayTemplate(languageCode, templateId = 1) {
   const lang = BIRTHDAY_TEMPLATES[languageCode] || BIRTHDAY_TEMPLATES['en-US'];
   const template = lang.templates.find(t => t.id === templateId) || lang.templates[0];

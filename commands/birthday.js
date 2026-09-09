@@ -72,16 +72,19 @@ module.exports = {
         .addIntegerOption(option =>
           option
             .setName('template')
-            .setDescription('Birthday greeting template (1-5, default: 1)')
+            .setDescription('Birthday greeting template (1-8, default: 1)')
             .setRequired(false)
             .setMinValue(1)
-            .setMaxValue(5)
+            .setMaxValue(8)
             .addChoices(
-              { name: 'Template 1 - Classic/經典祝福', value: 1 },
-              { name: 'Template 2 - Warm Wishes/溫馨祝福', value: 2 },
-              { name: 'Template 3 - Simple & Sweet/簡約祝福', value: 3 },
-              { name: 'Template 4 - Poetic/詩意祝福', value: 4 },
-              { name: 'Template 5 - Energetic/活力祝福', value: 5 }
+              { name: 'Template 1 - Classic', value: 1 },
+              { name: 'Template 2 - Warm Wishes', value: 2 },
+              { name: 'Template 3 - Simple & Sweet', value: 3 },
+              { name: 'Template 4 - PWL Alert: Level Up', value: 4 },
+              { name: 'Template 5 - PWL Alert: Stats Update', value: 5 },
+              { name: 'Template 6 - PWL Alert: Survival', value: 6 },
+              { name: 'Template 7 - PWL Alert: Achievement', value: 7 },
+              { name: 'Template 8 - PWL Alert: Boss Battle', value: 8 }
             )
         )
     )
