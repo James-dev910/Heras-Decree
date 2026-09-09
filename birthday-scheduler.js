@@ -44,7 +44,10 @@ async function checkAndSendBirthdayGreetings(client) {
 
         // Get birthday message template
         const template = getBirthdayTemplate(birthday.language, birthday.template_id);
-        const birthdayMessage = birthday.custom_message || template.message;
+        let birthdayMessage = birthday.custom_message || template.message;
+
+        // Replace @BirthdayPerson with actual user mention
+        birthdayMessage = birthdayMessage.replace(/@BirthdayPerson/g, `<@${birthday.user_id}>`);
 
         // Get birthday GIF from Giphy
         const gifUrl = await getBirthdayGif(template.gifKeyword);
@@ -300,7 +303,10 @@ async function testBirthdayGreeting(client, guildId, userId, channelOverride = n
 
     // Get birthday message template
     const template = getBirthdayTemplate(birthday.language, birthday.template_id);
-    const birthdayMessage = birthday.custom_message || template.message;
+    let birthdayMessage = birthday.custom_message || template.message;
+
+    // Replace @BirthdayPerson with actual user mention
+    birthdayMessage = birthdayMessage.replace(/@BirthdayPerson/g, `<@${userId}>`);
 
     // Get birthday GIF from Giphy
     const gifUrl = await getBirthdayGif(template.gifKeyword);
